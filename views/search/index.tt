@@ -1,0 +1,147 @@
+
+<div id="content">
+  <div id="header">
+    <h1>Search page</h1>
+    <h2>You&rsquo;ve joined the dance floor!</h2>
+  </div>
+
+
+   <h2>Current Selection</h2>
+   <ul id="selection"></ul>
+
+  <span id="search_help">(press ESC to close suggestions)</span>
+  <ul id="search">
+    <input type="text" id="query" name="query"/>
+  </ul>
+
+  <h3><a href="#" id="cloud_link">Filter results (open)</a></h3>
+
+  <div id="cloud-content" style="display: none;"-->
+      <h2>Keywords</h2>
+      <div class="tagcloud" id="doc_keyword">
+	  </div>
+
+      <h2>Folders</h2>
+      <div class="tagcloud" id="doc_folder"></div>
+
+  </div>
+
+  <script type="text/javascript">
+  $('#cloud_link').click(function() {
+      $('#cloud-content').slideToggle('fast', function() {
+          // ok
+      });
+      if ($('#cloud_link').text() == 'Filter results (open)') {
+          $('#cloud_link').text('Filter results (close)');
+      } else {
+          $('#cloud_link').text('Filter results (open)');
+      }
+      return( false );
+  });
+  </script>
+
+
+      <div id="result">
+        <div id="navigation">
+          <ul id="pager"></ul>
+          <div id="pager-header"></div>
+        </div>
+        <div id="docs"></div>
+      </div>
+
+<!--  <div id="getting-started">
+    <h1>Getting started</h1>
+    <h2>Here&rsquo;s how to get dancing:</h2>
+	<form method="get" id="search_form" action="/search">
+		<input type="text" name="q" value="" /></td>
+		<input type="submit" value="search" />
+	</form>              
+    <h3><a href="#" id="about_env_link">About your application's environment</a></h3>
+
+    <div id="about-content" style="display: none;">
+      <table>
+          <tbody>
+          <tr>
+              <td>Perl version</td>
+              <td><tt>[% perl_version %]</tt></td>
+          </tr>
+          <tr>
+              <td>Dancer version</td>
+              <td><tt>[% dancer_version %]</tt></td>
+          </tr>
+          <tr>
+              <td>Backend</td>
+              <td><tt>[% settings.apphandler %]</tt></td>
+          </tr>
+          <tr>
+              <td>Appdir</td>
+              <td><tt>/home/jokke/perl/LaoFAB</tt></td>
+          </tr>
+          <tr>
+              <td>Template engine</td>
+              <td><tt>[% settings.template %]</tt></td>
+          </tr>
+          <tr>
+              <td>Logger engine</td>
+              <td><tt>[% settings.logger %]</tt></td>
+          </tr>
+          <tr>
+              <td>Running environment</td>
+              <td><tt>[% settings.environment %]</tt></td>
+          </tr>
+          </tbody>
+      </table>
+    </div>
+
+    <script type="text/javascript">
+    $('#about_env_link').click(function() {
+        $('#about-content').slideToggle('fast', function() {
+            // ok
+        });
+        return( false );
+    });
+    </script>
+	<ul>
+	[% FOREACH r IN results %]
+        <li>
+            <h2>[% r.id %]: [% r.title | html %]</h2>
+            <p>[% r.highlights %]</p>
+        </li>
+    [% END %]
+	<ul> -->
+    <!-- ol>          
+      <li>
+        <h2>Tune your application</h2>
+
+        <p>
+        Your application is configured via a global configuration file,
+        <tt>config.yml</tt> and an "environment" configuration file,
+        <tt>environments/development.yml</tt>. Edit those files if you
+        want to change the settings of your application.
+        </p>
+      </li>
+
+      <li>
+        <h2>Add your own routes</h2>
+
+        <p>
+        The default route that displays this page can be removed,
+        it's just here to help you get started. The template used to
+        generate this content is located in 
+        <code>views/index.tt</code>.
+        You can add some routes to <tt>lib/LaoFAB.pm</tt>. 
+        </p>
+      </li>
+
+      <li>
+          <h2>Enjoy web development again</h2>
+
+          <p>
+          Once you've made your changes, restart your standalone server
+          (bin/app.pl) and you're ready to test your web application.
+          </p>
+      </li>
+
+    </ol
+  </div>-->
+</div>
