@@ -1,0 +1,101 @@
+<script type="text/javascript">
+
+    // require in the module
+    dojo.require("laofab.Author");
+    dojo.require("dijit.Tooltip");
+    dojo.require("dijit.form.TextBox");
+	dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.MultiSelect");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.form.FilteringSelect");
+    dojo.require("dijit.form.Button");
+	dojo.require("dijit.form.ComboBox");
+	dojo.require("dijit.dijit"); // optimize: load dijit layer
+	dojo.require("dijit.TitlePane");
+	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+	dojo.require("dojo.data.ItemFileReadStore");
+
+    function expandAll(node, tree) {
+        if (node.isExpandable && !node.isExpanded) {
+            tree._expandNode(node);
+        }
+        var children = node.getChildren();
+        for (var i=0; i<children.length; i++) {
+            expandAll(children[i], tree);
+        }
+    }
+	
+    dojo.addOnLoad(function(  ) {
+
+        var a = new laofab.Author;
+
+        //fire it up, which takes care of the rest
+        var authors = new Array();
+        [% FOREACH author = authors %]
+            authors.push("[% author.name %]"+"=>"+"[% author.org %]");
+        [% END %]
+        a.initialize( authors );
+
+        var myForm = dijit.byId("document_form");
+        dojo.connect(myForm, "onSubmit", function(e){
+            myForm.validate();
+        });
+
+		var author_name = dijit.byId("author_name");
+		dojo.connect(author_name, "onKeyPress", function(e) {
+			
+			var myStore = new dojo.data.ItemFileReadStore({url: "[% c.uri_for('/rest/author') %]/" + 
+				author_name.getValue() + e.keyChar });
+			author_name.store = myStore;
+		});
+		
+		var author_org = dijit.byId("author_org");
+		dojo.connect(author_org, "onKeyPress", function(e) {
+			
+			var myStore = new dojo.data.ItemFileReadStore({url: "[% c.uri_for('/rest/org') %]/" + 
+				author_org.getValue() + e.keyChar });
+			author_org.store = myStore;
+		});
+});
+
+var treeData = [% tree %];
+var selectedKeys;
+
+$(document).ready(function(){
+    [% IF selected_folders %]
+      selectedKeys = [% selected_folders %];
+    [% END %]
+    $("#check_tree").dynatree({
+      checkbox: true,
+      selectMode: 2,
+      children: treeData,
+      onSelect: function(select, dtnode) {
+        // Display list of selected nodes
+        var selNodes = dtnode.tree.getSelectedNodes();
+        // convert to title/key array
+        var selKeys = $.map(selNodes, function(node){
+             return node.data.key;
+        });
+        selectedKeys = selKeys.join(',');
+        $('#folder').val(selectedKeys);
+      },
+      onClick: function(dtnode, event) {
+                // We should not toggle, if target was "checkbox", because this
+                // would result in double-toggle (i.e. no toggle) 
+        if( dtnode.getEventTargetType(event) == "title" )
+            dtnode.toggleSelect(); 
+      },
+      onKeydown: function(dtnode, event) {
+        if( event.which == 32 ) {
+          dtnode.toggleSelect();
+          return false;
+        }
+      }
+    });
+
+    $('#document_form').submit(function(){
+      $('#folder').val(selectedKeys);
+    });
+});
+</script>

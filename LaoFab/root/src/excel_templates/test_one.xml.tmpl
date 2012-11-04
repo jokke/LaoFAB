@@ -1,0 +1,43 @@
+<workbook>
+    <worksheet name="LaoFab">
+        <row>
+            <format size="16">
+                <bold><cell>Extract from the LaoFAB Document Repository</cell></bold>
+            </format>
+        </row>
+        <row>
+            <bold><cell>Date</cell></bold>
+            <cell>[% current_date %]</cell>
+        </row>
+        <row>
+        </row>
+        <row><bold><italic>
+            <cell>Title</cell>
+            <cell>Secondary title</cell>
+            <cell>Type of document</cell>
+            <cell>Author(s)</cell>
+            <cell>Publication year</cell>
+            <cell>Subject categories</cell>
+            <cell>File type (mime)</cell>
+            <cell>File size</cell>
+            <cell>File name</cell>
+            <cell>Uploaded date/time</cell>
+            <cell>Direct link to download</cell>
+        </italic></bold></row>
+        [% WHILE (doc = documents.next) %]
+        <row>
+            <cell>[% doc.xml_title | html %]</cell>
+            <cell>[% doc.xml_sub_title | html %]</cell>
+            <cell>[% doc.doctype.name | html %]</cell>
+            <cell>[% FOREACH author = doc.authors %][% IF author.name && author.org %][% author.xml_name | html %] ([% author.xml_org | html %]), [% ELSIF author.name %][% author.xml_name | html %], [% ELSIF author.org %][% author.xml_org | html %], [% END %][% END %]</cell>
+            <cell>[% doc.pubyear | html %]</cell>
+            <cell>[% FOREACH subcat = doc.subcats %][% subcat.full_cat | html %], [% END %]</cell>
+            <cell>[% doc.mime | html %]</cell>
+            <cell>[% doc.filesize | html %]</cell>
+            <cell>[% doc.filename | html %]</cell>
+            <cell>[% doc.create_dt | html %]</cell>
+            <cell>[% c.uri_for("/document/view/$doc.id") %]</cell>
+        </row>
+        [% END %]
+    </worksheet>
+</workbook>

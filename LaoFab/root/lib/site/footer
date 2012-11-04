@@ -1,0 +1,3 @@
+<!-- BEGIN site/footer -->
+<div id="copyright"><p style="margin:2px;">The latest pronouncement from the Abbot is: <em>[% buzz_word | html %] ([% buzz_abr | html %])</em></p><p style="margin:2px;">&copy; [% site.copyright %]</p><p style="margin:2px;"><img src="[% c.uri_for("/static/images/footer.jpg") %]" alt="footer"></p></div>
+<!-- END site/footer -->

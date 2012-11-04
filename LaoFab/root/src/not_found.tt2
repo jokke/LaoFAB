@@ -1,0 +1,2 @@
+[% META title = '404 Not Found' %]
+<p>Couldn't find the page, go <a href="[% c.uri_for('/') %]">home instead</a></p>

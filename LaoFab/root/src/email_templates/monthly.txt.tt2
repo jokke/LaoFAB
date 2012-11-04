@@ -1,0 +1,14 @@
+Hello LaoFAB Users,
+
+Here is a list of documents uploaded to the LaoFAB repository during the past month:
+
+[% WHILE (doc = new_docs_txt.next) %]
+[% doc.title %] [[% doc.pubyear %]] http://www.laofab.org/document/view/[% doc.id %]
+[% END %]
+
+Thanks!
+
+Log in at: www.laofab.org
+--
+Santa's little LaoFAB helpers
+Follow us on twitter: http://twitter.com/laofab

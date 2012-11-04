@@ -1,0 +1,63 @@
+[% META title = "Edit folder" %]
+<script type="text/javascript">
+    dojo.require("dijit.Tooltip");
+    dojo.require("dijit.form.TextBox");
+    dojo.require("dijit.form.Button");
+	dojo.require("dijit.dijit"); // optimize: load dijit layer
+	dojo.require("dijit.TitlePane");
+	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+
+
+var treeData = [% tree %];
+var selectedKeys;
+
+$(document).ready(function(){
+    selectedKeys = [% folder_id %];
+    $("#radio_tree").dynatree({
+      checkbox: true,
+      // Override class name for checkbox icon:
+      classNames: {checkbox: "ui-dynatree-radio"}, 
+      selectMode: 1,
+      children: treeData,
+      onSelect: function(select, dtnode) {
+        // Display list of selected nodes
+        var s = dtnode.tree.getSelectedNodes();
+        selectedKeys = $.map(s, function(node) {
+          return node.data.key;
+        });
+        $('#folder').val(selectedKeys);
+      },
+      onDblClick: function(dtnode, event) {
+        dtnode.toggleSelect();
+      },
+      onKeydown: function(dtnode, event) {
+        if( event.which == 32 ) {
+          dtnode.toggleSelect();
+          return false;
+        }
+      }
+    });
+
+    $('#folder_form').submit(function(){
+      $('#folder').val(selectedKeys);
+    });
+});
+
+</script>
+
+<h1>[% template.title %]</h1>
+<p>Here you can change the name of the folder and/or change its location.</p>
+<form id="folder_form" method="post">
+<div id="TTfolderName"><p><label for="name">Name of folder: </label><br/>
+  <input type="text" name="name" 
+    value="[% folder_name %]"
+    dojoType="dijit.form.TextBox"
+    trim="true" 
+    required="true"/></p></div>
+	<div dojoType="dijit.TitlePane" title="Folder location" open="true" style="width: 70%; padding-top: 5px; padding-bottom: 20px;" >
+
+<div id="radio_tree"></div>
+		</div>
+<input type="hidden" value="[% folder_id %]" name="folder" id="folder">
+<button dojoType="dijit.form.Button" name="edit" value="Edit" type="submit">Edit</button>
+</form>

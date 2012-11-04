@@ -1,0 +1,5 @@
+[% META title = 'Create/Update a Document' %]
+    
+[% widget_result.as_xml %]
+    
+<p><a href="[% c.uri_for('/') %]">Return to start</a></p>

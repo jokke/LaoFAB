@@ -1,0 +1,136 @@
+<p>Displaying users [% pager.first %] - [% pager.last %] of [% pager.total_entries %]</p>
+<p>
+Navigation: <br/>&lt;&lt;
+[% IF page == pager.first_page %]
+    First
+[% ELSE %]
+    <a href="[% c.req.uri_with({page => pager.first_page}) %]">First</a>
+[% END %]
+[% IF pager.previous_page %]
+    <a href="[% c.req.uri_with({page => pager.previous_page}) %]">Previous</a>
+[% ELSE %]
+    Previous
+[% END %]
+|
+[% IF pager.next_page %]
+    <a href="[% c.req.uri_with({page => pager.next_page}) %]">Next</a>
+[% ELSE %]
+    Next
+[% END %]
+[% IF page == pager.last_page %]
+    Last
+[% ELSE %]
+    <a href="[% c.req.uri_with({page => pager.last_page}) %]">Last</a>
+[% END %]
+&gt;&gt;
+</p>
+<table width="100%">
+<tbody>
+<tr>
+    <td align="center"><em>no.</em></td><td><em><a 
+[% IF order.match('email') && direction.match('asc') %]
+	href="[% c.req.uri_with({direction => 'desc', order => 'email'}) %]">email</a>
+[% ELSE %]
+	href="[% c.req.uri_with({direction => 'asc', order => 'email'}) %]">email</a>
+[% END %]</em>
+</td><td><em><a 
+[% IF order.match('name') && direction.match('asc') %]
+	href="[% c.req.uri_with({direction => 'desc', order => 'name'}) %]">name</a>
+[% ELSE %]
+	href="[% c.req.uri_with({direction => 'asc', order => 'name'}) %]">name</a>
+[% END %]</em>
+</td><td><em><a 
+[% IF order.match('date') && direction.match('asc') %]
+	href="[% c.req.uri_with({direction => 'desc', order => 'date'}) %]">date&nbsp;added</a>
+[% ELSE %]
+	href="[% c.req.uri_with({direction => 'asc', order => 'date'}) %]">date&nbsp;added</a>
+[% END %]</em>
+</td><td align="center"><em><a 
+[% IF order.match('login') && direction.match('asc') %]
+	href="[% c.req.uri_with({direction => 'desc', order => 'login'}) %]">last&nbsp;login</a>
+[% ELSE %]
+	href="[% c.req.uri_with({direction => 'asc', order => 'login'}) %]">last&nbsp;login</a>
+[% END %]</em>
+</td></tr>
+
+[% SET number = pager.first %]
+
+[% WHILE (user = users.next) %]
+
+    <tr>
+    <td align="right" id="fixed">[% number %]</td>
+    [% number = number + 1 %]
+    <td><a href="[% c.uri_for("/user/view/$user.id") %]">[% user.username | html %]</a></td>
+    <td>[% user.name | html %]</td>
+    [% SET date = user.create_dt %]
+    <td align="center">[% date.substr(0, 10) %]</td>
+    <td align="center">[% c.model('LaoFabDB').user_last_login(user) %]</td>
+    <td><div id="edit_dialog_[% user.id %]" dojoType="dijit.Dialog" title="Edit [% user.username | html %]">
+        <form method="post" id="edit_user_form_[% user.id %]" dojoType="dijit.form.Form" action="[% c.uri_for("/user/edit/$user.id") %]">
+        <table>
+        <tr><td><label for="email_[% user.id %]">Email address:</label></td>
+        <td><input type="text" name="email" 
+                               value="[% user.username %]"
+                               id="email_[% user.id %]"
+                               dojoType="dijit.form.ValidationTextBox"
+                               regExpGen="dojox.validate.regexp.emailAddress" trim="true"
+                               required="true"
+                               invalidMessage="Invalid email address!"
+                               /></td></tr>
+        <tr><td><label for="name_[% user.id %]">Name:</label></td>
+        <td><input type="text" name="name" 
+                               value="[% user.name %]"
+                               id="name_[% user.id %]"
+                               dojoType="dijit.form.ValidationTextBox"
+                               trim="true"
+                               required="true"
+                               invalidMessage="Please fill in the name!"
+                               /></td></tr>
+        <tr><td><label for="password_[% user.id %]">Password:</label></td>
+        <td><input type="password" name="password" 
+                               id="password_[% user.id %]"
+                               dojoType="dijit.form.ValidationTextBox"
+                               regExp="(^.{6,}$|^$)"
+                               invalidMessage="The password must have at least 6 characters!"
+                               /></td></tr>
+        <tr><td><label for="password2_[% user.id %]">Password (confirm):</label></td>
+        <td><input type="password" name="password2" 
+                               id="password2_[% user.id %]"
+                               dojoType="dijit.form.ValidationTextBox"
+                               validator="return theSame(this, dijit.byId('password_[% user.id %]'));"
+                               invalidMessage="The two passwords must match!"
+                               /></td></tr>
+        <tr><td><label for="role_[% user.id %]">Administrator?</label></td>
+            <td><input id="role_[% user.id %]" dojotype="dijit.form.CheckBox"
+           name="admin" value="on"
+           [% FOREACH role IN user.roles %]
+               [% IF role.role == 'admin' %]
+                   checked='checked'
+               [% END %]
+           [% END %]
+           type="checkbox" />yes
+           </td>
+        </tr>
+        <tr><td colspan="2" align="center">
+            <button dojoType="dijit.form.Button" id="submit_edit_[% user.id %]" 
+                        type="submit">Edit</button></td></tr>
+    </table>
+    </form>
+    </div><img style="cursor: pointer;" src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" onclick="dijit.byId('edit_dialog_[% user.id %]').show();"/></td>
+    <td>
+        <div id="delete_dialog_[% user.id %]" dojoType="dijit.Dialog" title="Delete [% user.username | html %]?">
+            <table>
+                <tr><td>Are you sure you want to delete <em>[% user.username %]</em>?</td></tr>
+                    <tr><td align="center">
+                        <form method="get" action="[% c.uri_for("/user/delete/$user.id") %]">
+                        <button dojoType="dijit.form.Button" id="button_del_[% user.id %]" 
+                        type="submit">Delete</button>
+                        </form></td></tr>
+                </table>
+            </div>
+            <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_[% user.id %]').show();"/>
+            </td>
+    </tr>
+[% END %]
+</tbody>
+</table>

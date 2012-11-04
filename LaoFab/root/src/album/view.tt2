@@ -1,0 +1,49 @@
+[% META title = "Browsing album" %]
+<h1>[% template.title | html %]</h1>
+<p>Browsing the repository, album: [% album_name | html %]</p>
+<p>You are currently here:</p>
+<p>[% location_str %]</p>
+
+[% IF photos.count > 0 %]
+<p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/photo/add/$album_id") %]">Upload</a> a photo to this album ([% album_name | html %]).</p>
+
+[% UNLESS pager.first_page == pager.last_page %]
+<p>
+Navigation (pages) in this album: <br/>
+
+[% IF pager.previous_page %]
+    <a href="[% c.req.uri_with({page => pager.previous_page}) %]">&lt;-- previous</a>
+[% ELSE %]
+  &lt;--previous
+[% END %]
+
+[% SET tmp_page = 0 %]
+[% WHILE tmp_page < pager.last_page %]
+[% SET tmp_page = tmp_page + 1 %]
+[
+  [% UNLESS page == tmp_page %]
+    <a href="[% c.req.uri_with({page => tmp_page}) %]">[% tmp_page %]</a>
+  [% ELSE %]
+    [% tmp_page %]
+  [% END %]
+]
+[% END %]
+
+[% IF pager.next_page %]
+    <a href="[% c.req.uri_with({page => pager.next_page}) %]">next --&gt;</a>
+[% ELSE %]
+  next --&gt;
+[% END %]
+
+</p>
+[% END %]
+
+[% WHILE (photo = photos.next) %]
+  <a href="[% c.uri_for("/album/slide/$album_id/$photo.id") %]"><img src="[% c.uri_for("/photo/$photo.id/thumbnail") %]" alt="[% photo.caption | html %]" title="[% photo.caption | html %]" /></a>
+[% END %]
+[% ELSE %]
+<p>Nothing here yet...</p>
+[% END %]
+
+
+<p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/photo/add/$album_id") %]">Upload</a> a photo to this album ([% album_name | html %]).</p>

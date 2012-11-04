@@ -1,0 +1,44 @@
+[% INCLUDE photo/script_fragment.tt2 %]
+
+[% META title = 'Add a photo' %]
+<h1>[% template.title %]</h1>
+
+<p>Please fill in the values for your photo below and submit it to the repository. The following fields are required:
+<ul>
+<li><em>Caption</em> - every photo should have a caption, a short description of the photo</li>
+<li><em>The actual image</em> - the digital file</li>
+[% UNLESS album %]
+<li><em>Album</em> - in which album the photo should be available</li>
+[% END %]
+</ul>
+The other fields (location, photographer and date) are optional, but we encourage you to use them.
+</p>
+<p>If you need help regarding a particular field, just aim your mouse pointer over the <em>information</em> icon <img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" />.</p>
+
+[% INCLUDE photo/form_fragment.tt2 %]
+
+
+[% UNLESS album %]
+<p>
+<label for="album"><em>Album</em></label>&nbsp;<span id="info_album"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<select 
+    dojoType="dijit.form.FilteringSelect"
+    trim="true" 
+    id="album"
+    name="album"
+    required="true"
+    style="width: 350px;" >
+[% WHILE (alb = albums.next) %]
+  <option
+  [% IF alb.id == album.id %]
+    selected="selected"
+  [% END %]
+  value="[% alb.id %]">[% alb.name | html %]</option>
+[% END %]
+</select>
+</p>
+[% END %]
+
+<button dojoType="dijit.form.Button" value="Submit Photo" name="submit" type="submit">Submit Photo</button>
+
+</form>

@@ -1,0 +1,82 @@
+[% META title = "Search results" %]
+
+<h1>[% template.title %]</h1>
+
+<p>You searched for: <em>[% query | html %]</em></p>
+[% IF pager.total_entries > 0 %]
+<p>Displaying entries [% pager.first %] - [% pager.last %] of [% pager.total_entries %]</p>
+<p>
+Navigation: <br/>&lt;&lt;
+[% IF page == pager.first_page %]
+    First
+[% ELSE %]
+    <a href="[% c.req.uri_with({page => pager.first_page}) %]">First</a>
+[% END %]
+[% IF pager.previous_page %]
+    <a href="[% c.req.uri_with({page => pager.previous_page}) %]">Previous</a>
+[% ELSE %]
+    Previous
+[% END %]
+|
+[% IF pager.next_page %]
+    <a href="[% c.req.uri_with({page => pager.next_page}) %]">Next</a>
+[% ELSE %]
+    Next
+[% END %]
+[% IF page == pager.last_page %]
+    Last
+[% ELSE %]
+    <a href="[% c.req.uri_with({page => pager.last_page}) %]">Last</a>
+[% END %]
+&gt;&gt;<br/>
+or <a href="[% c.uri_for('/search') %]">search again</a>.
+</p>
+<table class="folder" width="100%">
+<tbody>
+<tr>
+    <td width="24"></td><td width="260" align="left"><em>title</em></td><td width="260" align="left"><em>author(s)</em></td><td align="center"><em>type</em></td><td align="center"><em>pub.<br/>year</em></td><td align="center"><em>size</em></td><td align="center"><em>modified<br/>date</em></td></tr>
+
+[% WHILE (row = results.next) %]
+    [% SET doc = row.document %]
+
+    <tr>
+	    [% IF doc.mime.match("msword") %]
+            [% SET pic = "doc-24x24.png" %]
+        [% ELSIF doc.mime.match("image") %]
+            [% SET pic = "pic-24x24.png" %]
+        [% ELSIF doc.mime.match("pdf") %]
+            [% SET pic = "pdf-24x24.png" %]
+        [% ELSIF doc.mime.match("excel") %]
+            [% SET pic = "xls-24x24.png" %]
+        [% ELSIF doc.mime.match("audio") %]
+            [% SET pic = "video-24x24.png" %]
+        [% ELSIF doc.mime.match("zip") %]
+            [% SET pic = "tgz-24x24.png" %]
+        [% ELSIF doc.mime.match("powerpoint") %]
+            [% SET pic = "pres-24x24.png" %]
+        [% ELSIF doc.mime.match("google") %]
+            [% SET pic = "kmz-24x24.png" %]
+        [% ELSE %]
+            [% SET pic = "ascii-24x24.png" %]
+        [% END %]
+    <td><img src="[% c.uri_for("/static/images/$pic") %]" alt="icon" /></td>
+    <td id="fixed"><a href="[% c.uri_for("/document/view/$doc.id") %]">[% doc.short_title | html %]</a></td>
+    <td id="fixed">[% doc.short_authors | html %]</td>
+    <td>[% IF doc.doctype %][% doc.doctype.name.replace('\s+','&nbsp;') %][% END %]</td>
+    <td align="right">[% doc.pubyear | html %]</td>
+    <td align="right">[% doc.friendly_size | html %]</td>
+    [% SET date = doc.checked_dt %]
+    <td align="right">[% date.substr(0, 10) %]</td>
+    [% IF c.check_user_roles(("admin")) %]
+        <td align="center"><a href="[% c.uri_for("/document/edit/$doc.id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" /></a></td>
+        <td align="center"><a href="[% c.uri_for("/document/delete/$doc.id") %]"><img src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" /></a></td>
+    [% END %]</tr>
+
+[% END %]
+</tbody>
+</table>
+
+[% ELSE %]
+<p>Sorry, nothing found from your search query.
+Please <a href="[% c.uri_for('/search') %]">search again</a> with new words.</p>
+[% END %]

@@ -1,0 +1,3 @@
+[% META title = 'Access denied' %]
+[% IF !error %]You are not allowed to access this resource.[% END %]
+[% IF !c.user %]<a href="[% c.uri_for('/login') %]">Logging in</a> might help.[% END %]

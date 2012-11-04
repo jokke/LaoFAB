@@ -1,0 +1,13 @@
+<div id="header" style="width: 820px; text-align: left; margin-left: auto; margin-right: auto;">[% PROCESS site/header %]</div>
+
+<div id="content" style="width: 820px; text-align: left; margin-left: auto; margin-right: auto; background-color: [% site.col.page %]">
+[% IF error %]
+    <p><span class="error">[% error %]</span></p>
+[% END %]
+[% IF message %]
+    <p><span class="message">[% message | html %]</span></p>
+[% END %]
+[% content %]
+</div>
+
+<div id="footer" style="width: 820px; margin-left: auto; margin-right: auto;">[% PROCESS site/footer %]</div>

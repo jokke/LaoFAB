@@ -1,0 +1,77 @@
+[% META title = "List folders" %]
+
+<script language="JavaScript" type="text/javascript">
+	dojo.require("dijit.dijit"); // optimize: load dijit layer
+	dojo.require("dijit.TitlePane");
+	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("my_ext.RadiobuttonTree");
+	dojo.require("my_ext.RadiobuttonForestStoreModel");
+	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+</script>
+
+<!-- <div dojoType="dojo.data.ItemFileReadStore" jsId="continentStore"
+  url="[% c.uri_for("/folder/do_list") %]"></div>
+
+<h3>Tree with hardcoded root node (not corresponding to any item in the store)</h3>
+<div dojoType="dijit.Tree" id="tree1" store="continentStore" query="{type:'continent'}"
+  labelAttr="name" label="Continents">
+  <script type="dojo/method" event="onClick" args="item">
+    if(item){
+      alert("Execute of node " + continentStore.getLabel(item)
+        +", population=" + continentStore.getValue(item, "population"));
+    }else{
+      alert("Execute on root node");
+    }
+  </script>
+</div>
+-->
+<form method="get">
+	<div dojoType="dijit.TitlePane" title="Folders" open="false" style="width: 70%;" >
+
+		<script type="text/javascript">
+			var treeStore = new dojo.data.ItemFileWriteStore({ url: "[% c.uri_for("/folder/do_list") %]" });//data : treeData });
+			var treeModel = new my_ext.RadiobuttonForestStoreModel({
+					store: treeStore,
+					childrenAttrs: ["children"]
+				});
+			
+			
+			
+			function doRefresh() {	
+				document.getElementById('selectedNodesDiv').innerHTML = '';
+				var itemFx = function(myItem, i){
+					document.getElementById('selectedNodesDiv').innerHTML += treeStore.getValue(myItem, 'name') + '<br />';
+				};
+				treeStore.fetch({
+					query: {'checked': true}, 
+					queryOptions: {deep:true},
+					onItem: itemFx});
+			}
+			
+			// onChange of the model we query it (the store inside the model) to get the checked nodes
+			dojo.connect(treeModel, "onChange", doRefresh);
+		</script>		
+				
+				
+		<div dojoType="my_ext.RadiobuttonTree" id="tree"
+				model="treeModel"  showRoot="false" openOnClick="false"
+				>
+				<!-- example of a connection on the 'onClick' event -->
+				<script type="dojo/method" event="onClick" args="item">
+					// check the clicked node
+					var isChecked = this.model.store.getValue(item, 'checked');
+					isChecked = (isChecked === true || (isChecked.toLowerCase && isChecked.toLowerCase() === 'true'));				
+					this.model.store.setValue(item, 'checked', !isChecked);
+					
+					console.log('onClick on ' + this.model.store.getValue(item, 'name'));
+					</script>
+		</div>
+
+	</div>	
+<input type="submit" />
+</form>
+	<div style="position:absolute; top:0px; right:0px; border: 2px solid red; width:100px">
+		<h6>Selected nodes:</h6>
+		<div id="selectedNodesDiv"></div>
+	</div>
+

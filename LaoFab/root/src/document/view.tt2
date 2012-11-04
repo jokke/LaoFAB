@@ -1,0 +1,200 @@
+[% META title = "Viewing document" %]
+
+<h1>[% template.title %] [% document.title %]</h1>
+<p>
+[% IF back %]
+    &lt;- Go <a href="[% back %]">back</a> where you came from.
+[% END %]
+</p>
+
+<script type="text/javascript">
+    dojo.require("dojox.form.Rating");
+	dojo.require("dojo.parser");
+</script>
+
+<table>
+<tbody>
+<tr>
+    <th align="right" valign="top">Title:</th>
+    <td><em>[% document.title | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Secondary&nbsp;reference:</th>
+    <td><em>[% document.sub_title | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Author(s):</th>
+    <td><em>[% FOREACH author = document.authors %]
+        [% IF author.name %]
+            Name: <b>[% author.name | html %]</b> 
+        [% END %]
+        [% IF author.org %]
+            Organisation: <b>[% author.org | html %]</b>
+        [% END %]
+        <br/>
+    [% END %]</em>
+    
+    </td>
+</tr><tr>
+    <th align="right" valign="top">Key&nbsp;words:</th>
+    <td><em>[% FOREACH key = document.keywords %]
+        [% key.word | html %]
+    [% END %]
+    </em></td>
+</tr><tr>
+    <th align="right" valign="top">Publication&nbsp;year:</th>
+    <td><em>[% document.pubyear | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Subject&nbsp;categories:</th>
+    <td><em>[% FOREACH subcat IN document.subcats %]
+                 [% subcat.full_cat | html %]<br/>
+            [% END %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Available&nbsp;in&nbsp;folders:</th>
+    <td>[% FOREACH folder = document.folders %]
+        <a href="[% c.uri_for("/folder/view/$folder.id") %]">[% folder.name | html %]</a> 
+    [% END %]
+    </td>
+</tr><tr>
+    <th align="right" valign="top">File&nbsp;type&nbsp;(mime):</th>
+    <td><em>[% document.mime | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">File&nbsp;size:</th>
+    <td><em>[% document.friendly_size | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Type&nbsp;of&nbsp;document:</th>
+    <td><em>[% document.doctype.name | html %]</em></td>
+</tr><tr>
+    <th align="right" valign="top">Uploaded&nbsp;date/time:</th>
+    <td><em>[% document.create_dt | html %]</em></td>
+[% IF c.check_user_roles(("admin")) %]
+</tr><tr>
+    <th align="right" valign="top">Submitted&nbsp;by:</th>
+    <td><em><a href="[% c.uri_for("/user/view/$document.create_user.id") %]">[% document.create_user.username | html %]</a></em></td>
+[% END %]
+</tr><tr>
+    <th align="right" valign="top">Accepted&nbsp;date/time:</th>
+    <td><em>[% document.checked_dt | html %]</em></td>
+[% IF document.checked_user %]
+</tr><tr>
+    <th align="right" valign="top">Accepted&nbsp;by:</th>
+    <td><em>[% document.checked_user.username | html %]</em></td>
+[% END %]
+</tr><tr>
+    <th align="right" valign="bottom">Download&nbsp;file:</th>
+	[% IF document.mime.match("msword") %]
+        [% SET pic = "doc-24x24.png" %]
+    [% ELSIF document.mime.match("image") %]
+        [% SET pic = "pic-24x24.png" %]
+    [% ELSIF document.mime.match("pdf") %]
+        [% SET pic = "pdf-24x24.png" %]
+    [% ELSIF document.mime.match("excel") %]
+        [% SET pic = "xls-24x24.png" %]
+    [% ELSIF document.mime.match("audio") %]
+        [% SET pic = "video-24x24.png" %]
+    [% ELSIF document.mime.match("zip") %]
+        [% SET pic = "tgz-24x24.png" %]
+    [% ELSIF document.mime.match("powerpoint") %]
+        [% SET pic = "pres-24x24.png" %]
+    [% ELSIF document.mime.match("google") %]
+        [% SET pic = "kmz-24x24.png" %]
+    [% ELSE %]
+        [% SET pic = "ascii-24x24.png" %]
+    [% END %]
+    <td valign="bottom"><img src="[% c.uri_for("/static/images/$pic") %]" alt="icon" /><em><a href="[% c.uri_for("/document/download/$document.id") %]">[% document.filename | html %]</a></em></td>
+</tr><tr>
+	<th align="right" valign="bottom">Download&nbsp;as&nbsp;ZIP:</th>
+	<td valign="bottom"><img src="[% c.uri_for("/static/images/") %]tgz-24x24.png" alt="icon" /><em><a href="[% c.uri_for("/document/download_zip/$document.id") %]">[% document.filename | html %].zip</a></em></td>
+</tr><tr>
+    <th align="right" valign="top">Downloads:</th>
+    <td>
+    [% SET no_downloads = c.model('LaoFabDB').file_downloads(document) %]
+    [% no_downloads | html %]</td>
+</tr><tr>
+    <th align="right" valign="top">Rating:</th>
+    <td>
+    <span id="inlineEvents">
+        [% IF user_rating > 0 %]
+            [% SET star = 0.5 %]
+            [% WHILE star <= rating %]
+                <img src="[% c.uri_for("/static/js/dojox/form/resources/images/rating_full.gif") %]" alt="full star" />
+                [% SET star = star + 1.0 %]
+            [% END %]
+            [% WHILE star <= 5.0 %]
+                <img src="[% c.uri_for("/static/js/dojox/form/resources/images/rating_empty.gif") %]" alt="empty star" />
+                [% SET star = star + 1.0 %]
+            [% END %]
+
+
+        [% END %]
+        <span class="rating_avg">[% rating %]</span>
+        (average by 
+        <span class="rating_count">[% no_comments %]</span> 
+        user[% IF no_comments > 1 %]s[% END %]).
+        <br />
+        Your rating of this document is 
+        <span class="rating_mine">[% IF user_rating > 0 %]
+            [% user_rating %]
+        [% ELSE %]
+            <em>not made yet</em>
+        [% END %]</span>.
+        [% IF user_rating < 1 %]
+        <br/>
+        Rate the document by clickin on the stars, <br/>
+        one star = bad, five stars = very good:<br/>
+        <span dojoType="dojox.form.Rating" numStars="5">
+            <script type="dojo/event" event="onChange">
+                dojo.xhrPost({
+                    url : "[% c.uri_for("/rest/rating/$document.id/$c.user.id") %]",
+                    handleAs : "json",
+                 content: {
+                        "rating":this.value
+                    },
+                    load: function(data,ioargs){
+                        dojo.query('#inlineEvents .rating_avg')[0].innerHTML = data.rating_avg;
+                        dojo.query('#inlineEvents .rating_count')[0].innerHTML = data.rating_count;
+                        dojo.query('#inlineEvents .rating_mine')[0].innerHTML = data.rating_mine;
+                        //console.log(data);
+                    }
+                });
+            </script>
+            <script type="dojo/event" event="onMouseOver" args="evt,value">
+                var message = "";
+                if (value == 1)
+                    message = "Very bad document!";
+                else if (value == 2)
+                    message = "Quite bad document.";
+                else if (value == 3)
+                    message = "Avarage document.";
+                else if (value == 4)
+                    message = "Good document.";
+                else if (value == 5)
+                    message = "Very good document!";
+
+                dojo.query('#inlineEvents .rating_desc')[0].innerHTML = message;
+            </script>
+        </span> <span class="rating_desc"></span>
+        [% END %]
+    </span>
+    
+    </td>
+</tr>
+</tbody>
+</table>
+
+[% IF c.check_user_roles(("admin")) %]
+<p>As you are an administrator, you can <a href="[% c.uri_for("/document/edit/$document.id") %]">edit</a> this document if needed.</p>
+<h3>Latest downloads (showing [% downloads.count %]):</h3>
+
+<ul>
+[% WHILE (download = downloads.next) %]
+    <li><a href="[% c.uri_for("/user/view/$download.user.id") %]">[% download.user.username %]</a> @ [% download.download_dt %]</li>
+[% END %]
+</ul>
+
+<h3>Latest ratings (showing [% comments.count %]):</h3>
+
+<ul>
+[% WHILE (comment = comments.next) %]
+    <li><a href="[% c.uri_for("/user/view/$comment.user.id") %]">[% comment.user.username %]</a> rating [% comment.rating %] @ [% comment.comment_dt %]</li>
+[% END %]
+</ul>
+[% END %]

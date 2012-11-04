@@ -1,0 +1,85 @@
+ ---
+ indicator: submit
+ auto_fieldset: { legend : 'Document form' }
+ elements:
+
+   - type: Text
+     name: title
+     label: Title
+     size: 30
+     constraints:
+       - Required
+
+   - type: Text
+     name: sub_title
+     label: Secondary title
+     size: 30
+
+   - type: Text
+     name: keywords
+     label: Keywords (comma separated)
+     size: 50
+     attributes:
+       title: Free keywords that should be associated to your document with commas between them as seperator.
+
+   - type: Multi
+     label: Subject category
+     container_attrs:
+       class: vertical
+       title: Select many by pressing controll and click.
+    
+     elements:
+       - type: Select
+         multiple: 1
+         name: agric2
+         options: 
+           - [ 1, 'Agric: general']
+           - [ 2, 'Agric: crop production']
+           - [ 3, 'Agric: livestock production']
+         attributes:
+           title: Select many by pressing controll and click.
+       - type: Select
+         multiple: 1
+         name: agric
+         values: [ 'Agric: general', 'Agric: crop production', 'Agric: livestock production', 'Agric: fishing, acquaculture', 'Agric: markets, trade, investment', 'Agric: food security, nutrition' ]
+         attributes:
+           title: Select many by pressing controll and click.
+       - type: Select
+         multiple: 1
+         name: nrm
+         values: [ 'NRM: general', 'NRM: forestry, timber, NTFPs', 'NRM: land use planning, management', 'NRM: water, irrigation, hydropower', 'NRM: mines, energy', 'NRM: environment, biodiversity' ]
+         attributes:
+           title: Select many by pressing controll and click.
+       - type: Select
+         multiple: 1
+         name: rdev
+         values: [ 'Rural Dev: general', 'Rural Dev: governance and service delivery', 'Rural Dev: groups, associations', 'Rural Dev: gender, ethnicity', 'Rural Dev: rights, conflicts', 'Rural Dev: SMEs' ]
+         attributes:
+           title: Select many by pressing controll and click.
+
+   - type: Text
+     name: pub_year
+     label: Publication year
+     size: 4
+     attributes:
+       title: Enter the publication year, 4 digits.
+
+   - type: Select
+     label: Type of document
+     name: tod
+     options:
+       - [ 6, 'Govt policies' ]
+       - [ 7, 'Published docs' ]
+       - [ 8, 'Grey literature' ]
+       - [ 9, 'Jobs & CVs' ]
+       - [ 10, 'Statistics' ]
+       - [ 11, 'Maps' ]
+       - [ 12, 'Video' ]
+       - [ 13, 'Photo' ]
+       - [ 14, 'Presentation' ]
+       - [ 15, 'Audio/podcast' ]
+       - [ 16, 'Other' ]
+
+   - type: Submit
+     name: submit
+     value: Submit Document

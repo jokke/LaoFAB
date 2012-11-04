@@ -1,0 +1,110 @@
+[% META title = "Welcome to the LaoFAB Document Repository" %]
+<script type="text/javascript">
+    dojo.require("dojo.data.ItemFileReadStore");
+    dojo.require("laofab.TagCloud");
+    dojo.require("dijit.TitlePane");
+    dojo.require("dijit.Tooltip");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.dijit");
+    dojo.require("dojo.parser");
+    
+	function tagItemClicked(sTag){
+		location.href = '[% c.uri_for('/search') %]?s=' + sTag;
+	}
+    function createTagCloud() {
+        var oStore = new dojo.data.ItemFileReadStore({
+            url:"[% c.uri_for('/document/do_tag_cloud') %]"
+		});
+        var oCloudDiv = dojo.byId('tagCloudDiv');
+        var oCloud = new laofab.TagCloud({
+            store: oStore
+        },oCloudDiv);
+    }
+    dojo.addOnLoad(function(){
+		createTagCloud();
+		dijit.byId('s').focus();
+	});
+    
+    
+</script>
+<table width="100%">
+<tbody>
+<tr><td valign="top">
+<h1>Welcome![%# content.heading | html %]</h1><p> </p>
+<form method="get" id="search_form" dojoType="dijit.form.Form" action="[% c.uri_for('/search') %]">
+<table><tbody><tr><td><em>Quick search:</em> </td>
+	<td><input type="text" name="s" value=""
+                dojoType="dijit.form.ValidationTextBox"
+                invalidMessage="Something to search for is required!"
+                trim="true"
+                required="true"
+                id="s"
+                /></td>
+<td><button dojoType="dijit.form.Button" name="b" value="go" type="submit">go</button></td></tr>
+</tbody></table>
+</form>
+<p style="margin:8px;">
+All members can upload and download documents. The system currently has [% no_users %] registered users.</p>
+<p style="margin:8px;">Most files in the repository are text documents, but members can also share photos, videos and audio files.</p> 
+<p style="margin:8px;">There are currently [% no_docs %] documents with a total of [% size %], spread out in [% no_folders %] folders and [% no_photos %] photos with a total of [% photo_size %], spread out in [% no_albums %] albums.</p>
+<p style="margin:8px;">You can find what you want by using the search or browse functions. The top search word of the week is <em><a href="[% c.uri_for("/search") %]?s=[% week_word %]">[% week_word | html %]</a></em>.</p>
+
+<p style="margin:8px;">You can also download an <a href="[% c.uri_for('/export/excel') %]">excel file</a> with a catalogue of all the documents in the repository.</p>
+<p style="margin:8px;">The upload link is visible at the top and bottom of ever folder. New files will not be visible to other members until after approval by the Secretariat.</p>
+<p style="margin:8px;">Guidance can be found in the LaoFAB Frequently Asked Questions, which can be downloaded <a href="[% c.uri_for('/static/faq.pdf') %]">here</a>. 
+<p style="margin:8px;">You can also check our links (on your right hand side) for other online libraries focused on Lao PDR.</p>
+
+<p style="margin:8px;">We hope you find this repository useful, but cannot accept any liability for the content.</p>
+<p style="margin:8px;"><a href="mailto:LEAP@laoex.org">Andrew Bartlett</a> (LaoFAB Secretariat)<br>   
+<a href="mailto:joakim.lagerqvist@gmail.com">Joakim Lagerqvist</a> (website and software development)
+	
+[%# content.body %]</p>
+<h2>The latest uploaded photos:</h2>
+<p>
+
+[% WHILE (photo = latest_photos.next) %]
+  <a href="[% c.uri_for("/album/slide/$photo.album.id/$photo.id") %]"><img src="[% c.uri_for("/photo/$photo.id/thumbnail") %]" alt="[% photo.caption | html %]" title="[% photo.caption | html %]" /></a>
+[% END %]
+</p>
+</td><td style="width:250px" valign="top">
+<div id="tagCloudDiv" style="width:250px;"></div>
+
+<div dojoType="dijit.TitlePane" open="false" title="10 Latest document uploads" style="width:100%;margin-top:40px;">
+    <ol>
+    [% WHILE (document = latest_uploads.next) %]
+        <li><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</li>
+    [% END %]
+    </ol>
+</div>
+
+<div dojoType="dijit.TitlePane" open="false" title="Most popular document downloads" style="width:100%;margin-top:20px;">
+    <ol>
+    [% WHILE (download = top_downloads.next) %]
+        <li><a href="[% c.uri_for("/document/view/$download.document.id") %]">[% download.document.title | html %]</a> [[% download.document.pubyear | html %]]</li>
+    [% END %]
+    </ol>
+</div>
+<div dojoType="dijit.TitlePane" open="false" title="Links" style="width:100%;margin-top:20px;">
+	<ul>
+		
+		<li><a href="http://www.na.gov.la/">The National Assembly</a> (constitution and laws)</li>
+
+		<li><a href="http://www.lao44.org/">Lao44</a> (hundreds of files in Lao language)</li>
+
+		<li><a href="http://lad.nafri.org.la/">The Lao Agriculture Database (LAD)</a> managed by NAFRI</li>
+
+		<li><a href="http://www.laoex.org">The National Agricultural Extension and Forestry Extension Service (NAFES)</a></li>
+
+		<li><a href="http://www.directoryofngos.org">The NGO Online Resource Library (ORL)</a> - members only</li>
+
+		<li><a href="http://go.worldbank.org/UIJASQY8A0">World Bank publications</a></li>
+
+		<li><a href="http://www.adb.org/laopdr/default.asp">Asian Development Bank (ADB)</a></li>
+
+		<li><a href="http://www.undplao.org/newsroom/publication.php">UNDP publications</a></li>
+
+	</ul>
+</div>
+</td></tr></tbody></table>

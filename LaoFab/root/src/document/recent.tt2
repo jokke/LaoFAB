@@ -1,0 +1,48 @@
+[% META title = "New documents" %]
+
+<script type="text/javascript">
+    dojo.require("dijit.form.TextBox");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.Dialog");
+</script>
+
+<h1>[% template.title %]</h1>
+
+[% IF documents.count > 0 %]
+
+<p>Below are the newly uploaded documents awaiting your approval (click on title to edit and approve):</p>
+<table class="folder" width="100%">
+<tbody>
+<tr>
+    <td><em>title</em></td><td><em>author(s)</em></td><td align="center"><em>created&nbsp;date</em></td><td><em>created&nbsp;by</em></td>
+</tr>
+    [% WHILE (doc = documents.next) %]
+        <td id="fixed"><a href="[% c.uri_for("/document/edit/$doc.id") %]">[% doc.short_title | html %]</a></td>
+        <td id="fixed">[% doc.short_authors | html %]</td>
+        [% SET date = doc.create_dt %]
+        <td align="center">[% date.substr(0, 10) %]</td>
+        <td>[% doc.create_user.username %]</td>
+        <td align="center"><a href="[% c.uri_for("/document/edit/$doc.id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" /></a></td>
+        <td align="center">
+            <div id="delete_dialog_[% doc.id %]" dojoType="dijit.Dialog" title="Delete [% doc.short_title | html %]?">
+                <table>
+                    <tr><td><label for="del_doc_[% doc.id %]">Are you sure you want
+                        to delete <br/><em>[% doc.short_title %]</em>?</label></td></tr>
+                    <tr><td align="center">
+                        <form method="post" action="[% c.uri_for("/document/delete/$doc.id") %]">
+                        <input type="hidden" name="from" id="from" value="recent" />
+                        <button id="del_doc[% doc.id %]" dojoType="dijit.form.Button" 
+                        type="submit">DELETE</button>
+                        </form></td></tr>
+                </table>
+            </div>
+            <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_[% doc.id %]').show();"/>
+            </td>
+        </tr>
+    [% END %]
+</tbody>
+</table>
+
+[% ELSE %]
+<p>There are no new documents.</p>
+[% END %]

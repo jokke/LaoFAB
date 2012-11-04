@@ -1,0 +1,10 @@
+<h1>Let Santa know what you want :)</h1>
+ <form method="post" action="[% c.uri_for('/') %]">
+     <fieldset><legend>Tell me everything</legend>
+         <label>Your email:<input type="text" name="email"/></label>
+         <label>Your name:<input type="text" name="name"/></label>
+         <label>Your Santa's email:<input type="text" name="santa"/></label>
+         <label>Your wish:<textarea name="gift" rows="5" cols="40"></textarea></label>
+         <input type="submit" name="submit" value="Go!"/>
+     </fieldset>
+ </form>

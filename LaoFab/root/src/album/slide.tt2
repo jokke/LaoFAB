@@ -1,0 +1,92 @@
+[% META title = "Browsing album" %]
+<h1>[% template.title | html %]</h1>
+<p>Browsing the repository, album: <a href="[% c.uri_for("/album/view/$album_id") %]">[% album_name | html %]</a></p>
+<p>You are currently here:</p>
+<p>[% location_str %]</p>
+[% IF c.check_user_roles(("admin")) OR c.user.id == photo.create_user.id %]
+    
+    <script type="text/javascript">
+        dojo.require("dijit.form.TextBox");
+        dojo.require("dijit.form.Button");
+        dojo.require("dijit.Dialog");
+        dojo.require("dojo.parser");
+    </script>
+[% END %]
+
+<center><h2>[% photo.caption | html %]</h2></center>
+
+<table width="100%" border="0">
+<tr>
+<td align="left">[% IF next_photo.id %]<a href="[% c.uri_for("/album/slide/$album_id/$next_photo.id") %]">&lt;-- next photo</a>[% ELSE %]this is the first photo
+[% END %]</td>
+<td align="right">[% IF prev_photo.id %]<a href="[% c.uri_for("/album/slide/$album_id/$prev_photo.id") %]">previous photo --&gt;</a>[% ELSE %]this is the last photo
+[% END %]</td>
+</tr>
+</table>
+
+<p>
+<img src="[% c.uri_for("/photo/$photo.id/normal") %]" style="display:block; margin-left: auto; margin-right: auto; width: 800px; scalefit: 1;" alt="[% photo.caption | html %]" title="[% photo.caption | html %]" />
+</p>
+<table width="100%" border="0">
+<tr>
+<td align="left">[% IF next_photo.id %]<a href="[% c.uri_for("/album/slide/$album_id/$next_photo.id") %]">&lt;-- next photo</a>[% ELSE %]this is the first photo
+[% END %]</td>
+<td align="right">[% IF prev_photo.id %]<a href="[% c.uri_for("/album/slide/$album_id/$prev_photo.id") %]">previous photo --&gt;</a>[% ELSE %]this is the last photo
+[% END %]</td>
+</tr>
+</table>
+<p>
+Caption: <em>[% photo.caption | html %]</em><br/>
+[% IF photo.location %]
+  Location: <em>[% photo.location %]</em><br/>
+[% END %]
+[% IF photo.photographer %]
+  Photographer: <em>[% photo.photographer %]</em><br/>
+[% END %]
+[% IF photo.taken_dt AND photo.date_only != '0000-00-00' %]
+  Picture date: <em>[% photo.date_only %]</em><br/>
+[% END %]
+[% IF c.check_user_roles("admin") %]
+  Created by: <a href="[% c.uri_for("/user/view/$photo.create_user.id") %]">
+  [% IF photo.create_user.name %]
+    [% photo.create_user.name | html %] ([% photo.create_user.username | html %])
+  [% ELSE %]
+    [% photo.create_user.username | html %]
+  [% END %]
+  </a><br />
+[% END %]
+Uploaded: [% photo.create_dt %]
+</p>
+
+[% IF c.check_user_roles("admin") OR c.user.id == photo.create_user.id %]
+<p>
+  <a href="[% c.uri_for("/photo/edit/$photo.id/$album_id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="edit icon"/>Edit this photo</a>.<br/>
+  
+  <div id="delete_dialog_[% photo.id %]" dojoType="dijit.Dialog" title="Delete [% photo.caption | html %]?">
+    <table>
+      <tr><td><label for="del_photo_[% photo.id %]">Are you sure you want
+          to delete this photo?</label></td></tr>
+      <tr><td align="center">
+          <form method="get" action="[% c.uri_for("/photo/delete/$photo.id") %]">
+          <input type="hidden" name="from" value="[% album_id %]"/>
+          <button dojoType="dijit.form.Button" value="Delete" id="del_photo_[% photo.id %]" 
+                  type="submit">Delete</button>
+          </form></td></tr>
+    </table>
+  </div>
+  <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_[% photo.id %]').show();"/><span style="color: blue; text-decoration: underline; cursor: pointer;" onclick="dijit.byId('delete_dialog_[% photo.id %]').show();">Delete this photo</span>
+  
+</p>
+[% END %]
+<p><a href="[% c.uri_for("/photo/download/$photo.id") %]">Download</a> the full version of this photo.</p>
+<p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/photo/add/$album_id") %]">Upload</a> a photo to this album ([% album_name | html %]).</p>
+
+[% IF c.check_user_roles(("admin")) %]
+<h3>Latest downloads (showing [% downloads.count %]):</h3>
+
+<ul>
+[% WHILE (download = downloads.next) %]
+    <li><a href="[% c.uri_for("/user/view/$download.user.id") %]">[% download.user.username %]</a> @ [% download.download_dt %]</li>
+[% END %]
+</ul>
+[% END %]

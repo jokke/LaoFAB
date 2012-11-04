@@ -1,0 +1,92 @@
+---
+# indicator is the field that is used to test for form submission
+indicator: submit
+# Start listing the form elements
+elements:
+    # The first element will be a text field for the title
+#    - type: Text
+#      name: title
+#      size: 40
+#      label: Title
+      # This is an optional 'mouse over' title pop-up
+#      container_attributes:
+#        id: subcat_tt
+#      attributes:
+#        title: Enter a title here
+#      constraints:
+#        - Required
+
+    # Another text field 
+#    - type: Text
+#      name: sub_title
+#      size: 40
+#      label: Sub title
+#      attributes:
+#        title: Enter a sub title
+    
+    # Add a drop-down list for the author selection.  Note that we will
+    # dynamically fill in all the authors from the controller but we
+    # could manually set items in the drop-list by adding this YAML code:
+    # options:
+    #   - [ '1', 'Bastien' ]
+    #   - [ '2', 'Nasseh'  ]
+#    - type: Select
+#      name: subcats
+#      multiple: multiple
+#      label: Subject categories
+#      attributes:
+#        title: Hold the CTRL key when you click to select several categories
+
+    # Another text field 
+#    - type: Text
+#      name: keywords
+#      label: Comma separated keywords
+#      size: 60
+#      attributes:
+#        title: Enter your keywords and separate them with comma (,)
+     
+    # Another text field 
+#    - type: Text
+#      name: pubyear
+#      size: 4
+#      label: Publication year
+#      attributes:
+#        title: Enter the year (4 digits) of publication
+#      constraint:
+#        - type: Regex
+#          regex: '^[12]\d{3}$'
+#          message: Publication year must be 4 digits, example '1975'.
+
+#    - type: Select
+#      name: doctypes
+#      label: Type of document
+#      attributes:
+#        title: Choose what type of document it is
+
+    #testing
+#    - type: Block
+#      name: author_widget
+#      content_xml: '<div id="author_lines"><label>Authors</label></div><div id="author_widget"><table><tr><td>Name:</td><td><input type="text" name="author_name" id="author_name" size="40"></td></tr><tr><td>Organisation:</td><td><input type="text" name="author_org" id="author_org" size="40"></td></tr><tr><td></td><td><input type="button" name="author_add" value="add author" id="author_add"></td></tr></table>'
+
+    #testing
+#    - type: Block
+#      name: folders
+
+    - type: File
+      name: document
+      label: The actual document
+      attributes:
+        title: Upload the document here
+      constraints:
+        - Required
+      #container_tag: div
+
+    # The submit button
+    - type: Submit
+      name: submit
+      value: Submit Document
+filter:
+    # Remove whitespace at both ends
+    - TrimEdges
+    # Escape HTML characters for safety
+    - HTMLEscape

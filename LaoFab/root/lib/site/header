@@ -1,0 +1,20 @@
+<!-- BEGIN site/header -->
+<img class="banner" src="[% c.uri_for("/static/images/banner_new.jpg") %]" alt="LaoFAB Banner" >
+[% IF c.check_user_roles(("viewer")) %]
+<ul id="menu">
+<li class="button"><a href="[% c.uri_for("/") %]">Start</a></li>
+<li class="button"><a href="[% c.uri_for("/search") %]">Search</a></li>
+<li class="button"><a href="[% c.uri_for("/folder/view") %]">Browse</a></li>
+<li class="button"><a href="[% c.uri_for("/user/view") %]">My settings</a></li>
+[% IF c.check_user_roles(("admin")) %]
+    <li class="button"><a href="[% c.uri_for("/manage") %]">Manage</a></li>
+    <li class="button"><a href="[% c.uri_for("/document/recent") %]">New documents</a></li>
+    <li class="button"><a href="[% c.uri_for("/stats") %]">Statistics</a></li>
+[% ELSE %]
+    <li class="button"><a href="[% c.uri_for("/document/add") %]">Upload document</a></li>
+    <li class="button"><a href="[% c.uri_for("/photo/add") %]">Upload photo</a></li>
+[% END %]
+<li class="button"><a href="[% c.uri_for("/logout") %]">Logout</a></li>
+</ul>
+[% END %]
+<!-- END site/header -->

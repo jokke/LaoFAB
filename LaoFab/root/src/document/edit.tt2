@@ -1,0 +1,20 @@
+[% INCLUDE document/script_fragment.tt2 %]
+
+[% META title = 'Edit and approve the document' %]
+
+<h1>[% template.title %]</h1>
+
+<p>Please review the values for the document below and submit it to the repository, once the document is submitted, it is viewable by the users. The following fields are required:
+<ul>
+<li><em>Title</em> - every document should have a title</li>
+<li><em>Publication year</em> - should be in the format of four digits, for example <em>1975</em></li>
+<li><em>Folder location(s)</em> - at least one folder should be selected to have the document. The default value is the folder you upload from 
+[% IF folder_name %]
+    (in this case, the folder <em>[% folder_name | html %]</em>)
+[% END %]</li>
+<li><em>The actual document</em> - the digital file</li>
+</ul>
+The other fields (secondary reference, keywords etc.) are optional, but we encurage you to use them.
+</p>
+
+[% INCLUDE document/form_fragment.tt2 %]

@@ -1,0 +1,105 @@
+<form dojoType="dijit.form.Form" id="photo_form" 
+  encType="multipart/form-data" method="post">
+
+<div dojoType="dijit.Tooltip"
+                connectId="info_caption"
+                label="Give the photo a caption, this field is required.">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="info_location"
+                label="Give the photo a location, choose a province or type in the location.">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="info_photographer"
+                label="Who toke this picture, name of the photographer.">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="info_taken_dt"
+                label="When the photo was taken in the format 'YYYY-MM-DD'.">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="info_photo"
+                label="The actual image file, this field is required.">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="info_album"
+                label="The location of the photo (which album), this field is required.">
+</div>
+
+<p>
+<label for="caption"><em>Caption</em></label>&nbsp;<span id="info_caption"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<input type="text" name="caption" 
+    value="[% photo.caption %]"
+    dojoType="dijit.form.ValidationTextBox"
+    trim="true" 
+    id="title"
+    required="true"
+    invalidMessage="A caption is required!"
+    style="width: 350px;" 
+/>
+</p>
+
+<p>
+<label for="location"><em>Location</em></label>&nbsp;<span id="info_location"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<select 
+    dojoType="dijit.form.ComboBox"
+    trim="true" 
+    id="location"
+    name="location"
+    required="false"
+    style="width: 350px;" >
+<option>[% photo.location %]</option>
+<option>Vientiane Capital</option>
+<option>Phongsaly</option>
+<option>Luangnamtha</option>
+<option>Oudomxay</option>
+<option>Bokeo</option>
+<option>Luangprabang</option>
+<option>Huaphanh</option>
+<option>Xayabury</option>
+<option>Xiengkhuang</option>
+<option>Vientiane</option>
+<option>Borikhamxay</option>
+<option>Khammuane</option>
+<option>Savannakhet</option>
+<option>Saravane</option>
+<option>Sekong</option>
+<option>Champasack</option>
+<option>Attapeu</option>
+</select>
+
+</p>
+
+<p>
+<label for="photographer"><em>Photographer</em></label>&nbsp;<span id="info_photographer"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<input type="text" name="photographer" 
+    value="[% photo.photographer %]"
+    dojoType="dijit.form.ValidationTextBox"
+    trim="true" 
+    id="photographer"
+    required="false"
+    style="width: 350px;" 
+/>
+</p>
+
+<p>
+<label for="taken_dt">Taken date:</label>&nbsp;<span id="info_taken_dt"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br/>
+<input id="taken_dt" name="taken_dt" value="[% photo.taken_dt %]" dojoType="dijit.form.DateTextBox"
+              constraints={datePattern:'yyyy-MM-dd'}
+              lang="en-us"
+              required="false"
+              promptMessage="yyyy-mm-dd"
+              invalidMessage="Invalid date. Please use yyyy-mm-dd format."/>
+</p>
+
+<div class="file label">
+<p>
+<label for="photo"><em>The actual photo</em></label>&nbsp;<span id="info_photo"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+[% IF photo.file %]
+    The current photo is: <img alt="Current photo" src="[% c.uri_for("/photo/$photo.id/thumbnail") %]" /><br/>
+    To replace this photo, upload a new below.<br/>
+[% END %]
+<input name="photo" title="Upload the photo here" id="photo" type="file" />
+</p>
+</div>
+

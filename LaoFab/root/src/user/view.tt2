@@ -1,0 +1,174 @@
+[% META title = "User settings" %]
+
+<script type="text/javascript">
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.Dialog");
+    dojo.require("dojox.validate.regexp");
+    dojo.require("dojo.parser");
+    function theSame(dojoTxt1, dojoTxt2) {
+        return dojoTxt1.getValue() == dojoTxt2.getValue();
+    } 
+    
+</script>
+
+<h1>[% template.title %]</h1>
+
+<p>
+[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+    [% user.username %]&rsquo;s
+[% ELSE %]
+    Your
+[% END %]
+registered settings are as follows:
+</p>
+<table>
+<tbody>
+<tr><th>Email address: </th><td>[% user.username %]</td></tr>
+<tr><th>Name: </th><td>[% user.name %]</td></tr>
+<tr><th>Date added: </th><td>[% user.create_dt %]</td></tr>
+</tbody>
+</table>
+<div id="update_info_dialog" dojoType="dijit.Dialog" title="Update your information">
+    <form method="post" id="update_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/edit_info/$user.id") %]">
+    <table>
+        <tr><td><label for="email">Email address:</label></td>
+        <td><input type="text" name="email" 
+                               value="[% user.username %]"
+                               id="email"
+                               dojoType="dijit.form.ValidationTextBox"
+                               regExpGen="dojox.validate.regexp.emailAddress" trim="true"
+                               required="true"
+                               invalidMessage="Invalid email address!"
+                               /></td></tr>
+        <tr><td><label for="email">Name:</label></td>
+        <td><input type="text" name="name" 
+                               value="[% user.name %]"
+                               id="name"
+                               dojoType="dijit.form.ValidationTextBox"
+                               trim="true"
+                               required="true"
+                               invalidMessage="Please fill in your name!"
+                               /></td></tr>
+        <tr><td colspan="2" align="center">
+            <button dojoType="dijit.form.Button" id="submit" 
+                        type="submit">Update</button></td></tr>
+    </table>
+    </form>
+</div>
+
+<div id="update_password_dialog" dojoType="dijit.Dialog" title="Change your password">
+    <form method="post" id="password_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/edit_password/$user.id") %]">
+    <table>
+        <tr><td><label for="email">Password:</label></td>
+        <td><input type="password" name="password" 
+                               id="password"
+                               dojoType="dijit.form.ValidationTextBox"
+                               required="true"
+                               regExp="^.{6,}$"
+                               invalidMessage="The password must have at least 6 characters!"
+                               /></td></tr>
+        <tr><td><label for="email">Password (confirm):</label></td>
+        <td><input type="password" name="password2" 
+                               id="password2"
+                               dojoType="dijit.form.ValidationTextBox"
+                               required="true"
+                               validator="return theSame(this, dijit.byId('password'));"
+                               invalidMessage="The two passwords must match!"
+                               /></td></tr>
+        <tr><td colspan="2" align="center">
+            <button dojoType="dijit.form.Button" id="submit_password" 
+                        type="submit">Change</button></td></tr>
+    </table>
+    </form>
+</div>
+
+<p><a href="#" onclick="dijit.byId('update_info_dialog').show();">Change settings</a> | <a href="#" onclick="dijit.byId('update_password_dialog').show();">Change password</a></p>
+
+[% IF downloads.count > 0 %]
+<p>
+[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+    [% user.username %] has
+[% ELSE %]
+    You have
+[% END %]
+downloaded the following documents (showing only the 
+[% IF downloads.count > 1 %]
+    [% downloads.count %] 
+[% END %]
+latest):
+</p>
+<ul>
+[% WHILE (download = downloads.next) %]
+  [% IF download.document %]
+    <li><a href="[% c.uri_for("/document/view/$download.document.id") %]">[% download.document.short_title | html %]</a>
+  [% ELSE %]
+    <li><a href="[% c.uri_for("/album/slide/$download.photo.albums.first.id/$download.photo.id") %]">[% download.photo.caption | html %]</a> (photo)
+  [% END %]
+  @ [% download.download_dt | html %]</li>
+[% END %]
+</ul>
+[% END %]
+[% IF uploads.count > 0 %]
+<p>
+[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+    [% user.username %] has
+[% ELSE %]
+    You have
+[% END %]
+uploaded the following documents (showing only the 
+[% IF uploads.count > 1 %]
+    [% uploads.count %] 
+[% END %]
+latest):
+</p>
+<ul>
+[% WHILE (upload = uploads.next) %]
+    <li><a href="[% c.uri_for("/document/view/$upload.id") %]">[% upload.short_title | html %]</a> @ [% upload.create_dt | html %]</li>
+[% END %]
+</ul>
+[% END %]
+[% IF comments.count > 0 %]
+<p>
+[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+    [% user.username %] has
+[% ELSE %]
+    You have
+[% END %]
+commented the following documents (showing only the 
+[% IF comments.count > 1 %]
+    [% comments.count %] 
+[% END %]
+latest):
+</p>
+<ul>
+[% WHILE (comment = comments.next) %]
+    <li><a href="[% c.uri_for("/document/view/$comment.document.id") %]">[% comment.document.short_title | html %]</a>
+    rating [% comment.rating %] @ [% comment.comment_dt | html %]</li>
+[% END %]
+</ul>
+[% END %]
+[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+    <p>
+    [% user.username %] has
+    [% IF logins.count < 1 %]
+        never loged in...</p>
+    [% ELSE %]
+        the following login records (showing only the 
+        [% IF logins.count > 1 %]
+            [% logins.count %] 
+        [% END %]
+        latest):
+        </p>
+        <ul>
+        [% WHILE (login = logins.next) %]
+            <li>From IP: [% login.ip_address %] @ [% login.create_dt | html %]
+            [% IF browser.user_agent(login.user_agent) %]
+                OS: <em>[% browser.os_string | html %]</em>
+                Browser: <em>[% browser.browser_string | html %]</em>
+            [% END %]</li>
+        [% END %]
+        </ul>
+    [% END %]
+[% END %]

@@ -1,0 +1,11 @@
+Hey LaoFAB Contributor,
+
+The moderator of the LaoFAB Document Repository just approved your document 
+[% document.short_title %]. You can have a look at it here: 
+
+[% c.uri_for("/document/view/$document.id") %]
+
+Thanks!
+--
+Santa's little LaoFAB helpers
+Follow us on twitter: http://twitter.com/laofab

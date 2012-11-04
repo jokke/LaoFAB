@@ -1,0 +1,30 @@
+Hey LaoFAB Admin,
+
+[% document.create_user.username %] just uploaded a document to the LaoFAB
+Document Repository and you need to look it over before it is published. You
+can do that by clicking this link:
+
+[% c.uri_for("/document/edit/$document.id") %]
+
+The following information was entered:
+
+Title: [% document.title %]
+Sub title: [% document.sub_title %]
+Subject categories: [% FOREACH subcat IN document.subcats %]
+    [% subcat.full_cat %][% END %]
+Key words: [% FOREACH keyword IN document.keywords %]
+    [% keyword.word %][% END %]
+Publication year: [% document.pubyear %]
+Type of document: [% document.doctype.name %]
+Author(s): [% FOREACH author IN document.authors %]
+    Name: [% author.name %]
+    Organisation: [% author.org %][% END %]
+Folder location(s): [% FOREACH folder IN document.folders %]
+    [% folder.name %][% END %]
+File type (mime): [% document.mime %]
+File name: [% document.filename %]
+File size: [% document.friendly_size %]
+
+--
+Santa's little LaoFAB helpers
+Follow us on twitter: http://twitter.com/laofab

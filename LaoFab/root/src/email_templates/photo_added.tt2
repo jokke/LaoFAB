@@ -1,0 +1,23 @@
+Hey LaoFAB Admin,
+
+[% photo.create_user.username %] just uploaded a photo to the LaoFAB
+Document Repository and you might just want to look at it and make sure
+it's not too pornographic. You can do that by clicking this link:
+
+[% c.uri_for("/album/slide/$photo.album.id/$photo.id") %]
+
+The following information was entered:
+
+Caption: [% photo.caption %]
+[%- IF photo.location %]
+Location: [% photo.location %]
+[% END -%]
+[%- IF photo.photographer %]
+Photographer: [% photo.photographer %]
+[% END -%]
+[%- IF photo.taken_dt AND photo.date_only != '0000-00-00' %]
+Picture date: [% photo.date_only %]
+[% END %]
+--
+Santa's little LaoFAB helpers
+Follow us on twitter: http://twitter.com/laofab

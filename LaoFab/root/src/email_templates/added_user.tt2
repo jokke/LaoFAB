@@ -1,0 +1,22 @@
+Hello LaoFAB User,
+
+You have just been added to the LaoFAB Document Repository web site.
+
+Your initial password is: [% password %]
+
+And your registered email address is: [% email_addr %]
+
+You can update your password (and name) at: 
+[% c.uri_for('/user/view') %]
+
+You are encouraged to upload documents, pictures, presentations, maps, etc and
+remember that other users cannot see who uploaded or downloaded what. This 
+repository is built upon users sharing their information, and the more 
+information we have, the more valuable the repository will be!
+
+Thanks!
+
+Log in at: [% c.uri_for('/') %]
+--
+Santa's little LaoFAB helpers
+Follow us on twitter: http://twitter.com/laofab

@@ -1,0 +1,59 @@
+[% META title = "Some statistics" %]
+<h1>[% template.title | html %]</h1>
+<h2>Usage graphs</h2>
+<img src="[% c.uri_for('/static/images/usage_stats.png') %]" alt="Usage graph" title="Usage graph" />
+<h2>Data graphs</h2>
+<img src="[% c.uri_for('/static/images/data_stats.png') %]" alt="Data graph" title="Data graph" />
+<h2>Users</h2>
+<p>Most downloads the past month:</p>
+<ol>
+[% WHILE (download = top_downloaders.next) %]
+    <li><a href="[% c.uri_for("/user/view/$download.user.id") %]">[% download.user.username %]</a> [% download.id %]
+    download(s)</li>
+[% END %]
+</ol>
+<p>Most active (logged in) the past month:</p>
+<ol>
+[% WHILE (login = top_logins.next) %]
+    <li><a href="[% c.uri_for("/user/view/$login.user.id") %]">[% login.user.username %]</a> [% login.id %]
+    login(s)</li>
+[% END %]
+</ol>
+<p>Rated most the past month:</p>
+<ol>
+[% WHILE (rating = top_ratings.next) %]
+    <li><a href="[% c.uri_for("/user/view/$rating.user.id") %]">[% rating.user.username %]</a> [% rating.rating %]
+    rating(s)</li>
+[% END %]
+</ol>
+<h2>Search words</h2>
+<p>The most frequently used search words the past month:</p>
+<ol>
+[% WHILE (search = top_searches.next) %]
+    <li><a href="[% c.uri_for("/search") %]?s=[% search.word %]">[% search.word %]</a> used [% search.id %]
+    time(s)</li>
+[% END %]
+</ol>
+<h2>Documents</h2>
+<p>The most downloaded documents the past month:</p>
+<ol>
+[% WHILE (download = top_downloads.next) %]
+    <li><a href="[% c.uri_for("/document/view/$download.document.id") %]">[% download.document.short_title %]</a> [% download.id %]
+    download(s)</li>
+[% END %]
+</ol>
+<p>The most rated documents the past month:</p>
+<ol>
+[% WHILE (rated = most_rated.next) %]
+    <li><a href="[% c.uri_for("/document/view/$rated.document.id") %]">[% rated.document.short_title %]</a> [% rated.rating %]
+    rating(s)</li>
+[% END %]
+</ol>
+<p>The highest rated documents:</p>
+<ol>
+[% WHILE (rated = highest_rated.next) %]
+    <li><a href="[% c.uri_for("/document/view/$rated.document.id") %]">[% rated.document.short_title %]</a> [% rated.rating %]
+    avarage rating</li>
+[% END %]
+</ol>
+

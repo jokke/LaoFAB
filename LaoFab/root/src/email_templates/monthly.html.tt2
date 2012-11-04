@@ -1,0 +1,18 @@
+<html>
+<body>
+<p>Hello LaoFAB Users,</p>
+<p>Here is a list of documents uploaded to the LaoFAB repository during the past month:</p>
+<p>
+  [% WHILE (doc = new_docs.next) %]
+  <a href="http://www.laofab.org/document/view/[% doc.id %]">[% doc.title %]</a> [[% doc.pubyear %]]<br/>
+  [% END %]
+</p>
+
+<p>Thanks!</p>
+
+<p>Log in at: <a href="http://www.laofab.org/">www.laofab.org</a><br/>
+--<br/>
+Santa's little LaoFAB helpers<br/>
+Follow us on twitter: <a href="http://twitter.com/laofab">twitter.com/laofab</a></p>
+</body>
+</html>

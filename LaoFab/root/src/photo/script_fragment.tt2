@@ -1,0 +1,22 @@
+<script type="text/javascript">
+    dojo.require("dijit.Tooltip");
+    dojo.require("dijit.form.TextBox");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.Textarea");
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.FilteringSelect");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.form.ComboBox");
+    dojo.require("dijit.dijit"); // optimize: load dijit layer
+    dojo.require("dijit.TitlePane");
+    dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+    dojo.addOnLoad(function(  ) {
+
+        var myForm = dijit.byId("photo_form");
+        dojo.connect(myForm, "onSubmit", function(e){
+            myForm.validate();
+        });
+
+    });
+</script>
