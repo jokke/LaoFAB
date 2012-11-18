@@ -1,82 +1,42 @@
 html {
-    height: 100%;
+	margin:0;
+	padding:0;
 }
 
 body { 
-    background:transparent url("/static/images/page_bg.gif") repeat-y scroll 50% 0;
-    width:100%;
-    background-color: #ffffff;
-    color: #46494c;
-    margin: 0px;
-    padding: 10px;
-    height: 100%;
+	text-align: center;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Helvetica, Arial, sans-serif;
+	background-color: #eee;
+	color: #444;
 }
 
-#header {
-    background-color: #1a1a1a;
-    border-bottom: 2px solid #01b6fb;
-    padding: 10px;
+div#page {
+    width: 1300px;
+    background-color: #fff;
+    margin: 0 auto;
+    text-align: left;
+    border-color: #ddd;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
 }
 
-#footer {
-    background-color: #1a1a1a;
-    text-align: center;
-    border-top: 2px solid #01b6fb;
-    /*position: absolute;*/
-    position: relative;
-    bottom: 0;
-    left: 0px;
-    width: 100%;
-    padding: 10px;
+div#container {
+    padding: 20px;
 }
 
-#content {
-    padding: 10px;
+div#content {
+	width: 1300px;
+	background-color: #fff;
+	margin: 0 auto;
+	text-align: left;
+	border-color: #ddd;
+	border-style: none solid solid;
+	border-width: medium 1px 1px;
 }
 
 #fixed {
     font-family: monospace;
 }
-
-h1.title {
-    padding: 4px;
-    margin: 0px;
-}
-
-/* tag cloud */
-
-.TagCloud {
-     font-family:Arial, sans-serif;
-     font-size:0.8em;
-     width:250px;
-     padding: 2px;
-     border:1px solid #666666;
-     background-color:#EEEEEE;
-}
-
-.TagCloud ul {
-     padding: 0pt;
-     margin: 0pt;
-     text-align:center;
-}
-
-.TagCloud li {
-     display:inline;
-     white-space:nowrap;
-     line-height:1.7em;
-}
-
-.TagCloud a:link, .TagCloud a:visited {
-     color: #01b6fb;
-     text-decoration:none;
-}
-
-.TagCloud a:hover {
-     color:#666666;
-     text-decoration:underline;
-}
-
-/* end tag cloud */
 
 .message {
     color: #66aa66;
@@ -86,83 +46,3 @@ h1.title {
     color: #cc4444;
      text-decoration:underline;
 }
-    .submit {
-        padding-top: .5em;
-        display: block;
-    }
-
-/*.tundra .dijitTooltip,
-.tundra .dijitTooltipDialog {
-    opacity: 0.35;
-    background: orange;    
-}
-
-.tundra .dijitTooltipContainer {
-    background-color: yellow;
-    border:8px dotted #cbcbcb;
-    opacity: 0.65;
-    padding:0.45em;
-    width: 300px;
-}
-*/
-.banner {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* for the menu */
-ul#menu
-{
-    text-align: center;
-	margin:10;
-	padding:10;
-	list-style-type:none;
-	width:auto;
-	position:relative;
-	display:block;
-	height:30px;
-	font-size:12px;
-	/*font-weight:bold;*/
-	/*background:transparent url([% c.uri_for("/static/images/nav_bg.png") %]) repeat-x top left;*/
-	/*font-family:Arial, Helvetica, sans-serif;*/
-	border-bottom:2px solid #000000;
-	border-top:2px solid #000000;
-}
-
-ul#menu li
-{
-	display:block;
-	float:left;
-	margin:0;
-	padding:0;
-}
-	
-ul#menu li a
-{
-	display:block;
-	float:left;
-	color:#999999;
-	text-decoration:none;
-	/*font-weight:bold;*/
-	padding:8px 20px 0 20px;
-}
-	
-ul#menu li a:hover
-{	
-	color:#FFFFFF;
-	height:22px;
-	/*background:transparent url([% c.uri_for("/static/images/nav_bg.png") %]) 0px -30px no-repeat;*/
-}
-	
-
-ul#menu li a.current
-{
-	display:inline;
-	height:22px;
-	/*background:transparent url([% c.uri_for("/static/images/nav_bg.png") %]) 0px -30px no-repeat;*/
-	float:left;
-	margin:0;
-}
-
-/* menu end */

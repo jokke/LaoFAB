@@ -200,9 +200,9 @@ sub view : Local {
     
     my $page = $c->req->param('page');
     $page = 1 if ($page !~ /^\d+$/);
-    $photos = $photos->page($page);
+    #$photos = $photos->page($page);
 
-    $c->stash->{pager} = $photos->pager;
+    #$c->stash->{pager} = $photos->pager;
     $c->stash->{page} = $page;
     
     $c->stash->{photos} = $photos;
