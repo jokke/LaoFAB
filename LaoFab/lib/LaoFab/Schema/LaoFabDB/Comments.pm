@@ -1,39 +1,115 @@
+use utf8;
 package LaoFab::Schema::LaoFabDB::Comments;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+LaoFab::Schema::LaoFabDB::Comments
+
+=cut
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "Core");
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::FS>
+
+=item * L<DBIx::Class::PK::Auto>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+
+=head1 TABLE: C<comments>
+
+=cut
+
 __PACKAGE__->table("comments");
+
+=head1 ACCESSORS
+
+=head2 user
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 document
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 rating
+
+  data_type: 'tinyint'
+  default_value: 3
+  extra: {unsigned => 1}
+  is_nullable: 1
+
+=head2 comment
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 comment_dt
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+=cut
+
 __PACKAGE__->add_columns(
   "user",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
   "document",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
   "rating",
-  { data_type => "TINYINT", default_value => 3, is_nullable => 1, size => 3 },
-  "comment",
   {
-    data_type => "TEXT",
-    default_value => undef,
+    data_type => "tinyint",
+    default_value => 3,
+    extra => { unsigned => 1 },
     is_nullable => 1,
-    size => 65535,
   },
+  "comment",
+  { data_type => "text", is_nullable => 1 },
   "comment_dt",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
     is_nullable => 0,
-    size => 14,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</user>
+
+=item * L</document>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("user", "document");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-28 10:57:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pOGwGTjGKre1y+1HfN2vKw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hEFvO04hTUCeWyv3TQhqrw
 
 
 __PACKAGE__->belongs_to(

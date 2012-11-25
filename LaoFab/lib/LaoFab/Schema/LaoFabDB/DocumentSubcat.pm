@@ -1,23 +1,80 @@
+use utf8;
 package LaoFab::Schema::LaoFabDB::DocumentSubcat;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+LaoFab::Schema::LaoFabDB::DocumentSubcat
+
+=cut
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "Core");
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::FS>
+
+=item * L<DBIx::Class::PK::Auto>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+
+=head1 TABLE: C<document_subcat>
+
+=cut
+
 __PACKAGE__->table("document_subcat");
+
+=head1 ACCESSORS
+
+=head2 document
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 subcat
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=cut
+
 __PACKAGE__->add_columns(
   "document",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
   "subcat",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</document>
+
+=item * L</subcat>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("document", "subcat");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-28 10:57:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uA5TkIOPa4hq/DbjhTKTSQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8cM7sE5+PjxO5OnCQS3LpQ
 
 __PACKAGE__->belongs_to('document' => 'LaoFab::Schema::LaoFabDB::Documents');
 __PACKAGE__->belongs_to('subcat' => 'LaoFab::Schema::LaoFabDB::Subcats');

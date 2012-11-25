@@ -43,7 +43,8 @@ Runs before anything and checkes if the path needs a login or not, if login is n
 
 sub auto : Private {
     my ( $self, $c ) = @_;
-    return 1 if ($c->req->path =~ /^feed/ or $c->req->path =~ /^user\/password_recovery/ or $c->req->path =~ /^rest\/laofind/);
+	$c->log->debug('path is '.$c->req->path);
+    return 1 if ($c->req->path =~ /^feed/ or $c->req->path =~ /^user\/password_recovery/ or $c->req->path =~ /^rest\/laofind/ or $c->req->path =~ /^user\/reset/);
     $c->forward( '/check_login' ) || return 0;
     return 1;
 }

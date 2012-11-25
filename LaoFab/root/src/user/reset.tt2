@@ -1,0 +1,49 @@
+[% META title = "Reset password" %]
+<script type="text/javascript">
+    dojo.require("dijit.Tooltip");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.form.Form");
+    dojo.require("dijit.form.ValidationTextBox");
+    dojo.require("dijit.dijit");
+    dojo.require("dojo.parser");
+    var myForm;
+    dojo.addOnLoad( function() {
+        dijit.byId('password').focus();
+    });
+
+    dojo.connect(myForm, "onSubmit", function(e){
+        myForm.validate();
+    });
+ </script>
+<div dojoType="dijit.Tooltip"
+                connectId="password"
+                label="Enter your new password">
+</div>
+<div dojoType="dijit.Tooltip"
+                connectId="password_confirm"
+                label="Enter your new password again to confirm.">
+</div>
+<h1>[% template.title %]</h1>
+<p>Enter your new password.</p>
+<form method="post" dojoType="dijit.form.Form" action="[% c.req.base %][% c.req.path %]">
+<table>
+<tr><td><label for="password">New password:</label></td>
+    <td><input type="text" name="password" 
+    id="password"
+    dojoType="dijit.form.ValidationTextBox"
+    invalidMessage="You need to enter a 6 char password"
+    trim="true" 
+    required="true"/></td></tr>
+
+<tr><td><label for="password_confirm">Confirm new password:</label></td>
+    <td><input type="text" name="password_confirm" 
+    id="password_confirm"
+    dojoType="dijit.form.ValidationTextBox"
+    invalidMessage="You need to enter a 6 char password"
+    trim="true" 
+    required="true"/></td></tr>
+
+<tr><td colspan="2" align="center">
+<button dojoType="dijit.form.Button" value="Send" name="Send" type="submit">Send</button></td></tr>
+</table>
+</form>

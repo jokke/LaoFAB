@@ -104,33 +104,35 @@ Action to reset a password for a user, takes the user id and a stored secret
 
 sub reset : Local {
     my ( $self, $c, $u_id, $secret ) = @_;
+	$c->log->debug('are we here?');
     my $user = $c->model('LaoFabDB::User')->find({ id => $u_id });
 
     unless ($user) {
-        $c->flash->{error} = "Could't find a valid user.";
+        $c->stash->{error} = "Could't find a valid user.";
         $c->res->redirect($c->uri_for('/default'));
         $c->detach;
     }
 
 	my $recovery = $c->model('LaoFabDB::PasswordRecovery')->search({
-		user => $user->id,
+		user => $user,
 	},{
 		order_by => 'expire_dt DESC',
 	})->first;
+
     unless ($recovery) {
-        $c->flash->{error} = "Could't find any restore request.";
+        $c->stash->{error} = "Could't find any restore request.";
         $c->res->redirect($c->uri_for('/default'));
         $c->detach;
     }
 
-	if (DateTime->compare(DateTime::Format::MySQL->parse_datetime($recovery->expire_dt), DateTime->now) < 1) {
+	if (DateTime->compare(DateTime->now, DateTime::Format::MySQL->parse_datetime($recovery->expire_dt)) < 1) {
         $c->stash->{error} = "Reset request is too old, password reset must be done within 24 hours.";
         $c->res->redirect($c->uri_for('/default'));
         $c->detach;
     }
 
-	unless ($recovery->validate($secret, $user, $c)) {
-        $c->flash->{error} = "Unable to validate the password request.";
+	unless ($recovery->validate($secret)) {
+        $c->stash->{error} = "Unable to validate the password request.";
         $c->res->redirect($c->uri_for('/default'));
         $c->detach;
     }
@@ -151,14 +153,14 @@ sub reset : Local {
 		
 		$user->password($c->req->param('password'));
 		$user->update;
-		$c->stash->{message} = "The password is successfully changed.";
+		$c->flash->{message} = "The password is successfully changed.";
         $c->res->redirect($c->uri_for('/'));
         $c->detach;
 	}
 
 	# else - make the form
+	$c->flash->{message} = 'all good!';
 	$c->log->debug("all good!");
-	$c->log->debug('are we here 6');
 }
 
 

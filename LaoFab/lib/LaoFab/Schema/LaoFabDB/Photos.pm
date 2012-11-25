@@ -1,83 +1,210 @@
+use utf8;
 package LaoFab::Schema::LaoFabDB::Photos;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+LaoFab::Schema::LaoFabDB::Photos
+
+=cut
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "Core");
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::FS>
+
+=item * L<DBIx::Class::PK::Auto>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+
+=head1 TABLE: C<photos>
+
+=cut
+
 __PACKAGE__->table("photos");
+
+=head1 ACCESSORS
+
+=head2 id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 caption
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 location
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 taken_dt
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 photographer
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 create_dt
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 create_user
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 checked_dt
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: '0000-00-00 00:00:00'
+  is_nullable: 0
+
+=head2 checked_user
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 1
+
+=head2 mime
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 file
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 filesize
+
+  data_type: 'integer'
+  default_value: 0
+  extra: {unsigned => 1}
+  is_nullable: 1
+
+=head2 album
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 0
+
+=head2 thumbnail
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 normal
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=cut
+
 __PACKAGE__->add_columns(
   "id",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_auto_increment => 1,
+    is_nullable => 0,
+  },
   "caption",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "location",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "taken_dt",
   {
-    data_type => "DATETIME",
-    default_value => undef,
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
     is_nullable => 1,
-    size => 19,
   },
   "photographer",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "create_dt",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
     is_nullable => 0,
-    size => 14,
   },
   "create_user",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
   "checked_dt",
   {
-    data_type => "TIMESTAMP",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
     default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
-    size => 14,
   },
   "checked_user",
-  { data_type => "INT", default_value => undef, is_nullable => 1, size => 10 },
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
   "mime",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 10,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "file",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "filesize",
-  { data_type => "INT", default_value => 0, is_nullable => 1, size => 10 },
+  {
+    data_type => "integer",
+    default_value => 0,
+    extra => { unsigned => 1 },
+    is_nullable => 1,
+  },
+  "album",
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
+  "thumbnail",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
+  "normal",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-28 10:57:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:w65BPe98xIHHf48O9/FPqg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zAY5AVvkffY9rO73Y+I5Cw
 __PACKAGE__->add_columns(
   "album",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },

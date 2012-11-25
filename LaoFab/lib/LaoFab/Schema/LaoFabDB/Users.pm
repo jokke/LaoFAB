@@ -1,50 +1,128 @@
+use utf8;
 package LaoFab::Schema::LaoFabDB::Users;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+LaoFab::Schema::LaoFabDB::Users
+
+=cut
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "Core");
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::FS>
+
+=item * L<DBIx::Class::PK::Auto>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+
+=head1 TABLE: C<users>
+
+=cut
+
 __PACKAGE__->table("users");
+
+=head1 ACCESSORS
+
+=head2 id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 email
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 name
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 password
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 create_dt
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+=cut
+
 __PACKAGE__->add_columns(
   "id",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_auto_increment => 1,
+    is_nullable => 0,
+  },
   "email",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "name",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "password",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "create_dt",
   {
-    data_type => "TIMESTAMP",
-    default_value => "CURRENT_TIMESTAMP",
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
     is_nullable => 0,
-    size => 14,
   },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<email>
+
+=over 4
+
+=item * L</email>
+
+=back
+
+=cut
+
 __PACKAGE__->add_unique_constraint("email", ["email"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-28 10:57:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QoEhWcAoSitIB4boY1IY+g
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T+Dd7tDjyIJ/5/vIcZkzbA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

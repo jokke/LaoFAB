@@ -1,35 +1,92 @@
+use utf8;
 package LaoFab::Schema::LaoFabDB::Subcats;
+
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
+=head1 NAME
+
+LaoFab::Schema::LaoFabDB::Subcats
+
+=cut
 
 use strict;
 use warnings;
 
-use base 'DBIx::Class';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "Core");
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::FS>
+
+=item * L<DBIx::Class::PK::Auto>
+
+=back
+
+=cut
+
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+
+=head1 TABLE: C<subcats>
+
+=cut
+
 __PACKAGE__->table("subcats");
+
+=head1 ACCESSORS
+
+=head2 id
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 main_cat
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=head2 sub_cat
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
+=cut
+
 __PACKAGE__->add_columns(
   "id",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
+  {
+    data_type => "integer",
+    extra => { unsigned => 1 },
+    is_auto_increment => 1,
+    is_nullable => 0,
+  },
   "main_cat",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
   "sub_cat",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 1,
-    size => 255,
-  },
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-04-28 10:57:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZQIDuNXFa4wDov+1/fw6WQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eQ5VUeP+FoPFWqsk3CqIwg
 
 sub full_cat {
     my $self = shift;
