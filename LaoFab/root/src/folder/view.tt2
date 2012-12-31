@@ -1,5 +1,16 @@
 [% META title = "Browsing folders" %]
 <h1>[% template.title | html %]</h1>
+
+<div class="page" style="padding: 10px;">
+
+<div class="sidebar">
+  <div id="widget" class="sticky">
+    <p>hej hopp</p>
+  </div>
+</div>
+
+<div class="main">
+
 <p>Browsing the repository, folder: [% folder_name | html %]</p>
 <p>You are currently here:</p>
 <p>[% location_str %]</p>
@@ -44,63 +55,15 @@
     </tbody></table>
   
 [% END %]
-[% IF folders.count > 0 || documents.count > 0 || albums.count > 0 %]
-<p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/document/add/$folder_id") %]">Upload</a> a document to this folder ([% folder_name | html %]).</p>
-<p>Content of folder <em>[% folder_name | html %]</em>, ordered by 
-	[% IF order.match('name')%]
-		name/title,
-	[% ELSIF order.match('author') %]
-		author name,
-	[% ELSIF order.match('type') %]
-		document type,
-	[% ELSIF order.match('year') %]
-		publication year,
-	[% ELSIF order.match('date') %]
-		upload date,
-	[% ELSIF order.match('size') %]
-		file size,
-	[% ELSE %]
-		[% order %], 
-	[% END %][% direction %]ending (click on the column header to change the order):</p>
 
-<table class="folder" width="100%">
-<tbody>
-<tr>
-    <td width="24"></td><td align="left" width="260"><em><a 
-	[% IF order.match('name') && direction.match('asc') %]
-		href="[% c.req.uri_with({direction => 'desc', order => 'name' }) %]"
-	[% ELSE %]
-		href="[% c.req.uri_with({direction => 'asc', order => 'name' }) %]"
-	[% END %]>name/title</a></em></td><td align="left" width="260"><em><a
-	[% IF order.match('author') && direction.match('asc') %]
-		href="[% c.req.uri_with({direction => 'desc', order => 'author' }) %]"
-	[% ELSE %]
-		href="[% c.req.uri_with({direction => 'asc', order => 'author' }) %]"
-	[% END %]>author(s)</a></em></td><td align="center"><em><a
-	[% IF order.match('type') && direction.match('asc') %]
-		href="[% c.req.uri_with({direction => 'desc', order => 'type' }) %]"
-	[% ELSE %]
-		href="[% c.req.uri_with({direction => 'asc', order => 'type' }) %]"
-	[% END %]>type</a></em></td><td align="center"><em><a 
-	[% IF order.match('year') && direction.match('asc') %]
-		href="[% c.req.uri_with({direction => 'desc', order => 'year' }) %]"
-	[% ELSE %]
-		href="[% c.req.uri_with({direction => 'asc', order => 'year' }) %]"
-	[% END %]>pub.<br/>year</a></em></td><td align="center"><em><a
-	[% IF order.match('size') && direction.match('asc') %]
-		href="[% c.req.uri_with({direction => 'desc', order => 'size' }) %]"
-	[% ELSE %]
-		href="[% c.req.uri_with({direction => 'asc', order => 'size' }) %]"
-	[% END %]>size</a><br/>files</em></td><td align="center"><em><a 
-    [% IF order.match('date') && direction.match('asc') %]
-    	href="[% c.req.uri_with({direction => 'desc', order => 'date' }) %]"
-    [% ELSE %]
-    	href="[% c.req.uri_with({direction => 'asc', order => 'date' }) %]"
-	[% END %]>modified<br/>date</a></em></td></tr>
+[% IF folders.count > 0 || documents.count > 0 || albums.count > 0 %]
+<table class="folder">
+  <tbody>
     [% WHILE (subfolder = folders.next) %]
-        <tr>
-        <td><img src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" 
-            alt="folder icon"/></td>
+      <tr>
+        <td class="icon"><img src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" alt="folder icon"/></td>
+
+
         <td id="fixed"><a href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
         <td align="left">-</td>
         <td>folder</td>
@@ -219,3 +182,7 @@
 [% END %]
 
 <p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/document/add/$folder_id") %]">Upload</a> a document to this folder ([% folder_name | html %]).</p>
+
+</div> <!-- end of main -->
+
+</div> <!-- end of page -->

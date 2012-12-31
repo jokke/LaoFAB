@@ -62,6 +62,10 @@ The first page. Fills up the stash with some statistics and stuff for view on th
 =cut
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
+
+	# set the header
+	$c->stash->{page_header} = 'Welcome';
+
     my $last_month = DateTime->now;
     $last_month->subtract( months => 1);
     my $search_dt = DateTime::Format::MySQL->format_datetime($last_month);

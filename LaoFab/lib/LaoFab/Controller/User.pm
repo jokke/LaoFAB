@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller::reCAPTCHA';
 use Catalyst::Request::Upload;
-use Text::CSV;
+use Text::CSV::Encoded;
 use HTTP::BrowserDetect;
 use DateTime;
 use DateTime::Format::MySQL;
@@ -277,7 +277,7 @@ sub add_multi : Local {
         $c->flash->{error} = "Doesn't seem to be any file...";
     } else {
         my $csv_fh = $c->req->upload("csv")->fh;
-        my $csv_parser = Text::CSV->new();
+        my $csv_parser = Text::CSV::Encoded->new ({ encoding  => "utf8" });
         my $no_imports = 0;
         while (my $line = <$csv_fh>) {
             next unless $csv_parser->parse($line);

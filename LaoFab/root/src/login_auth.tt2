@@ -55,6 +55,6 @@
 <button dojoType="dijit.form.Button" value="Login" name="Login" type="submit">Login</button></td></tr>
 </table>
 </form>
+<div class="content">
 <p>
 [% login_page.body %]
-</p>

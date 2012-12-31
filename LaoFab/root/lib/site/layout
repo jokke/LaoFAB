@@ -1,6 +1,6 @@
 <div id="header">[% PROCESS site/header %]</div>
 
-<div id="page">
+<div id="content">
 [% IF error %]
     <p><span class="error">[% error %]</span></p>
 [% END %]

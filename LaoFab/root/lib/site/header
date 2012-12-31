@@ -1,20 +1,37 @@
 <!-- BEGIN site/header -->
-<img class="banner" src="[% c.uri_for("/static/images/banner_new.jpg") %]" alt="LaoFAB Banner" >
-[% IF c.check_user_roles(("viewer")) %]
-<ul id="menu">
-<li class="button"><a href="[% c.uri_for("/") %]">Start</a></li>
-<li class="button"><a href="[% c.uri_for("/search") %]">Search</a></li>
-<li class="button"><a href="[% c.uri_for("/folder/view") %]">Browse</a></li>
-<li class="button"><a href="[% c.uri_for("/user/view") %]">My settings</a></li>
-[% IF c.check_user_roles(("admin")) %]
-    <li class="button"><a href="[% c.uri_for("/manage") %]">Manage</a></li>
-    <li class="button"><a href="[% c.uri_for("/document/recent") %]">New documents</a></li>
-    <li class="button"><a href="[% c.uri_for("/stats") %]">Statistics</a></li>
-[% ELSE %]
-    <li class="button"><a href="[% c.uri_for("/document/add") %]">Upload document</a></li>
-    <li class="button"><a href="[% c.uri_for("/photo/add") %]">Upload photo</a></li>
-[% END %]
-<li class="button"><a href="[% c.uri_for("/logout") %]">Logout</a></li>
-</ul>
-[% END %]
+<div class="menu">
+
+  [% IF c.check_user_roles(("viewer")) %]
+    <strong><a href="[% c.uri_for("/") %]">home</a></strong>
+    <a href="[% c.uri_for("/recent") %]">recent</a>
+	<a href="[% c.uri_for("/search") %]">search</a>
+    <a href="[% c.uri_for("/folder/view") %]">browse</a>
+    <a href="[% c.uri_for("/user/view") %]">settings</a>
+    [% IF c.check_user_roles(("admin")) %]
+      <a href="[% c.uri_for("/manage") %]">manage</a>
+      <a href="[% c.uri_for("/document/recent") %]">new documents</a>
+      <a href="[% c.uri_for("/stats") %]">statistics</a>
+    [% ELSE %]
+      <a href="[% c.uri_for("/document/add") %]">upload document</a>
+      <a href="[% c.uri_for("/photo/add") %]">upload photo</a>
+    [% END %]
+  [% END %]
+  <a href="https://github.com/jokke/LaoFAB//wiki/FAQ">FAQ</a>
+  <div class="spacer" style="text-align: right">
+    <strong class="inout" style="position: absolute; right: 2px; top: 0px; text-align: right;"><a href="[% c.uri_for("/logout") %]">sign out</a></strong>
+  </div>
+</div>
+
+<div style="float: right; text-align: right; padding-right: 5px; margin-top: -15px">
+  <a href="https://github.com/jokke/LaoFAB/issues/new">
+    <small>
+      Problem?
+      <br />
+      Open an issue!
+    </small>
+  </a>
+</div>
+
+
+<h1 class="header">LaoFab - [% page_header | html %]</h1>
 <!-- END site/header -->

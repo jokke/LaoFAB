@@ -1,38 +1,9 @@
 [% META title = "Welcome to the LaoFAB Document Repository" %]
-<script type="text/javascript">
-    dojo.require("dojo.data.ItemFileReadStore");
-    dojo.require("laofab.TagCloud");
-    dojo.require("dijit.TitlePane");
-    dojo.require("dijit.Tooltip");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.dijit");
-    dojo.require("dojo.parser");
-    
-	function tagItemClicked(sTag){
-		location.href = '[% c.uri_for('/search') %]?s=' + sTag;
-	}
-    function createTagCloud() {
-        var oStore = new dojo.data.ItemFileReadStore({
-            url:"[% c.uri_for('/document/do_tag_cloud') %]"
-		});
-        var oCloudDiv = dojo.byId('tagCloudDiv');
-        var oCloud = new laofab.TagCloud({
-            store: oStore
-        },oCloudDiv);
-    }
-    dojo.addOnLoad(function(){
-		createTagCloud();
-		dijit.byId('s').focus();
-	});
-    
-    
-</script>
+
 <table width="100%">
 <tbody>
 <tr><td valign="top">
-<h1>Welcome![%# content.heading | html %]</h1><p> </p>
+<h1>Welcome![% content.heading | html %]</h1><p> </p>
 <form method="get" id="search_form" dojoType="dijit.form.Form" action="[% c.uri_for('/search') %]">
 <table><tbody><tr><td><em>Quick search:</em> </td>
 	<td><input type="text" name="s" value=""
