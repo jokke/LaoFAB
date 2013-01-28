@@ -1,0 +1,234 @@
+.menu {
+    background: linear-gradient(#FFFFFF, #F5F5F5) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #E9E9E9;
+    height: 31px;
+    margin-bottom: 20px;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background: none repeat scroll 0 0 white;
+    line-height: 1.5;
+    font-size: 0.8em;
+
+    font-family: verdana,tahoma,sans-serif; 
+}
+
+a {
+	text-decoration: none;
+    color: #227744;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.spacer {
+    float: none;
+    height: 2px;
+    border-top: 2px solid #BAEAD3;
+    color: #33CC66;
+    display: block;
+    float: left;
+    font-size: 1em;
+    padding: 5px 9px;
+}
+
+.menu a {
+    border-top: 2px solid #BAEAD3;
+    color: #227744;
+    display: block;
+    float: left;
+    font-size: 1em;
+    padding: 5px 9px;
+	text-decoration: none;
+}
+
+.menu strong a {
+    border-top-color: #33CC66;
+    color: #000000;
+}
+
+.menu a:hover {
+    background: linear-gradient(#DAFFF3, #CAFAE3) repeat scroll 0 0 transparent;
+    text-decoration: none;
+}
+
+.sidebar {
+	float: left;
+	width: 165px;
+}
+
+.main {
+    border-left: 1px solid #E9E9E9;
+    margin-left: 175px;
+    padding-left: 15px;
+}
+
+tr.odd {
+    background-color: #F0F0F0;
+}
+
+div.home {
+	border: 0 none;
+	margin:	0;
+	padding: 0;
+	vertical-align: baseline;
+	text-align: center;
+}
+
+.small-logo {
+    float: left;
+    height: 32px;
+    margin: 0 12px 0 0;
+    position: relative;
+    width: 227px;
+}
+
+.ds {
+    border-bottom: 1px solid #E7E7E7;
+    border-right: 1px solid #E7E7E7;
+    display: inline-block;
+}
+
+.home input[type="text"] {
+    border-color: #CCCCCC #999999 #999999 #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    font-family: arial,sans-serif;
+    font-size: 18px;
+    height: 28px;
+    margin: 0;
+    outline: medium none;
+    padding: 0 0 0 5px;
+    vertical-align: top;
+}
+
+.home .ds input[type="submit"] {
+    border-left: 0 none;
+}
+
+button.g-button, a.g-button, input.g-button[type="submit"] {
+    background: url("/static/images/search_dropdown.png") no-repeat scroll 0 0 / 34px 30px transparent;
+    border: 0 none;
+    cursor: pointer;
+/*    float: left;*/
+    height: 30px;
+    width: 34px;
+}
+/*
+    background: linear-gradient(#FFFFFF, #DDDDDD) repeat scroll 0 0 transparent;
+    border: 1px solid #999999;
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.2em;
+    height: 30px;
+    margin: 0;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 1px #FFFFFF;
+    vertical-align: middle;
+}*/
+
+table.folder-listing {
+	table-layout: fixed;
+	width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+}
+
+td.icon-column {
+	float: none !important;
+    font-weight: normal;
+	width: 24px;
+}
+
+td.name-column {
+	float: none !important;
+    font-weight: bold;
+	width: 260px;
+}
+
+td.date-column {
+	float: none !important;
+	text-align: right;
+	width: 80px;
+}
+
+.ellipsis {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+td.digest-column {
+	float: none !important;
+    font-weight: normal;
+}
+
+
+/*
+tr.even {
+}
+*/
+
+
+/*
+.ds {
+    border-bottom: 1px solid #E7E7E7;
+    border-right: 1px solid #E7E7E7;
+    display: inline-block;
+}
+*/
+/*body {
+    background: none repeat scroll 0 0 #997777;
+    color: #000000;
+}
+
+.contentwrapper {
+    background: none repeat scroll 0 0 #D9D9D9;
+    border: 1px solid #AAAAAA;
+    margin: 10px auto;
+    min-width: 800px;
+    width: 75%;
+}
+
+#content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #AAAAAA;
+    font-size: 0.9em;
+    margin: 10px;
+    padding: 8px 20px;
+}
+*/
+h1.header {
+	background-image: url("/static/images/laofab_button.png");
+	background-repeat: no-repeat;
+	background-position: top left;
+	height: 64px;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#fixed {
+    font-family: monospace;
+}
+
+.message {
+    color: #66aa66;
+}
+
+.error {
+    color: #cc4444;
+    text-decoration:underline;
+}

@@ -1,4 +1,21 @@
 [% META title = "Browsing folders" %]
+
+<div class="home">
+  <form action="/search">
+     <div style="display: inline-block; text-align: left">
+       <div style="float: left; padding-top: 13px; padding-left: 10px;">
+         <div class="small-logo">
+           <a href="[% c.uri_for("/") %]"><img width="227" height="32" alt="LaoFab Search Logo" src="[% c.uri_for("/static/images/search_logo.png") %]"></a>
+         </div>
+         <div class="ds">
+           <input type="text" value="" id="search-input" size="41" name="q" autocomplete="off" class="ac_input"><input type="submit" class="g-button" value="">
+        </div><br/>
+        </div>
+        <div style="float: left; width: 168px"></div>
+      </div>
+    </form>
+  </div>
+
 <h1>[% template.title | html %]</h1>
 
 <div class="page" style="padding: 10px;">
@@ -57,122 +74,33 @@
 [% END %]
 
 [% IF folders.count > 0 || documents.count > 0 || albums.count > 0 %]
-<table class="folder">
+<table class="folder-listing">
   <tbody>
     [% WHILE (subfolder = folders.next) %]
       <tr>
-        <td class="icon"><img src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" alt="folder icon"/></td>
+        <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" alt="folder icon"/></td>
 
 
-        <td id="fixed"><a href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
-        <td align="left">-</td>
-        <td>folder</td>
-        <td align="center">-</td>
-        [% SET no_files = c.model('LaoFabDB').files_in_folder(subfolder) %]
-        <td align="right">[% no_files | html %]
-        file[% IF no_files != 1 %]s[% END %]</td>
+        <td class="name-column"><a class="ellipsis" title="[% subfolder.name | html %]" href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
+        <td class="digest-column"><span class="ellipsis">some digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infooooooooooosome digest info...</span></td>
         [% date = c.model('LaoFabDB').folder_changed(subfolder) %]
-        <td align="center">[% date.substr(0, 10) %]</td>
-        [% IF c.check_user_roles(("admin")) %]
-            <td align="center"><a href="[% c.uri_for("/folder/edit/$subfolder.id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" /></a></td>
-            <td align="center">
-            <div id="delete_dialog_[% subfolder.id %]" dojoType="dijit.Dialog" title="Delete [% subfolder.name | html %]?">
-                <table>
-                    <tr><td><label for="del_folder_[% subfolder.id %]">Are you sure you want
-                        to delete <em>[% subfolder.name %]</em>?</label></td></tr>
-                    <tr><td align="center">
-                        <form method="get" action="[% c.uri_for("/folder/delete/$subfolder.id") %]">
-                        <button dojoType="dijit.form.Button" value="Delete" id="del_folder_[% subfolder.id %]" 
-                        type="submit">Delete</button>
-                        </form></td></tr>
-                </table>
-            </div>
-            <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_[% subfolder.id %]').show();"/>
-            </td>
-        [% END %]</tr>
+        <td class="date-column">[% date.substr(0, 10) %]</td>
+        </tr>
     [% END %]
     
     [% WHILE (album = albums.next) %]
-        <tr>
-        <td><img src="[% c.uri_for("/static/images/folder-image-24x24.png") %]" 
-            alt="album icon"/></td>
-        <td id="fixed"><a href="[% c.uri_for("/album/view/$album.id") %]">[% album.name | html %]</a></td>
-        <td align="left">-</td>
-        <td>album</td>
-        <td align="center">-</td>
-        [% SET no_files = c.model('LaoFabDB').files_in_album(album) %]
-        <td align="right">[% no_files | html %]
-        photo[% IF no_files != 1 %]s[% END %]</td>
+      <tr>
+        <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-image-24x24.png") %]" alt="folder icon"/></td>
+
+
+        <td class="name-column"><a class="ellipsis" title="[% album.name | html %]" href="[% c.uri_for("/album/view/$album.id") %]">[% album.name | html %]</a></td>
+        <td class="digest-column"><span class="ellipsis">some digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infooooooooooosome digest info...</span></td>
         [% date = c.model('LaoFabDB').album_changed(album) %]
-        <td align="center">[% date.substr(0, 10) %]</td>
-        [% IF c.check_user_roles(("admin")) %]
-            <td align="center"><a href="[% c.uri_for("/album/edit/$album.id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" /></a></td>
-            <td align="center">
-            <div id="delete_dialog_[% album.id %]" dojoType="dijit.Dialog" title="Delete [% album.name | html %]?">
-                <table>
-                    <tr><td><label for="del_album_[% album.id %]">Are you sure you want
-                        to delete the album <em>[% album.name %]</em><br/>and everything inside it?</label></td></tr>
-                    <tr><td align="center">
-                        <form method="get" action="[% c.uri_for("/album/delete/$album.id") %]">
-                        <button dojoType="dijit.form.Button" value="Delete" id="del_album_[% album.id %]" 
-                        type="submit">Delete</button>
-                        </form></td></tr>
-                </table>
-            </div>
-            <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_[% album.id %]').show();"/>
-            </td>
-        [% END %]</tr>        
-            
+        <td class="date-column">[% date.substr(0, 10) %]</td>
+        </tr>
     [% END %]
 
     [% WHILE (doc = documents.next) %]
-        [% IF doc.viewable %]
-        <tr>
-        [% IF doc.mime.match("msword") %]
-            [% SET pic = "doc-24x24.png" %]
-        [% ELSIF doc.mime.match("image") %]
-            [% SET pic = "pic-24x24.png" %]
-        [% ELSIF doc.mime.match("pdf") %]
-            [% SET pic = "pdf-24x24.png" %]
-        [% ELSIF doc.mime.match("excel") %]
-            [% SET pic = "xls-24x24.png" %]
-        [% ELSIF doc.mime.match("audio") %]
-            [% SET pic = "video-24x24.png" %]
-        [% ELSIF doc.mime.match("zip") %]
-            [% SET pic = "tgz-24x24.png" %]
-        [% ELSIF doc.mime.match("powerpoint") %]
-            [% SET pic = "pres-24x24.png" %]
-        [% ELSIF doc.mime.match("google") %]
-            [% SET pic = "kmz-24x24.png" %]
-        [% ELSE %]
-            [% SET pic = "ascii-24x24.png" %]
-        [% END %]
-        <td><img src="[% c.uri_for("/static/images/$pic") %]" alt="icon" />
-        </td>
-        <td id="fixed"><a href="[% c.uri_for("/document/view/$doc.id") %]">[% doc.short_title | html %]</a></td>
-        <td id="fixed">[% doc.short_authors | html %]</td>
-        <td>[% IF doc.doctype %][% doc.doctype.name.replace('\s+','&nbsp;') %][% END %]</td>
-        <td align="right">[% doc.pubyear | html %]</td>
-        <td align="right">[% doc.friendly_size | html %]</td>
-        [% SET date = doc.create_dt %]
-        <td align="right">[% date.substr(0, 10) %]</td>
-        [% IF c.check_user_roles(("admin")) %]
-            <td align="center"><a href="[% c.uri_for("/document/edit/$doc.id") %]"><img src="[% c.uri_for("/static/images/widget-doc-24x24.png") %]" alt="Edit icon" /></a></td>
-            <td align="center"><div id="delete_dialog_doc_[% doc.id %]" dojoType="dijit.Dialog" title="Delete [% doc.short_title | html %]?">
-                <table>
-                    <tr><td><label for="del_soc_[% doc.id %]">Are you sure you want
-                        to delete <em>[% doc.short_title | html %]</em>?</label></td></tr>
-                    <tr><td align="center">
-                        <form method="get" action="[% c.uri_for("/document/delete/$doc.id") %]">
-                        <input type="hidden" name="from" value="[% folder_id %]" />
-                        <button dojoType="dijit.form.Button" value="Delete" id="del_doc_[% doc.id %]" 
-                        type="submit">Delete</button>
-                        </form></td></tr>
-                </table>
-            </div>
-            <img style="cursor: pointer;" src="[% c.uri_for("/static/images/trashcan-full-24x24.png") %]" alt="Delete icon" onclick="dijit.byId('delete_dialog_doc_[% doc.id %]').show();"/></td>
-        [% END %]</tr>
-		[% END %]
 	[% END %]
 </tbody>
 </table>
