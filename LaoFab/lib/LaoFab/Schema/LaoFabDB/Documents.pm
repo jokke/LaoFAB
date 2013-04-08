@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<documents>
 
@@ -126,6 +128,13 @@ __PACKAGE__->table("documents");
   extra: {unsigned => 1}
   is_nullable: 1
 
+=head2 permission
+
+  data_type: 'char'
+  default_value: 'pm'
+  is_nullable: 0
+  size: 2
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -182,6 +191,8 @@ __PACKAGE__->add_columns(
     extra => { unsigned => 1 },
     is_nullable => 1,
   },
+  "permission",
+  { data_type => "char", default_value => "pm", is_nullable => 0, size => 2 },
 );
 
 =head1 PRIMARY KEY
@@ -197,8 +208,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vrZ2MppKJ8U3Pn8KAaSuxg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G17+3pPhyA9z38QVxbZRJg
 
 __PACKAGE__->resultset_class(
 	'LaoFab::ResultSet::Documents');
@@ -235,6 +246,11 @@ __PACKAGE__->has_many(
     'document');
 __PACKAGE__->has_many(
     tags => 'LaoFab::Schema::LaoFabDB::Tags',
+    'document', {
+        cascading_delete => 1
+    });
+__PACKAGE__->has_many(
+    areas => 'LaoFab::Schema::LaoFabDB::Areas',
     'document', {
         cascading_delete => 1
     });

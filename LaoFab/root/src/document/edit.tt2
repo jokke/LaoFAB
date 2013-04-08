@@ -1,10 +1,28 @@
 [% INCLUDE document/script_fragment.tt2 %]
 
 [% META title = 'Edit and approve the document' %]
+<div class="home">
+  <form action="/search">
+     <div style="display: inline-block; text-align: left">
+       <div style="float: left; padding-top: 13px; padding-left: 10px;">
+         <div class="small-logo">
+           <a href="[% c.uri_for("/") %]"><img width="227" height="32" alt="LaoFab Search Logo" src="[% c.uri_for("/static/images/search_logo.png") %]"></a>
+         </div>
+         <div class="ds">
+           <input type="text" value="" id="search-input" size="41" name="q" autocomplete="off" class="ac_input"><input type="submit" class="g-button" value="">
+        </div><br/>
+        </div>
+        <div style="float: left; width: 168px"></div>
+      </div>
+    </form>
+  </div>
 
 <h1>[% template.title %]</h1>
+<div class="page" style="padding: 10px;">
 
-<p>Please review the values for the document below and submit it to the repository, once the document is submitted, it is viewable by the users. The following fields are required:
+<div class="sidebar">
+  <div id="widget" class="sticky">
+<p>Please fill in the values for your document below and submit it to the repository. The following fields are required:
 <ul>
 <li><em>Title</em> - every document should have a title</li>
 <li><em>Publication year</em> - should be in the format of four digits, for example <em>1975</em></li>
@@ -14,7 +32,13 @@
 [% END %]</li>
 <li><em>The actual document</em> - the digital file</li>
 </ul>
-The other fields (secondary reference, keywords etc.) are optional, but we encurage you to use them.
+The other fields (secondary reference, keywords etc.) are optional, but we encourage you to use them.
 </p>
+  </div>
+</div>
+
+<div class="main">
 
 [% INCLUDE document/form_fragment.tt2 %]
+
+</div>

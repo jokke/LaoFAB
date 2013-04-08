@@ -489,6 +489,8 @@ sub edit : Local {
             });
        
             $document->doctype($doctype) if $doctype;
+            $document->permission(_trim($c->req->param('permission')));
+
             
             $document->update;
 
@@ -497,7 +499,22 @@ sub edit : Local {
 			$document->tags->delete;
 			$document->set_subcats([]);
 			$document->set_folders([]);
-			
+            $document->areas->delete;
+            if ($c->req->param('mapcoords')) {
+                for my $coords (split (/;/, $c->req->param('mapcoords'))) {
+                    $coords =~ s/^\(//;
+                    $coords =~ s/\)$//;
+                    my @pairs = map { [ split /,\s/, $_ ] } split /\)\(/, $coords;
+                    push @pairs, [$pairs[0]->[0], $pairs[0]->[1]]; # complete the polygon
+                    my $areas = $c->model("LaoFabDB::Areas")->new({
+			            document => $document,
+			            polygon  => 'POLYGON(('.join (', ', map { join (' ', @$_) } @pairs).'))',
+		            });
+                    $areas->center($areas->calc_center);
+                    $areas->insert;
+                }
+            }
+ 
             $self->_insert_meta_data($c, $document);
 
             foreach my $author (@authors) {
@@ -531,6 +548,7 @@ sub edit : Local {
 
             $c->stash->{s_subcats} = \@s_subcats;
             $c->stash->{keywords} = $c->req->param("keywords");
+            #TODO set coords $c->stash->{coords} = $c->req->param("keywords");
         }
     } else {
         # enter stash values
@@ -550,15 +568,14 @@ sub edit : Local {
 		foreach my $s_sub ($document->subcats) {
 			push @subcats, $s_sub->id;
 		}
+
         $c->stash->{s_subcats} = \@subcats; 
         $c->stash->{keywords} = join (', ', @keywords);
         $c->stash->{authors} = \@authors;
-
     }
     # do the tree
     my $j = JSON::Any->new;
     my $tree = $c->model('LaoFabDB::Folders')->get_check_tree($selected_folders);
-
     $c->stash->{tree} = $j->objToJson($tree);
     $c->stash->{jquery} = 1;
     $c->stash->{selected_folders} = join(",", @$selected_folders);
@@ -573,6 +590,11 @@ sub edit : Local {
     my @doctypes_obj = $c->model("LaoFabDB::Doctypes")->all();
     @doctypes_obj = sort {$a->id <=> $b->id} @doctypes_obj;
     $c->stash->{doctypes} = \@doctypes_obj;
+
+    my @locations_obj = sort { 
+        $a->id <=> $b->id
+    } $c->model("LaoFabDB::Locations")->all();
+    $c->stash->{locations} = \@locations_obj;
 }
 
 =head2 add 
@@ -627,6 +649,22 @@ sub add : Local {
             });
        
             $document->doctype($doctype) if $doctype;
+            $document->permission(_trim($c->req->param('permission')));
+
+            if ($c->req->param('mapcoords')) {
+                for my $coords (split (/;/, $c->req->param('mapcoords'))) {
+                    $coords =~ s/^\(//;
+                    $coords =~ s/\)$//;
+                    my @pairs = map { [ split /,\s/, $_ ] } split /\)\(/, $coords;
+                    push @pairs, [$pairs[0]->[0], $pairs[0]->[1]]; # complete the polygon
+                    my $areas = $c->model("LaoFabDB::Areas")->new({
+			            document => $document,
+			            polygon  => 'POLYGON(('.join (', ', map { join (' ', @$_) } @pairs).'))',
+		            });
+                    $areas->center($areas->calc_center);
+                    $areas->insert;
+                }
+            }
             
             $document->insert;
 
@@ -696,6 +734,11 @@ sub add : Local {
 
     $c->stash->{doctypes} = \@doctypes_obj;
     $c->stash->{document} = $document;
+
+    my @locations_obj = sort { 
+        $a->id <=> $b->id
+    } $c->model("LaoFabDB::Locations")->all();
+    $c->stash->{locations} = \@locations_obj;
 }
 
 =head2 _get_select_key

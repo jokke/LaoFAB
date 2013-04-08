@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<user>
 
@@ -121,8 +123,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("username", ["username"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3lGHilSPaNKjnj2Yuxypqg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oV7Yb0lyItsyFWuJCLezTQ
 
 __PACKAGE__->has_many(map_user_role => 'LaoFab::Schema::LaoFabDB::UserRole', 'user');
 

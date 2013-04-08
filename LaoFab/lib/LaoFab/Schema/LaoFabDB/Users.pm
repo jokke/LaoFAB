@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<users>
 
@@ -121,8 +123,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("email", ["email"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T+Dd7tDjyIJ/5/vIcZkzbA
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:h4swNRdNm9DEFNz8Orc8BQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -37,6 +37,86 @@ mk_rating_entity
 =cut
 
 
+=head2 location
+
+=cut
+
+sub location : Local : ActionClass('REST') {
+    my ( $self, $c, $id) = @_;
+	$c->stash->{id} = $id;
+}
+
+sub location_GET {
+	my ($self, $c) = @_;
+	
+	eval {
+		my $location = $c->model('LaoFabDB::Locations')->find({
+			id => $c->stash->{id},
+		});
+						
+		$self->status_ok($c,
+			entity => { 
+                polygon => [ $location->pairs_polygon ],# '(' . join (')(', $location->google_polygon) . ')' }
+                color   => '#' . $location->color,
+            }
+		);
+	};
+	if ($@) {
+		$self->status_bad_request($c,
+			message => "Invalid data supplied: $@");
+	}
+}
+
+=head2 keywords
+
+=cut
+
+sub keywords : Local : ActionClass('REST') {
+    my ( $self, $c, $start_char) = @_;
+	$c->stash->{start_char} = $start_char;
+}
+
+sub keywords_GET {
+	my ($self, $c) = @_;
+	
+	eval {
+		my $words = $c->model('LaoFabDB::Keywords')->search({
+			word => {
+				-like => $c->stash->{start_char}.'%',
+			}
+		},{
+			select => [
+				{ distinct => 'word', },
+			],
+			as => 'word',
+			order_by => "word asc",
+			group_by => 'word',
+		})->slice(0,9);
+						
+		$self->status_ok($c,
+			entity => mk_keywords_entity($c, $words)
+			#location => $c->uri_for('/rest/author_name/'.$c->stash->{start_char})
+		);
+	};
+	if ($@) {
+		$self->status_bad_request($c,
+			message => "Invalid data supplied: $@");
+	}
+}
+
+sub mk_keywords_entity {
+	my $c = shift;
+	my $words = shift;
+	
+	my @values;
+	
+	while (my $word = $words->next) {
+		push @values, { id => 'id', label => 'label', value => $word->word };
+	}
+	
+	return \@values;;
+}
+
 =head2 org
 
 REST action for organisation auto complete for adding and editing documents, returns a list of possible organisations. Using org_GET for GET requests which in turn uses mk_org_entity to create the JSON.

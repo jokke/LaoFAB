@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<comments>
 
@@ -108,8 +110,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user", "document");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hEFvO04hTUCeWyv3TQhqrw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XxbjFwltkMun36iOhldz3A
 
 
 __PACKAGE__->belongs_to(

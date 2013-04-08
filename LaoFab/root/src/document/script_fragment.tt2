@@ -1,68 +1,221 @@
+<script type='text/javascript' src='[% c.uri_for('/static/js/jquery.cookie.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/jquery.dynatree.js') %]'></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAFxjmg4u-Vz3gnLX7ZyhXSKcyOcnTO5wE&libraries=drawing&sensor=false"></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/gdropdown.js') %]'></script>
+<link href="[% c.uri_for("/static/css/gdropdown.css") %]" rel="stylesheet" type="text/css"/>
+<link href="[% c.uri_for("/static/css/skin/ui.dynatree.css") %]" rel="stylesheet" type="text/css"/>
 <script type="text/javascript">
 
-    // require in the module
-    dojo.require("laofab.Author");
-    dojo.require("dijit.Tooltip");
-    dojo.require("dijit.form.TextBox");
-	dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.MultiSelect");
-    dojo.require("dijit.form.Textarea");
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.Button");
-	dojo.require("dijit.form.ComboBox");
-	dojo.require("dijit.dijit"); // optimize: load dijit layer
-	dojo.require("dijit.TitlePane");
-	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
-	dojo.require("dojo.data.ItemFileReadStore");
-
-    function expandAll(node, tree) {
-        if (node.isExpandable && !node.isExpanded) {
-            tree._expandNode(node);
-        }
-        var children = node.getChildren();
-        for (var i=0; i<children.length; i++) {
-            expandAll(children[i], tree);
-        }
+function expandAll(node, tree) {
+    if (node.isExpandable && !node.isExpanded) {
+        tree._expandNode(node);
     }
+    var children = node.getChildren();
+    for (var i=0; i<children.length; i++) {
+        expandAll(children[i], tree);
+    }
+}
 	
-    dojo.addOnLoad(function(  ) {
-
-        var a = new laofab.Author;
-
-        //fire it up, which takes care of the rest
-        var authors = new Array();
-        [% FOREACH author = authors %]
-            authors.push("[% author.name %]"+"=>"+"[% author.org %]");
-        [% END %]
-        a.initialize( authors );
-
-        var myForm = dijit.byId("document_form");
-        dojo.connect(myForm, "onSubmit", function(e){
-            myForm.validate();
-        });
-
-		var author_name = dijit.byId("author_name");
-		dojo.connect(author_name, "onKeyPress", function(e) {
-			
-			var myStore = new dojo.data.ItemFileReadStore({url: "[% c.uri_for('/rest/author') %]/" + 
-				author_name.getValue() + e.keyChar });
-			author_name.store = myStore;
-		});
-		
-		var author_org = dijit.byId("author_org");
-		dojo.connect(author_org, "onKeyPress", function(e) {
-			
-			var myStore = new dojo.data.ItemFileReadStore({url: "[% c.uri_for('/rest/org') %]/" + 
-				author_org.getValue() + e.keyChar });
-			author_org.store = myStore;
-		});
-});
-
 var treeData = [% tree %];
 var selectedKeys;
+var tipsOpen = false;
 
-$(document).ready(function(){
+//fire it up, which takes care of the rest
+var authors = new Array();
+function add_author(name, org) {
+    var divtag = "authline_"+authors.length;
+    var auth_line = $("<div id='"+divtag+"'/>");
+
+    var text_for_p;
+    if (org == "") {
+        text_for_p = name+" ";
+    } else if (name == "") {
+        text_for_p = org+" ";
+    } else {
+        text_for_p = name + " (" + org +") ";
+    }
+
+    var p_tag = $("<p>"+text_for_p+"</p>");
+
+    // a-delete tag
+    var a_tag = $("<a href='delete_author' id='delete_"+authors.length+"'><em id='delete_"+authors.length+"'>delete</em></a>");
+    a_tag.click(function () {
+        $('#'+divtag).remove();
+        return false;
+    });
+    var hidden_tag = $('<input type="hidden" name="authors" value="'+name+"=>"+org+'">');
+    $("#author_lines").append(auth_line);
+    auth_line.append(hidden_tag);
+    auth_line.append(p_tag);
+    p_tag.append(a_tag);
+
+    authors.push(divtag);
+}
+
+function draw_ajax_poly(id) {
+    $.get('[% c.uri_for("/rest/location/") %]' + id, function(data) {
+        var polygonCoords = [];
+        for (var i=0; i<data.polygon.length; i++) {
+            polygonCoords.push(new google.maps.LatLng(data.polygon[i][0], data.polygon[i][1]));
+        }
+        draw_polygon(polygonCoords, data.color);
+/*        var p1 = new google.maps.Polygon({
+            paths: polygonCoords,
+            strokeColor: data.color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: data.color,
+            editable: false,
+            fillOpacity: 0.35
+        });
+
+        // show polygon on the map
+        p1.setMap(map);
+*/
+    }, 'json');
+}
+
+function draw_polygon(coords, color) {
+    var polygon = new google.maps.Polygon({
+        paths: coords,
+        strokeColor: color,
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: color,
+        editable: false,
+        fillOpacity: 0.35
+    });
+
+    // show polygon on the map
+    polygon.setMap(map);
+    polygons.push(polygon);
+}
+
+var polygons = [];
+var map;
+
+$(document).ready(function() {
+
+    // for authors
+    [% FOREACH author = authors %]
+        add_author("[% author.name %]", "[% author.org %]");
+    [% END %]
+
+    $('#author_add').click(function() {
+        var author_name = $("#author_name").val();
+        var author_org = $("#author_org").val();
+        if (author_name == "" && author_org == "")
+            return false;
+        add_author(author_name, author_org);
+        $("#author_name").val('');
+        $("#author_org").val('');
+        return false;
+    });
+    //map
+
+    var laosCenter=new google.maps.LatLng(18.229, 104.634);
+    var myOptions = {
+        zoom: 7,
+        center: laosCenter,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById('main-map'), myOptions);
+
+    var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.POLYGON,
+    drawingControl: true,
+        drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+           drawingModes: [
+                google.maps.drawing.OverlayType.POLYGON,
+            ]
+        },
+        polygonOptions: {
+            editable: true,
+            strokeColor: "#AAAA55",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#AAAA55",
+            fillOpacity: 0.35
+        }
+    });
+    drawingManager.setMap(map);
+    google.maps.event.addListener(drawingManager, 'polygoncomplete', function(p) {
+        polygons.push(p);
+    });
+
+    //reset
+    $('#reset').click(function(){ 
+        for (var i=0; i<polygons.length; i++) {
+            if (polygons[i] != null) {
+                polygons[i].setMap(null);
+            }
+        }
+        polygons = [];
+    });
+
+    
+    [% IF document.areas %]
+        [% area = document.areas.first %]
+        [% bbox = area.bbox %]
+        var east = [% bbox.0 %];
+        var north = [% bbox.1 %];
+        var west = [% bbox.2 %];
+        var south = [% bbox.3 %];
+    [% END %]
+
+    [% FOREACH area IN document.areas %]
+        [% bbox = area.bbox %]
+        if ([% bbox.0 %] < east) 
+            east = [% bbox.0 %];
+        if ([% bbox.1 %] < north) 
+            north = [% bbox.1 %];
+        if ([% bbox.2 %] > west) 
+            west = [% bbox.2 %];
+        if ([% bbox.3 %] > south) 
+            south = [% bbox.3 %];
+
+        var bounds = new google.maps.LatLngBounds();
+
+        bounds.extend(new google.maps.LatLng(east, north));
+        bounds.extend(new google.maps.LatLng(west, south));
+        map.fitBounds(bounds);
+
+        var polygonCoords = [ new google.maps.LatLng([% area.google_polygon.join("), new google.maps.LatLng(") %] ) ];
+        draw_polygon(polygonCoords, '#AAAA55');
+        // construct the polygon
+        /*polygon = new google.maps.Polygon({
+                              paths: polygonCoords,
+                              strokeColor: "#FF0000",
+                              strokeOpacity: 0.8,
+                              strokeWeight: 2,
+                              fillColor: "#FF0000",
+                              editable: true,
+                              fillOpacity: 0.35
+        });
+
+        // show polygon on the map
+        polygon.setMap(map);*/
+        $('#map-container').show();
+        // add to the hidden input
+        //$('#mapcoords').val("([% area.google_polygon.join(')(') %])");
+    [% END %]
+
+    $('.togglemap').click(function(){
+        $('#map-container').toggle();
+        return false;
+    });
+
+    //tooltip
+    /*var tooltips = $( "[title]" ).tooltip();
+    $( "<button>" ).text( "Toggle help" ).button().click(function() {
+        if (tipsOpen)
+            tooltips.tooltip( "close" );
+        else
+            tooltips.tooltip( "open" );
+        tipsOpen = !tipsOpen;
+    }).insertBefore( "form" );
+*/
     [% IF selected_folders %]
       selectedKeys = [% selected_folders %];
     [% END %]
@@ -93,9 +246,75 @@ $(document).ready(function(){
         }
       }
     });
+    [% FOREACH key IN selected_folders.split(',') %]
+        $("#check_tree").dynatree("getTree").getNodeByKey("[% key %]").select();
+        var node = $("#check_tree").dynatree("getTree").getNodeByKey("[% key %]");
+        while (node = node.getParent())
+            node.expand();
+    [% END %]
+
+    //map controls
+    //start process to set up custom drop down
+    //create the options that respond to click
+    var select_options = [];
+    [% FOREACH location IN locations %]
+        select_options.push(new optionDiv({
+                gmap: map,
+                name: "[% location.description | html %]",
+                title: "[% location.description | html %]",
+                id: "location_[% location.id %]",
+                action: function(){
+                    draw_ajax_poly([% location.id %]);
+                }
+
+        }));
+    [% END %]
+
+    var optionDiv1 = new optionDiv({
+                name: 'Option1',
+                title: "This acts like a button or click event",
+                id: "mapOpt",
+                action: function(){
+                    alert('option1');
+                }
+        });
+        
+    var optionDiv2 = new optionDiv({
+                gmap: map,
+                name: 'Option2',
+                title: "This acts like a button or click event",
+                id: "satelliteOpt",
+                action: function(){
+                    alert('option2');
+                }
+        });
+        
+        
+        //possibly add a separator between controls        
+        var sep = new separator();
+        
+        //put them all together to create the drop down       
+        var dropDownDiv = new dropDownOptionsDiv({
+            items: select_options,
+            id: "myddOptsDiv"
+        });
+
+        var dropDown1 = new dropDownControl({
+                gmap: map,
+                name: 'Provinces',
+                id: 'ddControl',
+                title: 'Select a pre-defined location if you don\'t want to draw your own poluygon',
+                position: google.maps.ControlPosition.TOP_RIGHT,
+                dropDown: dropDownDiv 
+});
 
     $('#document_form').submit(function(){
-      $('#folder').val(selectedKeys);
+        $('#folder').val(selectedKeys);
+        var str_pol = [];
+        for (var i=0; i<polygons.length; i++) {
+            str_pol.push(polygons[i].getPath().getArray().join(''));
+        }
+        $('#mapcoords').val(str_pol.join(';'));
     });
 });
 </script>

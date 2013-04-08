@@ -1,77 +1,49 @@
-<form dojoType="dijit.form.Form" id="document_form" 
-	encType="multipart/form-data" method="post">
 
-<div dojoType="dijit.Tooltip"
-                connectId="info_title"
-                label="Give the document a title, this field is required.">
-</div>
 
-<div dojoType="dijit.Tooltip"
-                connectId="info_subtitle"
-                label="Use this box for journal reference, name and date of conference, project titles, or other secondary information.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_subcats"
-                label="Select the categories that corresponds to your document. You can select several by pressing <em>[% select_key %]</em> at the same time you click.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_keywords"
-                label="Fill in the different keywords for your document and separate them with comma. For example: <em>land management, rubber</em>.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_pubyear"
-                label="Enter the year of publication with four digits. For example <em>1975</em>. This field is required.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_doctype"
-                label="Select the corresponding document type, if your prefered type is not in the list, choose <em>Other</em>.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_authors"
-                label="Enter the authors names and organisations below and add them by clicking <em>add author</em>-button. You are free to add as many as you need.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_location"
-                label="By clicking on the <em>Avaliable folders</em> you can select the folders where your document should be available. At least one folder should be selected but you can choose as many as you think is fit.">
-</div>
-
-<div dojoType="dijit.Tooltip"
-                connectId="info_document"
-                label="Here you have to select the actual digital file to upload. Just click <em>browse</em> and locate the document on your computer. This field is required.">
-</div>
+<form id="document_form" encType="multipart/form-data" method="post">
 
 <p>
-<label for="title"><em>Title</em></label>&nbsp;<span id="info_title"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<label for="title"><em>Title</em></label>
+<br />
 <input type="text" name="title" 
     value="[% document.title %]"
-    dojoType="dijit.form.ValidationTextBox"
-    trim="true" 
+    title="Give the document a title, this field is required."
     id="title"
-    required="true"
-    invalidMessage="A title is required!"
     style="width: 350px;" 
 />
 </p>
 
 <p>
-<label for="sub_title"><em>Secondary reference</em></label>&nbsp;<span id="info_subtitle"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span>
+<label for="sub_title"><em>Secondary reference</em></label>
 <br />
 <input type="text" name="sub_title" 
     value="[% document.sub_title %]"
+    title="Use this box for journal reference, name and date of conference, project titles, or other secondary information."
     id="sub_title"
-    dojoType="dijit.form.TextBox"
-    style="width: 350px;" 
-    trim="true" /></p>
+    style="width: 350px;"
+/></p>
 
 <p>
-<label for="subcats"><em>Subject Categories</em></label>&nbsp;<span id="info_subcats"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
-<select dojoType="dijit.form.MultiSelect" id="subcats" name="subcats" multiple="multiple" size="[% subcats.size %]">
+<label for="permission"><em>Access permission</em>
+<br />
+<select id="permission" name="permission" title="Permission can be defined as: Metadata is public but only members can download document, Metadata and download is restricted to members only, or both Metadata and downloads are public."
+        [% IF document.permission %]
+            value="[% document.permission %]"
+        [% ELSE %]
+            value="pm"
+        [% END %]>
+    [% FOREACH perm IN [{ id => 'pm', label => 'Public Metadata'  } , { id => 're', label => 'Restricted' } , { id => 'pu', label => 'Completelay Public' } ] %]
+        <option value="[% perm.id %]"
+        [% IF doctype.permission == perm.id %]
+            selected="selected"[% END %]>[% perm.label %]</option>
+    [% END %]
+</select>
+</p>
+
+<p>
+<label for="subcats"><em>Subject Categories</em>
+<br />
+<select id="subcats" name="subcats" multiple="multiple" size="[% subcats.size %]" title="Select the categories that corresponds to your document. You can select several by pressing [% select_key %] at the same time you click.">
 [% FOREACH subcat IN subcats %]
   <option value="[% subcat.id %]"
   [% FOREACH s_subcat IN s_subcats %]
@@ -84,25 +56,23 @@
 </p>
 
 <p>
-<label for="keywords"><em>Keywords</em></label>&nbsp;<span id="info_keywords"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
-<textarea dojoType="dijit.form.Textarea" name="keywords" style="width: 250px;">[% keywords %]</textarea>
+<label for="keywords"><em>Keywords</em></label>
+<br />
+<textarea name="keywords" id="keywords" style="width: 250px;" title="Fill in the different keywords for your document and separate them with comma. For example: land management, rubber.">[% keywords %]</textarea>
 </p>
 
 <p>
-<label for="pubyear"><em>Publication year</em></label>&nbsp;<span id="info_pubyear"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<label for="pubyear"><em>Publication year</em></label>
+<br />
 <input type="text" name="pubyear" value="[% document.pubyear %]"
-    dojoType="dijit.form.ValidationTextBox"
-    regExp="[12][\d]{3}"
-    required="true"
-    invalidMessage="Must be a year with four digits."
+    title="Enter the year of publication with four digits. For example 1975. This field is required."
     style="width: 50px;" />
 </p>
 
 <p>
-<label for="doctype"><em>Type of Document</em></label>&nbsp;<span id="info_doctype"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
-<select dojoType="dijit.form.FilteringSelect"
+<label for="doctype"><em>Type of Document</em></label>
+<select title="Select the corresponding document type, if your prefered type is not in the list, choose 'Other'." 
         name="doctype"
-        autocomplete="true"
         [% IF document.doctype %]
             value="[% document.doctype.id %]"
         [% ELSE %]
@@ -118,46 +88,50 @@
 
 <p>
 <div id="author_lines">
-<label for="authors"><em>Authors</em></label>&nbsp;<span id="info_authors"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span></p>
-
+<label for="authors"><em>Authors</em></label>
 </div>
+</p>
+
 <div id="author_widget">
 <table>
 <tbody>
 <tr><td>Name:</td><td><input 
-	dojoType="dijit.form.ComboBox"
 	value=""
-	autocomplete="false"
-	searchAttr="name"
 	name="author_name"
-	hasDownArrow="false"
 	style="width: 250px;"
 	id="author_name"></td></tr>
 
 <tr><td>Organisation:</td><td><input 
-	dojoType="dijit.form.ComboBox"
 	value=""
-	autocomplete="false"
-	searchAttr="name"
 	name="author_org"
-	hasDownArrow="false"
 	style="width: 250px;"
 	id="author_org"></td></tr>
 
-<tr><td></td><td><button dojoType="dijit.form.Button" id="author_add" value="add author" name="author_add" type="submit_author">add author</button>
+<tr><td></td><td><button id="author_add" value="add author" name="author_add" type="submit_author">add author</button>
 </td></tr>
 </tbody></table>
-</p>
 </div>
 
 <p>
-<label for="folder_loc"><em>Folder location(s)</em></label>&nbsp;<span id="info_location"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br/>
-<div dojoType="dijit.TitlePane" title='Available folders' id="folder_loc" open="true" style="width: 70%; padding-top: 5px; padding-bottom: 20px;" >
+<label for="folder_loc"><em>Folder location(s)</em></label>
+<br/>
+<div title='Available folders' id="folder_loc" style="width: 70%; padding-top: 5px; padding-bottom: 20px;" >
 
 <div id="check_tree"></div>
 
 </div>
 </p>
+
+
+<div>
+<p>You can associate the document with a geographical locatation. <a href="#" class="togglemap">Open the map</a> and click with your mouse to create a polygon, each click is a corner in the polygon. Finalise the polygon by clicking on the first corner.</p>
+<p><a href="#" class="togglemap">Open/hide the map</a></p>
+<div id="map-container">
+    <div id="main-map"></div>
+    <input id="reset" value="Reset map" type="button" class="navi"/>
+</div>
+</div>
+
 <div class="file label">
 <p>
 <label for="document"><em>The actual document</em></label>&nbsp;<span id="info_document"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
@@ -168,6 +142,7 @@
 </p>
 </div>
 <input type="hidden" value="[% selected_folders %]" name="folder" id="folder" />
+<input type="hidden" value="[% mapcoords %]" name="mapcoords" id="mapcoords" />
 
 <button dojoType="dijit.form.Button" value="Submit Document" name="submit" type="submit">Submit Document</button>
 

@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<document_subcat>
 
@@ -73,8 +75,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("document", "subcat");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8cM7sE5+PjxO5OnCQS3LpQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TJecyC0P3NKWXJ/ZKeaRvg
 
 __PACKAGE__->belongs_to('document' => 'LaoFab::Schema::LaoFabDB::Documents');
 __PACKAGE__->belongs_to('subcat' => 'LaoFab::Schema::LaoFabDB::Subcats');

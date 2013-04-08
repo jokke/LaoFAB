@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<user_role>
 
@@ -73,8 +75,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dTXPldTfG0l7Hzd9TIWtuw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NL6BIvSvtv2j3LO0m2A62A
 
 __PACKAGE__->belongs_to(user => 'LaoFab::Schema::LaoFabDB::User', 'user');
 __PACKAGE__->belongs_to(role => 'LaoFab::Schema::LaoFabDB::Role', 'role');

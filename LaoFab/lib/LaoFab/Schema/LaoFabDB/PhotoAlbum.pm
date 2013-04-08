@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<photo_album>
 
@@ -73,8 +75,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("photo", "album");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 13:01:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ThP4MwLkH7zWVgW9+WViLQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BzV+ZV42beEFJwOaH8+rww
 
 __PACKAGE__->belongs_to('photo' => 'LaoFab::Schema::LaoFabDB::Photos');
 __PACKAGE__->belongs_to('album' => 'LaoFab::Schema::LaoFabDB::Albums');

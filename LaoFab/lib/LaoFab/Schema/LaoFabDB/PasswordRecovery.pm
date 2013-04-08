@@ -23,11 +23,13 @@ use base 'DBIx::Class::Core';
 
 =item * L<DBIx::Class::PK::Auto>
 
+=item * L<DBIx::Class::GeomColumns>
+
 =back
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto");
+__PACKAGE__->load_components("InflateColumn::FS", "PK::Auto", "GeomColumns");
 
 =head1 TABLE: C<password_recovery>
 
@@ -115,8 +117,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2012-11-18 16:26:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XyR+9Lo3X2Jd8qFPi9+QKw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Eml4R4P5n+XVjkjzgMp8Nw
 
 __PACKAGE__->belongs_to(
     'user', 'LaoFab::Schema::LaoFabDB::User',
