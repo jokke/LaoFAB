@@ -79,7 +79,7 @@ sub generate_thumbnail : Chained('get_photos') PathPart('thumbnail') Args(0) {
         my $data = $photo->file->open('r') or die "Error: $!";
         my $img = Imager->new;
         $img->read( fh => $data ) or die $img->errstr;
-        my $scaled = $img->scale(xpixels=>150,ypixels=>150,type=>'min');
+        my $scaled = $img->scale(xpixels=>50,ypixels=>50,type=>'min');
 
         $scaled->write(
             type => $extension,
