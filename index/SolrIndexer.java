@@ -18,22 +18,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 import java.util.*;
-//import java.util.Map;
-//import java.util.TreeMap;
+import javax.activation.MimetypesFileTypeMap;
 
 public class SolrIndexer {
 
 	public static void main(String args[]) {
 		try {
-			indexFilesSolrCell(args[0]);
+			if (args.length != 2) {
+				System.out.println("Must run with arguments<what> <xmlfile>");
+			} else 
+			indexFilesSolrCell(args[0], args[1]);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
-	private static void indexFilesSolrCell(String fileName) 
+	private static void indexFilesSolrCell(String type, String fileName) 
 		    throws Exception {
 		ModifiableSolrParams p = new ModifiableSolrParams();
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -43,9 +44,9 @@ public class SolrIndexer {
 
 		String root_node = doc.getDocumentElement().getNodeName();
 		
-		NodeList docNodes = doc.getElementsByTagName("doc");
+		NodeList docNodes = doc.getElementsByTagName(type);
 
-		String urlString = "http://localhost:8080/solr"; 
+		String urlString = "http://0:8983/solr/"+type; 
 		SolrServer solr = new HttpSolrServer(urlString);
 
 		ContentStreamUpdateRequest up = new ContentStreamUpdateRequest("/update/extract");
@@ -64,43 +65,16 @@ public class SolrIndexer {
 				Element element = (Element) node;
 				String fieldtype = element.getAttributeNode("name").getValue();
 				if (fieldtype.equalsIgnoreCase("file")) {
-					up.addFile(new File(node.getTextContent()));
+                    File f = new File(node.getTextContent());
+					up.addFile(f, new MimetypesFileTypeMap().getContentType(f));
 					continue;
 				}
-//				if (element.getAttributeNode("multi").getValue().equals("true")) {
-//					Collection<String> values = map.get(fieldtype);
-//					if (values==null) {
-//						values = new ArrayList<String>();
-//						map.put(fieldtype, values);
-//					}
-//					values.add(node.getTextContent());
-//					continue;
-//				}
 					
 
-				if (fieldtype.equalsIgnoreCase("id")) {
-					//up.setParam("literal.id", node.getTextContent());
-					p.add(ExtractingParams.LITERALS_PREFIX + "id", node.getTextContent());
-					continue;
-				}
-				//up.setParam("literal.doc_"+fieldtype, node.getTextContent());
-				p.add(ExtractingParams.LITERALS_PREFIX + "doc_" + fieldtype, node.getTextContent());
+				p.add(ExtractingParams.LITERALS_PREFIX + fieldtype, node.getTextContent());
 			}
 		}
 
-/*		Iterator<String> iter = map.keySet().iterator();
-		while (iter.hasNext()) {
-			String fieldtype = iter.next();
-			Collection<String> values = map.get(fieldtype);
-			for (String value : values) {
-System.out.println("Setting "+fieldtype+" to "+value);
-				p.add(ExtractingParams.LITERALS_PREFIX + "doc_" + fieldtype, value);
-			}
-			//up.setParams(p);
-		} */
-
-		//up.setParam("uprefix", "attr_");
-		//up.setParam("fmap.content", "attr_content");
 		p.add("uprefix", "attr_");
 		p.add("fmap.content", "attr_content");
 		up.setParams(p);

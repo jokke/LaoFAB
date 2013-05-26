@@ -3,25 +3,25 @@
     <field name="id">[% doc.id %]</field>
     <field name="title">[% doc.title | html %]</field>
     <field name="sub_title">[% doc.sub_title | html %]</field>
-    [% FOREACH author = doc.authors %]
-        [% IF author.name %]
-            <field name="author_name">[% author.name | html %]</field>
-        [% END %]
-        [% IF author.org %]
-            <field name="author_organisation">[% author.org | html %]</field>
-        [% END %]
-    [% END %]
+    [%- FOREACH author = doc.authors %]
+        [% IF author.name %]<field name="author_name">[% author.name | html %]</field>[% END %]
+        [% IF author.org %]<field name="author_organisation">[% author.org | html %]</field>[% END %]
+    [%- END -%]
     [% FOREACH key = doc.keywords %]
       <field name="keyword">[% key.word | html %]</field>
-    [% END %]
+    [%- END %]
     <field name="pubyear">[% doc.pubyear %]</field>
     [% FOREACH subcat IN doc.subcats %]
         <field name="subcat">[% subcat.full_cat | html %]</field>
-    [% END %]
+    [%- END %]
     [% FOREACH folder = doc.folders %]
       <field name="folder">[% folder.name | html %]</field>
     [% END %]
+    [% FOREACH area = doc.areas %]
+      <field name="geo">[% area.polygon | html %]</field>
+    [% END %]
     <field name="doctype">[% doc.doctype.name | html %]</field>
+    <field name="permission">[% doc.permission | html %]</field>
     <field name="file">[% file %]</field>
   </doc>
 </add>

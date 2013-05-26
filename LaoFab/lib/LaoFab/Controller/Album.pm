@@ -200,6 +200,16 @@ sub view : Local {
     
     my $page = $c->req->param('page');
     $page = 1 if ($page !~ /^\d+$/);
+
+
+#    my $prs = $c->model('LaoFabDB::Photos')->search({ album => $album->id });
+#    my $max_w = $prs->get_column('width')->max;
+#    my $max_h = $prs->get_column('height')->max;
+#    $c->log->error("height is $max_h and width is $max_w and factor is ". ($max_w / 800));
+
+#    $c->stash->{max_w} = 800;
+#    $c->stash->{max_h} = $max_h / ( $max_w / 800 );
+
     #$photos = $photos->page($page);
 
     #$c->stash->{pager} = $photos->pager;

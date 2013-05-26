@@ -60,6 +60,7 @@ __PACKAGE__->table("locations");
 =head2 color
 
   data_type: 'char'
+  default_value: 'FF0000'
   is_nullable: 1
   size: 6
 
@@ -78,7 +79,7 @@ __PACKAGE__->add_columns(
   "polygon",
   { data_type => "geometry", is_nullable => 0 },
   "color",
-  { data_type => "char", is_nullable => 1, size => 6 },
+  { data_type => "char", default_value => "FF0000", is_nullable => 1, size => 6 },
 );
 
 =head1 PRIMARY KEY
@@ -94,8 +95,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-04-06 15:06:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:s710eKOAnHLIO/gLqEaGBQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-05-12 22:17:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:thLi2OaO500mzMKfLgI5Aw
 
 __PACKAGE__->geom_columns('polygon');
 

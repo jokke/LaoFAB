@@ -133,6 +133,18 @@ __PACKAGE__->table("photos");
   is_nullable: 1
   size: 255
 
+=head2 width
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 1
+
+=head2 height
+
+  data_type: 'integer'
+  extra: {unsigned => 1}
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -190,6 +202,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "normal",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "width",
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
+  "height",
+  { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -205,8 +221,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5/OX5ooiCtog6azYHbdvMw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-05-12 22:17:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+MAKvdHVR5oZ6MhjvX8eJg
 __PACKAGE__->add_columns(
   "album",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 10 },
@@ -229,21 +245,21 @@ __PACKAGE__->add_columns(
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'photos') . "",
-            fs_column_path   => '/var/www/LaoFab/root/photos/',
+            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/photos/',
         },
     "thumbnail",
         {
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'thumbnail_photos') . "",
-            fs_column_path   => '/var/www/LaoFab/root/thumbnail_photos/',
+            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/thumbnail_photos/',
         },
     "normal",
         {
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'normal_size_photos') . "",
-            fs_column_path   => '/var/www/LaoFab/root/normal_size_photos/',
+            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/normal_size_photos/',
         },
     );
 

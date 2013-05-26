@@ -31,6 +31,32 @@ sub get_photos : Chained('/') PathPart('photo') CaptureArgs(1) {
     }
 }
 
+=head2 get_original
+
+this method returns the originale of a given image
+
+=cut
+
+sub get_original : Chained('get_photos') PathPart('original') Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $photo = $c->stash->{photo};
+
+    my $mimeinfo = File::MimeInfo->new;
+    my $extension;
+    if ($photo->mime =~ /\/(.+)$/) {
+        $extension = $1;
+    }
+
+    my $out = $photo->file->open('r');
+    $c->res->content_type( $photo->mime );
+    $c->res->content_length( -s $out );
+    $c->res->header( "Content-Disposition" => "inline; filename=laofab_photo_original_".$photo->id .".". $extension);# 
+    
+    binmode $out;
+    $c->res->body($out);
+}
+
 =head2 generate_thumbnail
 
 this method generates a thumbnail of a given image
@@ -222,6 +248,10 @@ sub _resize_photo {
     my $data = $photo->file->open('r') or die "Error: $!";
     my $img = Imager->new;
     $img->read( fh => $data ) or die $img->errstr;
+    
+    $photo->width($img->getwidth);
+    $photo->height($img->getheight);
+
     my $scaled;
     if ($height) {
         $scaled = $img->scale(xpixels=>$width,ypixels=>$height,type=>'min');#xheight => $size );

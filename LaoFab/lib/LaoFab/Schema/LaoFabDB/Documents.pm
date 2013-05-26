@@ -254,6 +254,9 @@ __PACKAGE__->has_many(
     'document', {
         cascading_delete => 1
     });
+__PACKAGE__->has_many(
+    solrupdates => 'LaoFab::Schema::LaoFabDB::Solrupdates',
+    'document');
 
 sub short_title {
     my $self = shift;
@@ -323,6 +326,48 @@ sub friendly_size {
     return sprintf("%.2f".$size_names[$e], ($file_size/pow(1024, floor($e))));
 }
 
+sub insert {
+    my ( $self, @args ) = @_;
+
+    my $guard = $self->result_source->schema->txn_scope_guard;
+
+    $self->next::method(@args);
+    $self->create_related ('solrupdates', {
+        update_type => 'n',
+    });
+    $guard->commit;
+                          
+    return $self;
+};
+
+sub update {
+    my ( $self, @args ) = @_;
+
+    my $guard = $self->result_source->schema->txn_scope_guard;
+
+    $self->next::method(@args);
+    $self->create_related ('solrupdates', {
+        update_type => 'u',
+    });
+    $guard->commit;
+                          
+    return $self;
+};
+
+sub delete {
+    my ( $self, @args ) = @_;
+
+    my $guard = $self->result_source->schema->txn_scope_guard;
+
+    $self->next::method(@args);
+    $self->create_related ('solrupdates', {
+        update_type => 'd',
+    });
+    $guard->commit;
+                          
+    return $self;
+};
+
 #TODO fixme
 #use LaoFab;
 __PACKAGE__->add_columns(
@@ -331,7 +376,8 @@ __PACKAGE__->add_columns(
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
             #fs_column_path   => LaoFab->path_to('root', 'docs') . "",
-            fs_column_path   => '/var/www/LaoFab/root/docs/',
+            #fs_column_path   => '/var/www/LaoFab/root/docs/',
+            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/docs/',
         }
     );
 
