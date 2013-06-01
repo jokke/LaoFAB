@@ -1,115 +1,69 @@
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/laofab.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/Core.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/AbstractManager.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/Parameter.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/ParameterStore.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/AbstractWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/AbstractFacetWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/core/AbstractTextWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/ResultWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/PagerWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/TagcloudWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/CurrentSearchWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/TextWidget.js') %]'></script>
+<script type='text/javascript' src='[% c.uri_for('/static/js/solr/managers/Manager.jquery.js') %]'></script>
 [% META title = "Search for documents" %]
 
-<script type="text/javascript">
-    dojo.require("dijit.Tooltip");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.ValidationTextBox");
-	dojo.require("dijit.form.FilteringSelect");
-	dojo.require("dijit.form.CheckBox");
-    dojo.require("dijit.dijit");
-    dojo.require("dojo.parser");
-    var myForm;
-    dojo.addOnLoad( function() {
-        myForm  = dijit.byId("search_form");
-        dijit.byId('s').focus();
-    });
-    dojo.connect(myForm, "onSubmit", function(e){
-        return myForm.validate();
-    });
 
-	function uncheckCA() {
-		dijit.byId("ca").setChecked(false);
-	}
-	
-	function uncheckAll() {
-		[% FOREACH subcat IN subcats %]
-	        dijit.byId("c_[% subcat.id %]").setChecked(false);
-	    [% END %]
-	}
-	
-</script>
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>Access thousands of documents from this page</h2>
+</div>
 
-<h1>[% template.title %]</h1>
-<p>Please enter your search query below.</p>
-<form method="get" id="search_form" dojoType="dijit.form.Form" action="[% c.req.base %][% c.req.path %]">
-<table><tbody><tr><td>
-    Enter your search expression: </td>
-    <td><input type="text" name="s" value=""
-                dojoType="dijit.form.ValidationTextBox"
-                invalidMessage="Something to search for is required!"
-                trim="true"
-                required="true"
-                id="s"
-                /></td>
-	<td><select dojoType="dijit.form.FilteringSelect"
-				name="d"
-				autocomplete="true"
-				value="0">
-				<option value="0">All document types</option>
-				[% FOREACH doctype IN doctypes %]
-				    <option value="[% doctype.id %]">[% doctype.name | html %]</option>
-				[% END %]
-	</select></td>
-    <td><button dojoType="dijit.form.Button" name="b" value="search" type="submit">search</button></td></tr>
-<tr><td colspan="4">
-	<input id="t" dojotype="dijit.form.CheckBox"
-		name="f" value="t" checked="checked"
-		type="checkbox" >Titles
-	<input id="a" dojotype="dijit.form.CheckBox"
-		name="f" value="a" checked="checked"
-		type="checkbox" >Authors
-	<input id="o" dojotype="dijit.form.CheckBox"
-		name="f" value="o" checked="checked"
-		type="checkbox" >Organizations
-	<input id="k" dojotype="dijit.form.CheckBox"
-		name="f" value="k" checked="checked"
-		type="checkbox" >Keywords
-	</td></tr>
-	</tbody>
-</table>
-<h2>Select the subject categories to search within:</h2>
-<table>
-	<tbody>
-<tr><td><input id="ca" dojotype="dijit.form.CheckBox" name="ca" value="ca" 
-	checked="checked" type="checkbox" onClick="uncheckAll()">All categories</td><td colspan="3"></td></tr>
-<tr>
-	<td>
-		[% FOREACH subcat IN subcats %]
-			[% IF subcat.main_cat.match('^Agric') %]
-				<input id='c_[% subcat.id %]'
-					dojotype="dijit.form.CheckBox"
-					name="c"
-					value='[% subcat.id %]'
-					type="checkbox"
-					onClick="uncheckCA();">[% subcat.full_cat | html %]<br>
-			[% END %]
-		[% END %]
-	</td>
-	<td>
-		[% FOREACH subcat IN subcats %]
-			[% IF subcat.main_cat.match('^NRM') %]
-				<input id='c_[% subcat.id %]'
-					dojotype="dijit.form.CheckBox"
-					name="c"
-					value='[% subcat.id %]'
-					type="checkbox"
-					onClick="uncheckCA();">[% subcat.full_cat | html %]<br>
-			[% END %]
-		[% END %]
-	</td>
-	<td>
-		[% FOREACH subcat IN subcats %]
-			[% IF subcat.main_cat.match('^Rural') %]
-				<input id='c_[% subcat.id %]'
-					dojotype="dijit.form.CheckBox"
-					name="c"
-					value='[% subcat.id %]'
-					type="checkbox"
-					onClick="uncheckCA();">[% subcat.full_cat | html %]<br>
-			[% END %]
-		[% END %]
-	</td>
-</tr>
-</tbody></table>
-</form>
+<div class="page" style="padding: 10px;">
+
+<div class="sidebar" style="width: 390;">
+  <div id="widget" class="sticky" style="width: 390;">
+      <h2>Current Selection</h2>
+      <ul id="selection"></ul>
+
+      <h2>Search</h2>
+      <span id="search_help">(press ESC to close suggestions)</span>
+      <ul id="search">
+        <input type="text" id="query" name="query" autocomplete="off">
+      </ul>
+
+      <h2>Publication Years</h2>
+      <div class="tagcloud" id="pubyear"></div>
+
+      <h2>Document Types</h2>
+      <div class="tagcloud" id="doctype"></div>
+
+      <h2>Organisations</h2>
+      <div class="tagcloud" id="author_organisation"></div>
+
+      <h2>Authors</h2>
+      <div class="tagcloud" id="author_name"></div>
+
+      <h2>Folders</h2>
+      <div class="tagcloud" id="folder"></div>
+
+      <h2>Keywords</h2>
+      <div class="tagcloud" id="keyword"></div>
+
+  </div>
+</div>
+
+<div class="main" style="margin-left: 400px;">
+      <div id="result" style="width: 700px;">
+        <div id="navigation">
+          <ul id="pager"></ul>
+          <div id="pager-header"></div>
+        </div>
+        <div id="docs"></div>
+      </div>
+    <div class="clear"></div>
+
+</div> <!-- end of main -->
+
+</div> <!-- end of page -->

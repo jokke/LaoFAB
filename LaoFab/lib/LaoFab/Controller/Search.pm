@@ -28,7 +28,10 @@ Global action to handle search queries. If a query is supplied, it will return a
 
 sub search : Global {
     my ( $self, $c, $query ) = @_;
-    
+
+}
+
+=old code
     $query ||= $c->req->param('s') 
         if (defined ($c->req->param('s')));
 
@@ -150,7 +153,7 @@ sub search : Global {
 
     $c->stash->{template} = 'search/result.tt2';
 }
-
+=cut
 
 =head1 AUTHOR
 

@@ -41,6 +41,58 @@ mk_rating_entity
 
 =cut
 
+sub solr : Local : ActionClass('REST') {
+    my ( $self, $c) = @_;
+}
+
+sub solr_POST {
+	my ($self, $c) = @_;
+	
+
+    my $q = $c->req->param('query');
+    $q =~ tr/\+/ /;
+    $q =~ s/\%([A-Fa-f0-9]{2})/pack('C', hex($1))/eg;
+    my %req;
+    for my $field (split /&/, $q) {
+        my ($key, $val) = split /=/, $field;
+        if ($req{$key} and ref $req{$key} eq 'ARRAY') {
+            push @{$req{$key}}, $val;
+        } elsif ($req{$key}) {
+            $req{$key} = [ $req{$key}, $val ];
+        } else {
+            $req{$key} = $val;
+        }
+    }
+
+    $c->log->debug("searching for ".Dumper( \%req ));
+    my $options;
+    $options->{fq} = $req{fq} if $req{fq};
+    $options->{'facet.field'} = $req{'facet.field'} if $req{'facet.field'};
+    $options->{'facet'} = $req{'facet'} if $req{'facet'};
+    $options->{'facet.limit'} = $req{'facet.limit'} if $req{'facet.limit'};
+    $options->{'facet.mincount'} = $req{'facet.mincount'} if $req{'facet.mincount'};
+    $options->{'f.topics.facet.limit'} = $req{'f.topics.facet.limit'} if $req{'f.topics.facet.limit'};
+    $options->{'json.nl'} = $req{'json.nl'} if $req{'json.nl'};
+    $options->{'df'} = $req{'df'} if $req{'df'};
+
+
+    my $response = $c->model('Solr')->search( $req{'q'}, $options);
+    my $entity = {
+        start => $response->content->{start},
+        numFound => $response->content->{numFound},
+    };
+
+
+    for my $key (keys %{$response->content}) {
+        $c->log->debug('key: ' . Dumper($key));
+    }
+	$self->status_ok($c, entity => $response->content );
+#        doc => {
+#            title => 'test',
+#        }
+#    });
+}
+
 sub location : Local : ActionClass('REST') {
     my ( $self, $c, $id) = @_;
 	$c->stash->{id} = $id;

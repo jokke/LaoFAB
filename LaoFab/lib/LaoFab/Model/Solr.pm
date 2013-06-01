@@ -23,7 +23,7 @@ it under the same terms as Perl itself.
 
 =cut
 __PACKAGE__->config(
-    server  => 'http://localhost:8983/solr/',
+    server  => 'http://localhost:8983/solr/repo',
     options => {
         autocommit => 1,
     }

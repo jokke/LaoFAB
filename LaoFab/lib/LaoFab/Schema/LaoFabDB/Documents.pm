@@ -135,6 +135,19 @@ __PACKAGE__->table("documents");
   is_nullable: 0
   size: 2
 
+=head2 preview
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+=head2 hot
+
+  data_type: 'integer'
+  default_value: 0
+  extra: {unsigned => 1}
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -193,6 +206,15 @@ __PACKAGE__->add_columns(
   },
   "permission",
   { data_type => "char", default_value => "pm", is_nullable => 0, size => 2 },
+  "preview",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "hot",
+  {
+    data_type => "integer",
+    default_value => 0,
+    extra => { unsigned => 1 },
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -208,8 +230,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G17+3pPhyA9z38QVxbZRJg
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-06-01 17:03:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fO+eNp28nO3zRYrjLMOwTw
 
 __PACKAGE__->resultset_class(
 	'LaoFab::ResultSet::Documents');

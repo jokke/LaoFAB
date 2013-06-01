@@ -33,5 +33,4 @@
 </div>
 
 
-<h1 class="header">LaoFab - [% page_header | html %]</h1>
 <!-- END site/header -->
