@@ -2,7 +2,12 @@
      debug("Passing page through as text: $template.name");
      content;
    ELSE;
-     debug("Applying HTML page layout wrappers to $template.name\n");
-     content WRAPPER site/html + site/layout;
+     IF wrapper;
+        debug("Applying custom $wrapper to $template.name");
+        content WRAPPER $wrapper;
+     ELSE; 
+        debug("Applying wrapper to $template.name");
+        content WRAPPER site/html + site/layout;
+     END;
    END;
 -%]

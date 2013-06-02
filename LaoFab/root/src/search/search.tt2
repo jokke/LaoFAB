@@ -14,10 +14,9 @@
 <script type='text/javascript' src='[% c.uri_for('/static/js/solr/managers/Manager.jquery.js') %]'></script>
 [% META title = "Search for documents" %]
 
-
 <div id="heading">
     <h1>[% template.title %]</h1>
-    <h2>Access thousands of documents from this page</h2>
+    <h2>Access thousands of documents</h2>
 </div>
 
 <div class="page" style="padding: 10px;">
@@ -28,7 +27,7 @@
       <ul id="selection"></ul>
 
       <h2>Search</h2>
-      <span id="search_help">(press ESC to close suggestions)</span>
+      <!-- <span id="search_help">(press ESC to close suggestions)</span> -->
       <ul id="search">
         <input type="text" id="query" name="query" autocomplete="off">
       </ul>
@@ -40,10 +39,10 @@
       <div class="tagcloud" id="doctype"></div>
 
       <h2>Organisations</h2>
-      <div class="tagcloud" id="author_organisation"></div>
+      <div class="tagcloud" id="organisation"></div>
 
       <h2>Authors</h2>
-      <div class="tagcloud" id="author_name"></div>
+      <div class="tagcloud" id="author"></div>
 
       <h2>Folders</h2>
       <div class="tagcloud" id="folder"></div>

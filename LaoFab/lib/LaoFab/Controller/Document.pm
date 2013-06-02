@@ -102,24 +102,6 @@ sub view : Local {
         $c->flash->{error} = "The document you requested can not be found, sorry.";
         $c->detach;
     }
-    my $user_rating = 0;
-    my $user_comment = $c->model('LaoFabDB::Comments')->find({
-        document => $document->id,
-        user     => $c->user->id,
-    });
-    $user_rating = $user_comment->rating if ($user_comment);
-    my $comments = $c->model('LaoFabDB::Comments')->search({
-        document => $document->id,
-    });
-
-    my $rating = 0;
-    my $comments_count = $comments->count;
-    while (my $comment = $comments->next) {
-        $rating += $comment->rating;
-    }
-    if ($comments_count) {
-        $rating = $rating/$comments_count;
-    }
 
     my $downloads = $c->model('LaoFabDB::Downloads')->search({
         document => $document->id,
@@ -128,18 +110,34 @@ sub view : Local {
         order_by => ['download_dt desc'],
     })->slice(0,14);
 
-    $comments = $c->model('LaoFabDB::Comments')->search({
-        document => $document->id,
-    },{
-        prefetch => 'user',
-        order_by => ['comment_dt desc'],
-    })->slice(0,14);
-    $c->stash->{rating} = sprintf("%.1f", $rating);
-    $c->stash->{no_comments} = $comments_count;
-    $c->stash->{user_rating} = $user_rating;
+    my $mailq = 'content:laofab.org/document/view/'.$document->id . ' AND -from:noreply@laofab.org';
+#    {
+#        'content' => "laofab.org/document/view/" . $document->id,
+#        '-from' => 'noreply@laofab.org',
+#    };
+
+    my $options = {
+        fl    => 'sentDate,subject,uuid',
+        sort  => 'sentDate desc',
+        rows  => 20,
+    };
+
+    my $response = $c->model('SolrMail')->search( $mailq, $options);
+
+    my $emails = [];
+
+    for my $mail ( $response->docs ) {
+        my $digest = { 
+            sentDate => $mail->value_for('sentDate'),
+            subject => $mail->value_for('subject'),
+            uuid => $mail->value_for('uuid'),
+        };
+        push @$emails, $digest;
+    }
+
     $c->stash->{document} = $document;
     $c->stash->{downloads} = $downloads;
-    $c->stash->{comments} = $comments;
+    $c->stash->{emails} = $emails;
 }
 
 =head2 do_tag_cloud

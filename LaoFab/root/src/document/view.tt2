@@ -18,79 +18,97 @@ function draw_polygon(coords, color) {
 var map;
 
 $(document).ready(function() {
-    var laosCenter=new google.maps.LatLng(18.229, 104.634);
-
-    var myOptions = {
-        zoom: 7,
-        center: laosCenter,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    map = new google.maps.Map(document.getElementById('main-map'), myOptions);
     [% IF document.areas %]
-        [% area = document.areas.first %]
-        [% bbox = area.bbox %]
-        var east = [% bbox.0 %];
-        var north = [% bbox.1 %];
-        var west = [% bbox.2 %];
-        var south = [% bbox.3 %];
-    [% END %]
-    [% FOREACH area IN document.areas %]
-        [% bbox = area.bbox %]
-        if ([% bbox.0 %] < east) 
-            east = [% bbox.0 %];
-        if ([% bbox.1 %] < north) 
-            north = [% bbox.1 %];
-        if ([% bbox.2 %] > west) 
-            west = [% bbox.2 %];
-        if ([% bbox.3 %] > south)
-            south = [% bbox.3 %];
+        var laosCenter=new google.maps.LatLng(18.229, 104.634);
 
-        var bounds = new google.maps.LatLngBounds();
-        bounds.extend(new google.maps.LatLng(east, north));
-        bounds.extend(new google.maps.LatLng(west, south));
-        map.fitBounds(bounds);
+        var myOptions = {
+            zoom: 7,
+            center: laosCenter,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
 
-        var polygonCoords = [ new google.maps.LatLng([% area.google_polygon.join("), new google.maps.LatLng(") %] ) ];
-        draw_polygon(polygonCoords, '#AAAA55');
+        map = new google.maps.Map(document.getElementById('main-map'), myOptions);
+            [% area = document.areas.first %]
+            [% bbox = area.bbox %]
+            var east = [% bbox.0 %];
+            var north = [% bbox.1 %];
+            var west = [% bbox.2 %];
+            var south = [% bbox.3 %];
+        [% FOREACH area IN document.areas %]
+            [% bbox = area.bbox %]
+            if ([% bbox.0 %] < east) 
+                east = [% bbox.0 %];
+            if ([% bbox.1 %] < north) 
+                north = [% bbox.1 %];
+            if ([% bbox.2 %] > west) 
+                west = [% bbox.2 %];
+            if ([% bbox.3 %] > south)
+                south = [% bbox.3 %];
+
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(new google.maps.LatLng(east, north));
+            bounds.extend(new google.maps.LatLng(west, south));
+            map.fitBounds(bounds);
+
+            var polygonCoords = [ new google.maps.LatLng([% area.google_polygon.join("), new google.maps.LatLng(") %] ) ];
+            draw_polygon(polygonCoords, '#AAAA55');
+        [% END %]
+        $('div#main-map').css("height",$('div#main-map').width());
     [% END %]
 });
+
 </script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 [% META title = "Viewing document" %]
 
-<div class="home">
-  <form action="/search">
-     <div style="display: inline-block; text-align: left">
-       <div style="float: left; padding-top: 13px; padding-left: 10px;">
-         <div class="small-logo">
-           <a href="[% c.uri_for("/") %]"><img width="227" height="32" alt="LaoFab Search Logo" src="[% c.uri_for("/static/images/search_logo.png") %]"></a>
-         </div>
-         <div class="ds">
-           <input type="text" value="" id="search-input" size="41" name="q" autocomplete="off" class="ac_input"><input type="submit" class="g-button" value="">
-        </div><br/>
-        </div>
-        <div style="float: left; width: 168px"></div>
-      </div>
-    </form>
-  </div>
-
-<h1>[% template.title %] [% document.title %]</h1>
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>[% document.title | html %]</h2>
+</div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
-    <p>hej hopp</p>
-  </div>
+[% IF back %]
+<p>
+    &lt;- Go <a href="[% back %]">back</a> where you came from.
+</p>
+[% END %]
+
+    [% IF emails && emails.size %] <h2>Document referenced in the following discussions</h2> [% END %]
+    <table class="folder-listing">
+        [% FOREACH email IN emails %]
+            <tr>
+                <td><a href="#" class="ellipsis" onClick="Messi.load('[% c.uri_for('/email/view/') %][% email.uuid %]', {modal: true, width: '800px', height: '600px' });">[% email.subject %]</a></td>
+            </tr>
+        [% END %]
+    </table>
+    [% IF document.areas %]
+        <p><a href="[% c.uri_for("/map/intersect/$document.id") %]">View other documents on a map</a> that overlaps with this area.</p>
+    [% END %]
+
+    [% IF document.preview %]
+    <p>Font page view:
+    <a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>
+    </p>
+    [% END %]
+
+    <div class="fb-like" data-href="[% c.uri_for("/document/view/$document.id") %]" data-send="true" data-width="250" data-show-faces="false"></div>
+
+   </div>
 </div>
 
 <div class="main">
-
-<p>
-[% IF back %]
-    &lt;- Go <a href="[% back %]">back</a> where you came from.
-[% END %]
-</p>
 
 <table>
 <tbody>
@@ -181,85 +199,18 @@ $(document).ready(function() {
     [% END %]
     <td valign="bottom"><img src="[% c.uri_for("/static/images/$pic") %]" alt="icon" /><em><a href="[% c.uri_for("/document/download/$document.id") %]">[% document.filename | html %]</a></em></td>
 </tr><tr>
-	<th align="right" valign="bottom">Download&nbsp;as&nbsp;ZIP:</th>
-	<td valign="bottom"><img src="[% c.uri_for("/static/images/") %]tgz-24x24.png" alt="icon" /><em><a href="[% c.uri_for("/document/download_zip/$document.id") %]">[% document.filename | html %].zip</a></em></td>
-</tr><tr>
     <th align="right" valign="top">Downloads:</th>
     <td>
     [% SET no_downloads = c.model('LaoFabDB').file_downloads(document) %]
     [% no_downloads | html %]</td>
 </tr><tr>
-    <th align="right" valign="top">Rating:</th>
-    <td>
-    <span id="inlineEvents">
-        [% IF user_rating > 0 %]
-            [% SET star = 0.5 %]
-            [% WHILE star <= rating %]
-                <img src="[% c.uri_for("/static/js/dojox/form/resources/images/rating_full.gif") %]" alt="full star" />
-                [% SET star = star + 1.0 %]
-            [% END %]
-            [% WHILE star <= 5.0 %]
-                <img src="[% c.uri_for("/static/js/dojox/form/resources/images/rating_empty.gif") %]" alt="empty star" />
-                [% SET star = star + 1.0 %]
-            [% END %]
-
-
-        [% END %]
-        <span class="rating_avg">[% rating %]</span>
-        (average by 
-        <span class="rating_count">[% no_comments %]</span> 
-        user[% IF no_comments > 1 %]s[% END %]).
-        <br />
-        Your rating of this document is 
-        <span class="rating_mine">[% IF user_rating > 0 %]
-            [% user_rating %]
-        [% ELSE %]
-            <em>not made yet</em>
-        [% END %]</span>.
-        [% IF user_rating < 1 %]
-        <br/>
-        Rate the document by clickin on the stars, <br/>
-        one star = bad, five stars = very good:<br/>
-        <span dojoType="dojox.form.Rating" numStars="5">
-            <script type="dojo/event" event="onChange">
-                dojo.xhrPost({
-                    url : "[% c.uri_for("/rest/rating/$document.id/$c.user.id") %]",
-                    handleAs : "json",
-                 content: {
-                        "rating":this.value
-                    },
-                    load: function(data,ioargs){
-                        dojo.query('#inlineEvents .rating_avg')[0].innerHTML = data.rating_avg;
-                        dojo.query('#inlineEvents .rating_count')[0].innerHTML = data.rating_count;
-                        dojo.query('#inlineEvents .rating_mine')[0].innerHTML = data.rating_mine;
-                        //console.log(data);
-                    }
-                });
-            </script>
-            <script type="dojo/event" event="onMouseOver" args="evt,value">
-                var message = "";
-                if (value == 1)
-                    message = "Very bad document!";
-                else if (value == 2)
-                    message = "Quite bad document.";
-                else if (value == 3)
-                    message = "Avarage document.";
-                else if (value == 4)
-                    message = "Good document.";
-                else if (value == 5)
-                    message = "Very good document!";
-
-                dojo.query('#inlineEvents .rating_desc')[0].innerHTML = message;
-            </script>
-        </span> <span class="rating_desc"></span>
-        [% END %]
-    </span>
-    
-    </td>
 </tr>
 </tbody>
 </table>
+
+[% IF document.areas %]
 <div id="main-map"></div>
+[% END %]
 
 [% IF c.check_user_roles(("admin")) %]
 <p>As you are an administrator, you can <a href="[% c.uri_for("/document/edit/$document.id") %]">edit</a> this document if needed.</p>
@@ -271,13 +222,6 @@ $(document).ready(function() {
 [% END %]
 </ul>
 
-<h3>Latest ratings (showing [% comments.count %]):</h3>
-
-<ul>
-[% WHILE (comment = comments.next) %]
-    <li><a href="[% c.uri_for("/user/view/$comment.user.id") %]">[% comment.user.username %]</a> rating [% comment.rating %] @ [% comment.comment_dt %]</li>
-[% END %]
-</ul>
 [% END %]
 
 </div> <!-- end of main -->

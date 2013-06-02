@@ -1,0 +1,14 @@
+[% META title = "Email" %]
+
+
+<div id="heading" style="margin-left: 80px;">
+    <h1>[% subject | html %]</h1>
+    <h2>From: [% from | html %]</h2>
+    <h2>Date: [% sentDate | html %]</h2>
+</div>
+
+<div class="email_body">
+
+[% email_content %]
+
+</div> <!-- end of page -->

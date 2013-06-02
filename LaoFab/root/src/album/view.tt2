@@ -32,23 +32,31 @@ $(document).ready(function() {
 });
 
 </script>
-<h1>[% template.title | html %]</h1>
+
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>[% album_name %]</h2>
+</div>
+
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
+    <h2>Upload</h2>
+    <p><a href="[% c.uri_for("/photo/add/$album_id") %]">Upload</a> a photo to this album ([% album_name | html %]).</p>
+    <h2>Current photo</h2>
     <div id="photoinfo">
-        <p>
-            <em>Caption:</em><span id="pi_caption"></span><br/>
-            <em>Photagrapher:</em><span id="pi_photagrapher"></span><br/>
-            <em>Picture date:</em><span id="pi_taken_dt"></span><br/>
-            <em>Uploaded date:</em><span id="pi_uploaded_dt"></span><br/>
-            <em>Location:</em><span id="pi_location"></span><br/>
+        <table class="folder-listing">
+            <tr><td width="30%"><em>Caption:</em></td><td class="ellipsis"><span id="pi_caption"></span></td></tr>
+            <tr><td><em>Photagrapher:</em></td><td class="ellipsis"><span id="pi_photagrapher"></span></td></tr>
+            <tr><td><em>Picture date:</em></td><td class="ellipsis"><span id="pi_taken_dt"></span></td></tr>
+            <tr><td><em>Uploaded date:</em></td><td class="ellipsis"><span id="pi_uploaded_dt"></span></td></tr>
+            <tr><td><em>Location:</em></td><td class="ellipsis"><span id="pi_location"></span></td></tr>
             [% IF c.check_user_roles("admin") %]
-            <em>Uploaded by:</em><span id="pi_user"></span><br/>
+            <tr><td><em>Uploaded by:</em></td><td class="ellipsis"><span id="pi_user"></span></td></tr>
             [% END %]
-        </p>
+        </table>
     </div>
   </div>
 </div>
@@ -56,7 +64,7 @@ $(document).ready(function() {
 <div class="main">
   <div id="galleria">
   </div>
-
 </div> <!-- end of main -->
 
 </div> <!-- end of page -->
+

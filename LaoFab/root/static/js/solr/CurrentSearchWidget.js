@@ -1,19 +1,3 @@
-var fieldmap = {
-    author_name: 'Author',
-    author_organisation: 'Organsiation',   
-    pubyear: 'Publiced',   
-    keyword: 'Keyword',
-    doctype: 'Type',      
-    folder: 'Folder'      
-};
-
-function prettyFields(field) {
-    var regEx = /(^[a-z_]+)/;
-    var match = regEx.exec(field);
-    return field.replace(match[1], fieldmap[match[1]]);
-}
-
-
 (function ($) {
 
 AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
@@ -34,7 +18,7 @@ AjaxSolr.CurrentSearchWidget = AjaxSolr.AbstractWidget.extend({
 
     var fq = this.manager.store.values('fq');
     for (var i = 0, l = fq.length; i < l; i++) {
-      links.push($('<a href="#"></a>').text('(x) ' + prettyFields(fq[i]) ).click(self.removeFacet(fq[i])));
+      links.push($('<a href="#"></a>').text('(x) ' + fq[i] ).click(self.removeFacet(fq[i])));
     }
 
     if (links.length > 1) {

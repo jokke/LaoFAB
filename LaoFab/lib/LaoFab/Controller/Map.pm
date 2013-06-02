@@ -43,6 +43,37 @@ sub intersect : Local {
     $c->stash->{inter_areas} = \@filtered_areas;
 }
 
+sub _get_areas_in_folder {
+    my ($folder, $c) = @_;
+
+    my @areas = ();
+
+    for my $d ($folder->documents) {
+        for my $a ($d->areas) {
+            push @areas, $a;
+        }
+    }
+
+    my $folders = $c->model('LaoFabDB::Folders')->search({
+        parent => $folder->id,
+    });
+
+    for my $f ($folders->next) {
+        push @areas, _get_areas_in_folder($f, $c) if $f;
+    }
+    return @areas;
+}
+
+sub folder : Local {
+    my ( $self, $c, $folderid ) = @_;
+    
+    my $folder = $c->model('LaoFabDB::Folders')->find({id => $folderid});
+    my @areas = _get_areas_in_folder($folder, $c) if $folder;
+
+    $c->stash->{folder} = $folder;
+    $c->stash->{areas} = \@areas;
+}
+
 
 =head1 AUTHOR
 

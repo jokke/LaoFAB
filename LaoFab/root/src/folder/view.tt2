@@ -1,43 +1,28 @@
 [% META title = "Browsing folders" %]
 
-<div class="home">
-  <form action="/search">
-     <div style="display: inline-block; text-align: left">
-       <div style="float: left; padding-top: 13px; padding-left: 10px;">
-         <div class="small-logo">
-           <a href="[% c.uri_for("/") %]"><img width="227" height="32" alt="LaoFab Search Logo" src="[% c.uri_for("/static/images/search_logo.png") %]"></a>
-         </div>
-         <div class="ds">
-           <input type="text" value="" id="search-input" size="41" name="q" autocomplete="off" class="ac_input"><input type="submit" class="g-button" value="">
-        </div><br/>
-        </div>
-        <div style="float: left; width: 168px"></div>
-      </div>
-    </form>
-  </div>
 
-<h1>[% template.title | html %]</h1>
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>Folder: [% folder_name | html %]</h2>
+</div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
-    <p>hej hopp</p>
-  </div>
-</div>
+    [% IF folder_parent %]
+    <p>Go <a href="[% c.uri_for("/folder/view/$folder_parent.id") %]">back to parent folder <em>[% folder_parent.name | html %]</em></a>.
+    </p>
+    [% END %]
 
-<div class="main">
 
-<p>Browsing the repository, folder: [% folder_name | html %]</p>
-<p>You are currently here:</p>
-<p>[% location_str %]</p>
-[% IF c.check_user_roles(("admin")) %]
-    <script type="text/javascript">
-        dojo.require("dijit.form.TextBox");
-        dojo.require("dijit.form.Button");
-        dojo.require("dijit.Dialog");
-        dojo.require("dojo.parser");
-    </script>
+    <p><a href="[% c.uri_for("/document/add/$folder_id") %]">Upload</a> a document to this folder ([% folder_name | html %]).</p>
+
+    [% IF folder_has_map %]
+        <p>View the documents in this folder on a <a href="[% c.uri_for("/map/folder/$folder_id") %]">map</a>.</p>
+    [% END %]
+
+    [% IF c.check_user_roles(("admin")) %]
     
     <table><tbody><tr>
     <td align="right">Create a folder here: </td>
@@ -71,7 +56,11 @@
     
     </tbody></table>
   
-[% END %]
+    [% END %]
+  </div>
+</div>
+
+<div class="main">
 
 [% IF folders.count > 0 || documents.count > 0 || albums.count > 0 %]
 <table class="folder-listing">
@@ -82,7 +71,7 @@
 
 
         <td class="name-column"><a class="ellipsis" title="[% subfolder.name | html %]" href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
-        <td class="digest-column"><span class="ellipsis">some digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infooooooooooosome digest info...</span></td>
+        <td class="digest-column"><span class="ellipsis"></span></td>
         [% date = c.model('LaoFabDB').folder_changed(subfolder) %]
         <td class="date-column">[% date.substr(0, 10) %]</td>
         </tr>
@@ -91,16 +80,43 @@
     [% WHILE (album = albums.next) %]
       <tr>
         <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-image-24x24.png") %]" alt="folder icon"/></td>
-
-
         <td class="name-column"><a class="ellipsis" title="[% album.name | html %]" href="[% c.uri_for("/album/view/$album.id") %]">[% album.name | html %]</a></td>
-        <td class="digest-column"><span class="ellipsis">some digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infsome digest infooooooooooosome digest info...</span></td>
+        <td class="digest-column"><span class="ellipsis"></span></td>
         [% date = c.model('LaoFabDB').album_changed(album) %]
         <td class="date-column">[% date.substr(0, 10) %]</td>
         </tr>
     [% END %]
 
     [% WHILE (doc = documents.next) %]
+        [% IF doc.viewable %]
+        <tr>
+        [% IF doc.mime.match("msword") %]
+            [% SET pic = "doc-24x24.png" %]
+        [% ELSIF doc.mime.match("image") %]
+            [% SET pic = "pic-24x24.png" %]
+        [% ELSIF doc.mime.match("pdf") %]
+            [% SET pic = "pdf-24x24.png" %]
+        [% ELSIF doc.mime.match("excel") %]
+            [% SET pic = "xls-24x24.png" %]
+        [% ELSIF doc.mime.match("audio") %]
+            [% SET pic = "video-24x24.png" %]
+        [% ELSIF doc.mime.match("zip") %]
+            [% SET pic = "tgz-24x24.png" %]
+        [% ELSIF doc.mime.match("powerpoint") %]
+            [% SET pic = "pres-24x24.png" %]
+        [% ELSIF doc.mime.match("google") %]
+            [% SET pic = "kmz-24x24.png" %]
+        [% ELSE %]
+            [% SET pic = "ascii-24x24.png" %]
+        [% END %]
+        <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/$pic") %]" alt="document icon"/></td>
+        <td class="name-column"><a class="ellipsis" title="[% doc.title | html %]" href="[% c.uri_for("/document/view/$doc.id") %]">[% doc.title | html %]</a></td>
+        <td class="digest-column"><span class="ellipsis">Year: [% doc.pubyear %][% IF doc.sub_title %], [% doc.sub_title %][% END %][% IF doc.long_authors %], [% doc.long_authors %][% END %]
+        </span></td>
+        [% SET date = doc.create_dt %]
+        <td class="date-column">[% date.substr(0, 10) %]</td>
+        </tr>
+        [% END %]
 	[% END %]
 </tbody>
 </table>
@@ -108,9 +124,7 @@
 [% ELSE %]
 <p>Nothing here yet...</p>
 [% END %]
-
-<p><img alt="icon" src="[% c.uri_for('/static/images/upload-24x24.png') %]"><a href="[% c.uri_for("/document/add/$folder_id") %]">Upload</a> a document to this folder ([% folder_name | html %]).</p>
-
+    <div class="clear"></div>
 </div> <!-- end of main -->
 
 </div> <!-- end of page -->

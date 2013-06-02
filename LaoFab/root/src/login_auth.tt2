@@ -1,60 +1,42 @@
 [% META title = "Login to LaoFab Document Repository" %]
-<script type="text/javascript">
-    dojo.require("dijit.Tooltip");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.dijit");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dojo.parser");
-    var myForm;
-    dojo.addOnLoad( function() {
-        myForm = dijit.byId("login_form");
-        dijit.byId('username').focus();
-    });
-    dojo.connect(myForm, "onSubmit", function(e){
-        myForm.validate();
-    });
- </script>
 
-<h1>[% login_page.heading | html %]</h1>
-<div dojoType="dijit.Tooltip"
-                connectId="username"
-                label="Enter your email address and corresponding password for the LaoFab Document Repository.">
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>The home of document and photos for LaoFab</h2>
 </div>
-<form method="post" id="login_form" dojoType="dijit.form.Form" action="[% c.req.base %][% c.req.path %]">
-<table style="float:right;">
-<tr><td><label id="uname" for="username">Email address:</label></td>
-    <td><input type="text" name="__username" 
-    id="username"
-    dojoType="dijit.form.ValidationTextBox"
-    invalidMessage="An email address is required!"
-    trim="true" 
-    required="true"></td></tr>
 
-<tr><td><label for="password">Password:</label></td>
-    <td><input type="password" name="__password" 
-    id="password"
-    dojoType="dijit.form.ValidationTextBox"
-    trim="true" 
-    invalidMessage="A password is required!"
-    required="true">
+<div class="page" style="padding: 10px;">
 
-    [% FOREACH p IN c.request.params.pairs %]
-        [% NEXT IF p.key.matches( '^__' ) %]
-        <input type="hidden" name="[% p.key %]" value="[% p.value %]" >
-    [% END %]</td></tr>
-<tr><td><label for="remember">Remember my login?</label></td>
-            <td><input id="remember" dojotype="dijit.form.CheckBox"
-           name="__remember" value="on"
-           type="checkbox" >yes</td>
+<div class="sidebar" style="width: 390;">
+  <div id="widget" class="sticky" style="width: 390;">
+    <form method="post" id="login_form" dojoType="dijit.form.Form" action="[% c.req.base %][% c.req.path %]">
+    <table style="float:right;">
+        <tr><td><label id="uname" for="username">Email address:</label></td>
+        <td><input type="text" name="__username" id="username" /></td></tr>
+
+        <tr><td><label for="password">Password:</label></td>
+        <td><input type="password" name="__password" id="password" />
+        [% FOREACH p IN c.request.params.pairs %]
+            [% NEXT IF p.key.matches( '^__' ) %]
+                <input type="hidden" name="[% p.key %]" value="[% p.value %]" />
+        [% END %]</td></tr>
+        <tr><td><label for="remember">Remember my login?</label></td>
+            <td><input id="remember" name="__remember" value="on" type="checkbox" />yes</td>
         </tr>
+        <tr><td colspan="2" align="center">
+        <button value="Login" name="Login" type="submit">Login</button></td></tr>
+    </table>
+    </form>
 
+  </div>
+</div>
 
-<tr><td colspan="2" align="center">
-<button dojoType="dijit.form.Button" value="Login" name="Login" type="submit">Login</button></td></tr>
-</table>
-</form>
-<div class="content">
-<p>
+<div class="main" style="margin-left: 400px;width: 700px;">
 [% login_page.body %]
+    <div class="clear"></div>
+
+</div> <!-- end of main -->
+
+</div> <!-- end of page -->
+
+

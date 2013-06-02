@@ -177,7 +177,7 @@ sub view : Local {
 		'">Root</a> ->'.$location_str if ($folderid); 
 	$c->stash->{location_str} = $location_str; 
 	if ($folder->parent) { 
-		$c->stash->{folder_parent} = $folder->parent->id; 
+		$c->stash->{folder_parent} = $folder->parent; 
 	}
 	my $folder_order = 'name';
 	if ($order eq 'date') {
@@ -193,12 +193,34 @@ sub view : Local {
     },{
         order_by => "$folder_order $direction",
     });
+
+
+    $c->stash->{folder_has_map} = _has_map($folder, $c);
 #    $c->log->info("no: ".$c->model('LaoFabDB')->files_in_album($albums->next));
     $c->stash->{albums} = $albums;
     $c->stash->{folders} = $folders;
     $c->stash->{admin} = 1;
 }
 
+sub _has_map {
+    my ($folder, $c) = @_;
+
+    for my $d ($folder->documents) {
+        if ($d->areas > 0) {
+            return 1;
+        }
+    }
+    my $folders = $c->model('LaoFabDB::Folders')->search({
+        parent => $folder->id,
+    });
+
+    while (my $f = $folders->next) {
+        my $has_map = _has_map($f, $c);
+        return 1 if $has_map;
+    }
+
+    return 0;
+}
 
 =head2 _check_folder_name
 

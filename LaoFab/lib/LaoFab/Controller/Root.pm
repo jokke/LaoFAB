@@ -167,6 +167,27 @@ sub index :Path :Args(0) {
     })->slice(0,2);
     
     $c->stash->{latest_photos} = $latest_photos;
+
+# email
+    my $options = {
+        fl    => 'sentDate,subject,uuid',
+        sort  => 'sentDate desc',
+        rows  => 5,
+    };
+
+    my $response = $c->model('SolrMail')->search( '*:*', $options);
+
+    my $emails = [];
+
+    for my $mail ( $response->docs ) {
+        my $digest = {
+            sentDate => $mail->value_for('sentDate'),
+            subject => $mail->value_for('subject'),
+            uuid => $mail->value_for('uuid'),
+        };
+        push @$emails, $digest;
+    }
+    $c->stash->{emails} = $emails;   
 }
 
 

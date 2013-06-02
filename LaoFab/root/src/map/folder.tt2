@@ -1,9 +1,9 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry&key=AIzaSyAFxjmg4u-Vz3gnLX7ZyhXSKcyOcnTO5wE&sensor=false"></script>
 <script type="text/javascript" src="[% c.uri_for('/static/js/oms.min.js') %]"></script>
 <script type="text/javascript">
-var inter_areas = [
+var areas = [
 [% should_comma = 0 %]
-[% FOREACH a IN inter_areas %]
+[% FOREACH a IN areas %]
     [% IF should_comma %], [% END %]
     [ '[% a.document.short_title %]', [% a.google_center.join(', ') %], [%a.document.id %] ]
     [% should_comma = 1 %]
@@ -37,83 +37,57 @@ function setMarkers(map, locations) {
     }
 }
 
-function draw_polygon(coords, color) {
-    var polygon = new google.maps.Polygon({
-        paths: coords,
-        strokeColor: color,
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: color,
-        editable: false,
-        fillOpacity: 0.35
-    });
-
-    // show polygon on the map
-    polygon.setMap(map);
-}
-
 var map;
 
 $(document).ready(function() {
-    [% area = document.areas.first %]
-    [% bbox = area.bbox %]
-    var east = [% bbox.0 %];
-    var north = [% bbox.1 %];
-    var west = [% bbox.2 %];
-    var south = [% bbox.3 %];
+    var east = 0;
+    var north = 0;
+    var west = 0;
+    var south = 0;
 
-    [% FOREACH area IN document.areas %]
-        [% bbox = area.bbox %]
-        if ([% bbox.0 %] < east) 
-            east = [% bbox.0 %];
-        if ([% bbox.1 %] < north) 
-            north = [% bbox.1 %];
-        if ([% bbox.2 %] > west) 
-            west = [% bbox.2 %];
-        if ([% bbox.3 %] > south)
-            south = [% bbox.3 %];
-    [% END %]
-
-    var center=new google.maps.LatLng([% area.google_center %]);
-    var myOptions = {
-        center: center,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    map = new google.maps.Map(document.getElementById('main-map'), myOptions);
-
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0; i < inter_areas.length; i++) {
-        var a = inter_areas[i];
+    for (var i = 0; i < areas.length; i++) {
+        var a = areas[i];
         if (a[1] < west) west = a[1];
         if (a[2] < north) north = a[2];
         if (a[1] > east) east = a[1];
         if (a[2] > south) south = a[2];
     }
-
+    var bounds = new google.maps.LatLngBounds();
     bounds.extend(new google.maps.LatLng(west, north));
     bounds.extend(new google.maps.LatLng(east, south));
+
+    //var center=new google.maps.LatLng([% area.google_center %]);
+    var myOptions = {
+        center: bounds.getCenter(),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById('main-map'), myOptions);
+
     map.fitBounds(bounds);
-    var polygonCoords;
-    [% FOREACH area IN document.areas %]
-        polygonCoords = [ new google.maps.LatLng([% area.google_polygon.join("), new google.maps.LatLng(") %] ) ];
-        draw_polygon(polygonCoords, '#AAAA55');
-    [% END %]
-    setMarkers(map, inter_areas);
+    setMarkers(map, areas);
     $('div#main-map').css("height",$('div#main-map').width());
 });
 </script>
-[% META title = "Viewing map with overlapping documents for" %]
+[% META title = "Viewing map with documents in folder" %]
 
 <div id="heading">
     <h1>[% template.title %]</h1>
-    <h2>[% document.title %]</h2>
+    <h2>[% folder.name | html %]</h2>
 </div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
-    <p>View the main page for <a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a></p>
+    <p>Back to folder <a href="[% c.uri_for("/folder/view/$folder.id") %]">[% folder.name | html %]</a></p>
+    <h2>Documents on map</h2>
+    <table class="folder-listing">
+        [% FOREACH a IN areas %]
+            <tr>
+                <td><a class="ellipsis" href="[% c.uri_for("/document/view/$a.document.id") %]">[% a.document.title | html %]</a></td>
+            </tr>
+        [% END %]
+    </table>
   </div>
 </div>
 

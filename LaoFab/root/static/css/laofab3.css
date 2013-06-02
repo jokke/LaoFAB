@@ -15,7 +15,7 @@
 /* map */
 div#main-map{
     width:80%;
-    height:800px;
+    height:600px;
 }
 /* end map */
 
@@ -269,6 +269,7 @@ tr.even {
     padding-left: 75px;
     padding-right: 30px;
     margin-left: 300px;
+    margin-bottom: 60px;
 }
 
 #heading h1 {
@@ -287,6 +288,10 @@ tr.even {
     font-family: monospace;
 }
 
+span.highlight {
+    background-color: yellow;
+}   
+
 .message {
     color: #66aa66;
 }
@@ -294,6 +299,12 @@ tr.even {
 .error {
     color: #cc4444;
     text-decoration:underline;
+}
+
+div.email_body {
+    padding: 10px;
+    white-space: pre;
+    font-family: monospace;
 }
 
 /* search */
@@ -322,6 +333,15 @@ tr.even {
 #docs {
   padding-top: 1px;
 }
+
+.docthumb {
+    float: left;
+}
+
+div.docres {
+    overflow: hidden;
+}
+
 /* left */
 .sidebar h2 {
   clear: left;
@@ -911,3 +931,4 @@ button.messi .btn::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
+

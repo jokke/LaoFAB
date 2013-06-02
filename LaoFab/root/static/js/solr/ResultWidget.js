@@ -40,11 +40,12 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
     $(this.target).empty();
     for (var i = 0, l = this.manager.response.response.docs.length; i < l; i++) {
       var doc = this.manager.response.response.docs[i];
-      $(this.target).append(this.template(doc));
+      var hl = this.manager.response.highlighting[doc.id];
+      $(this.target).append(this.template(doc, hl));
 
       var items = [];
-      items = items.concat(this.facetLinks('author_name', doc.author_name));
-      items = items.concat(this.facetLinks('author_organisation', doc.author_organisation));
+      items = items.concat(this.facetLinks('author', doc.author_name));
+      items = items.concat(this.facetLinks('organisation', doc.author_organisation));
       items = items.concat(this.facetLinks('subcat', doc.subcat));
       items = items.concat(this.facetLinks('pubyear', [doc.pubyear]));
 
@@ -56,14 +57,20 @@ AjaxSolr.ResultWidget = AjaxSolr.AbstractWidget.extend({
     }
   },
 
-  template: function (doc) {
-    var snippet = '' + doc.content;
-    snippet = snippet.substring(0, 300);
+  template: function (doc, hl) {
+    var snippet = '';
+    if (hl.text) {
+      snippet = hl.text;
+    }
 
-    var output = '<div><h2><a href="/document/view/'+ doc.id +'">' + doc.title;
+    var output = '<div class="docres"><h2><a href="/document/view/'+ doc.id +'">' + doc.title;
     if (doc.sub_title)
         output += ' - ' + doc.sub_title;
     output += '</a></h2>';
+    if (doc.preview) {
+        output += '<a href="#" onClick="Messi.img(' + "'/static/images/doc/prev/" + doc.id + ".jpg', {title: '" + doc.title + "', modal: true});" + '"  class="docthumb">';
+        output += '<img src="/static/images/doc/thumb/' + doc.id + '.jpg" alt="thumbnail for ' + doc.title + '" border="0"/></a>';
+    }
     output += '<p id="links_' + doc.id + '" class="links"></p>';
     output += '<p>' + snippet + '</p></div>';
     return output;

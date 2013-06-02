@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>[% template.title or site.title %]</title>
+    <style type="text/css">
+        @import "[% c.uri_for("/static/css/laofab3.css") %]";
+    </style>
+ </head>
+ <body>
+   <div class="contentwrapper">
+[% content %]
+   </div>
+ </body>
+</html>

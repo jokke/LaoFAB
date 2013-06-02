@@ -64,7 +64,6 @@ sub solr_POST {
         }
     }
 
-    $c->log->debug("searching for ".Dumper( \%req ));
     my $options;
     $options->{fq} = $req{fq} if $req{fq};
     $options->{'facet.field'} = $req{'facet.field'} if $req{'facet.field'};
@@ -74,23 +73,18 @@ sub solr_POST {
     $options->{'f.topics.facet.limit'} = $req{'f.topics.facet.limit'} if $req{'f.topics.facet.limit'};
     $options->{'json.nl'} = $req{'json.nl'} if $req{'json.nl'};
     $options->{'df'} = $req{'df'} if $req{'df'};
+    
+#highlight
+    $options->{'hl'} = 'true';
+    $options->{'hl.simple.pre'} = '<span class="highlight">';
+    $options->{'hl.simple.post'} = '</span>';
+    $options->{'hl.fragsize'} = 300;
 
+# limit fields
+    $options->{'fl'} = 'id,folder,author,title,subcat,preview,keyword,doctype,pubyear,sub_title';
 
     my $response = $c->model('Solr')->search( $req{'q'}, $options);
-    my $entity = {
-        start => $response->content->{start},
-        numFound => $response->content->{numFound},
-    };
-
-
-    for my $key (keys %{$response->content}) {
-        $c->log->debug('key: ' . Dumper($key));
-    }
 	$self->status_ok($c, entity => $response->content );
-#        doc => {
-#            title => 'test',
-#        }
-#    });
 }
 
 sub location : Local : ActionClass('REST') {

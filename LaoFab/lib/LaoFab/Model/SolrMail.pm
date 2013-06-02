@@ -1,4 +1,4 @@
-package LaoFab::Model::Solr;
+package LaoFab::Model::SolrMail;
 use Moose;
 use namespace::autoclean;
 
@@ -6,7 +6,7 @@ extends 'Catalyst::Model::WebService::Solr';
 
 =head1 NAME
 
-LaoFab::Model::Solr - Catalyst Model
+LaoFab::Model::SolrMail - Catalyst Model
 
 =head1 DESCRIPTION
 
@@ -24,11 +24,12 @@ it under the same terms as Perl itself.
 =cut
 
 __PACKAGE__->config(
-    server  => 'http://localhost:8983/solr/repo',
+    server  => 'http://localhost:8983/solr/mail',
     options => {
         autocommit => 1,
     }
 );
+
 
 __PACKAGE__->meta->make_immutable;
 
