@@ -92,7 +92,11 @@ sub view : Local {
     my $folderid;
     if ($c->req->referer and $c->req->referer =~ m/folder\/view\/(\d+)$/) {
         $folderid = $1;
-        $c->stash->{back} = $c->req->referer;
+        my $folder = $c->model('LaoFabDB::Folders')->find({id => $folderid});
+        $c->stash->{back} = {
+            url => $c->uri_for("/folder/view/$folderid"),
+            name => $folder->name,
+        };#$c->req->referer;
     }
     my $document = $c->model('LaoFabDB::Documents')->find({id => $docid});
     unless ($document) {
@@ -122,17 +126,29 @@ sub view : Local {
         rows  => 20,
     };
 
-    my $response = $c->model('SolrMail')->search( $mailq, $options);
-
     my $emails = [];
+    
+    eval {
+        my $response = $c->model('SolrMail')->search( $mailq, $options);
 
-    for my $mail ( $response->docs ) {
-        my $digest = { 
-            sentDate => $mail->value_for('sentDate'),
-            subject => $mail->value_for('subject'),
-            uuid => $mail->value_for('uuid'),
+        for my $mail ( $response->docs ) {
+            my $digest = { 
+                sentDate => $mail->value_for('sentDate'),
+                subject => $mail->value_for('subject'),
+                uuid => $mail->value_for('uuid'),
+            };
+            push @$emails, $digest;
+        }
+    };
+
+    if ($document->permission ne 're') {
+        my $facebook = {
+            title => $document->title,
         };
-        push @$emails, $digest;
+
+        $facebook->{title} .= ' ('. $document->sub_title . ')' if ($document->sub_title);
+        $facebook->{image} = $c->uri_for('/static/images/doc/prev/' . $document->id . '.jpg') if $document->preview;
+        $c->stash->{facebook} = $facebook;
     }
 
     $c->stash->{document} = $document;

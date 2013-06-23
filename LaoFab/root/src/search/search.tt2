@@ -27,6 +27,7 @@
       <ul id="selection"></ul>
 
       <h2>Search</h2>
+      <span id="search_help">(You can use logical operators such as <em>AND</em> and <em>OR</em> - note uppercase - between search words.)
       <!-- <span id="search_help">(press ESC to close suggestions)</span> -->
       <ul id="search">
         <input type="text" id="query" name="query" autocomplete="off">

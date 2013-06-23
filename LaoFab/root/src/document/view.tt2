@@ -81,7 +81,7 @@ $(document).ready(function() {
   <div id="widget" class="sticky">
 [% IF back %]
 <p>
-    &lt;- Go <a href="[% back %]">back</a> where you came from.
+    <a href="[% back.url %]">Back to folder <em>[% back.name | html %]</em></a>.
 </p>
 [% END %]
 
@@ -102,8 +102,20 @@ $(document).ready(function() {
     <a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>
     </p>
     [% END %]
-
+    [% IF facebook %]
     <div class="fb-like" data-href="[% c.uri_for("/document/view/$document.id") %]" data-send="true" data-width="250" data-show-faces="false"></div>
+    [% END %]
+    [% IF c.check_user_roles(("admin")) %]
+        <p>As you are an administrator, you can <a href="[% c.uri_for("/document/edit/$document.id") %]">edit</a> this document if needed.</p>
+        <h3>Latest downloads (showing [% downloads.count %]):</h3>
+
+        <ul>
+        [% WHILE (download = downloads.next) %]
+            <li><a href="[% c.uri_for("/user/view/$download.user.id") %]">[% download.user.username %]</a> @ [% download.download_dt %]</li>
+        [% END %]
+        </ul>
+
+    [% END %]
 
    </div>
 </div>
@@ -212,17 +224,7 @@ $(document).ready(function() {
 <div id="main-map"></div>
 [% END %]
 
-[% IF c.check_user_roles(("admin")) %]
-<p>As you are an administrator, you can <a href="[% c.uri_for("/document/edit/$document.id") %]">edit</a> this document if needed.</p>
-<h3>Latest downloads (showing [% downloads.count %]):</h3>
-
-<ul>
-[% WHILE (download = downloads.next) %]
-    <li><a href="[% c.uri_for("/user/view/$download.user.id") %]">[% download.user.username %]</a> @ [% download.download_dt %]</li>
-[% END %]
-</ul>
-
-[% END %]
+    <div class="clear"></div>
 
 </div> <!-- end of main -->
 

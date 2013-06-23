@@ -1,23 +1,12 @@
 [% INCLUDE document/script_fragment.tt2 %]
 
 [% META title = 'Edit and approve the document' %]
-<div class="home">
-  <form action="/search">
-     <div style="display: inline-block; text-align: left">
-       <div style="float: left; padding-top: 13px; padding-left: 10px;">
-         <div class="small-logo">
-           <a href="[% c.uri_for("/") %]"><img width="227" height="32" alt="LaoFab Search Logo" src="[% c.uri_for("/static/images/search_logo.png") %]"></a>
-         </div>
-         <div class="ds">
-           <input type="text" value="" id="search-input" size="41" name="q" autocomplete="off" class="ac_input"><input type="submit" class="g-button" value="">
-        </div><br/>
-        </div>
-        <div style="float: left; width: 168px"></div>
-      </div>
-    </form>
-  </div>
 
-<h1>[% template.title %]</h1>
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>Contribute to the repository</h2>
+</div>
+
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">

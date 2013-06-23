@@ -2,6 +2,11 @@
 <html>
  <head>
   <meta charset="UTF-8">
+  <meta property="og:site_name" content="LaoFAB Repository"/>
+  [% IF facebook %]
+  <meta property="og:title" content="[% facebook.title | html %]"/>
+  <meta property="og:image" content="[% facebook.image %]"/>
+  [% END %]
   <title>[% template.title or site.title %]</title>
     <style type="text/css">
         @import "[% c.uri_for("/static/css/laofab3.css") %]";

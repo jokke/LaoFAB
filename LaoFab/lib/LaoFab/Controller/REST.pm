@@ -4,6 +4,9 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller::REST';
 use Data::Dumper;
+use utf8;
+use Encode;
+
 
 __PACKAGE__->config(
     # Set the default serialization to JSON
@@ -11,6 +14,7 @@ __PACKAGE__->config(
     'map' => {
         # Remap x-www-form-urlencoded to use JSON for serialization
         'application/x-www-form-urlencoded' => 'JSON',
+        'text/plain' => 'JSON',
     },
 );
 #__PACKAGE__->config->{serialize}{default} = 'JSON';
@@ -73,6 +77,8 @@ sub solr_POST {
     $options->{'f.topics.facet.limit'} = $req{'f.topics.facet.limit'} if $req{'f.topics.facet.limit'};
     $options->{'json.nl'} = $req{'json.nl'} if $req{'json.nl'};
     $options->{'df'} = $req{'df'} if $req{'df'};
+    $options->{'start'} = $req{'start'} if $req{'start'};
+    $options->{'sort'} = $req{'sort'} if $req{'sort'};
     
 #highlight
     $options->{'hl'} = 'true';
@@ -83,7 +89,11 @@ sub solr_POST {
 # limit fields
     $options->{'fl'} = 'id,folder,author,title,subcat,preview,keyword,doctype,pubyear,sub_title';
 
+#sort
+    $options->{'sort'} = 'id desc' unless defined $options->{'sort'};
+    
     my $response = $c->model('Solr')->search( $req{'q'}, $options);
+# need to make it utf8
 	$self->status_ok($c, entity => $response->content );
 }
 
@@ -119,6 +129,9 @@ sub location_GET {
 
 sub keywords : Local : ActionClass('REST') {
     my ( $self, $c, $start_char) = @_;
+    if (not $start_char and $c->req->param('query')) {
+        $start_char = $c->req->param('query');
+    }
 	$c->stash->{start_char} = $start_char;
 }
 
@@ -140,7 +153,10 @@ sub keywords_GET {
 		})->slice(0,9);
 						
 		$self->status_ok($c,
-			entity => mk_keywords_entity($c, $words)
+			entity => {
+                query => $c->stash->{start_char},
+                suggestions => mk_keywords_entity($c, $words),
+            }
 			#location => $c->uri_for('/rest/author_name/'.$c->stash->{start_char})
 		);
 	};
@@ -157,7 +173,7 @@ sub mk_keywords_entity {
 	my @values;
 	
 	while (my $word = $words->next) {
-		push @values, { id => 'id', label => 'label', value => $word->word };
+		push @values, $word->word; #{ id => 'id', label => 'label', value => $word->word };
 	}
 	
 	return \@values;;
@@ -171,6 +187,9 @@ REST action for organisation auto complete for adding and editing documents, ret
 
 sub org : Local : ActionClass('REST') {
     my ( $self, $c, $start_char) = @_;
+    if (not $start_char and $c->req->param('query')) {
+        $start_char = $c->req->param('query');
+    }
 	$c->stash->{start_char} = $start_char;
 }
 
@@ -192,7 +211,10 @@ sub org_GET {
 		})->slice(0,9);
 						
 		$self->status_ok($c,
-			entity => mk_org_entity($c, $orgs)
+			entity => {
+                query => $c->stash->{start_char},
+                suggestions => mk_org_entity($c, $orgs),
+            }
 			#location => $c->uri_for('/rest/author_name/'.$c->stash->{start_char})
 		);
 	};
@@ -209,13 +231,14 @@ sub mk_org_entity {
 	my @names;
 	
 	while (my $org = $orgs->next) {
-		push @names, { name => $org->org };
+		push @names, $org->org; #{ name => $org->org };
 	}
-	
-	return { 
-		label => 'name',
-		items => \@names,
-	};
+
+    return \@names;
+#	return { 
+#		label => 'name',
+#		items => \@names,
+#	};
 }
 
 =head2 laofind
@@ -226,7 +249,7 @@ REST action for author name auto complete for adding and editing documents, retu
 
 sub laofind : Local : ActionClass('REST') {
     my ( $self, $c ) = @_;
-	$c->stash->{query} = $c->req->param('q');;
+	$c->stash->{query} = $c->req->param('q');
 }
 
 sub mk_hits_laofind {
@@ -306,6 +329,9 @@ REST action for author name auto complete for adding and editing documents, retu
 
 sub author : Local : ActionClass('REST') {
     my ( $self, $c, $start_char) = @_;
+    if (not $start_char and $c->req->param('query')) {
+        $start_char = $c->req->param('query');
+    }
 	$c->stash->{start_char} = $start_char;
 }
 
@@ -327,7 +353,11 @@ sub author_GET {
 		})->slice(0,9);
 						
 		$self->status_ok($c,
-			entity => mk_author_entity($c, $authors)
+			entity => {
+                query => $c->stash->{start_char},
+                suggestions => mk_author_entity($c, $authors),
+            }
+			#entity => mk_author_entity($c, $authors)
 			#location => $c->uri_for('/rest/author_name/'.$c->stash->{start_char})
 		);
 	};
@@ -344,13 +374,13 @@ sub mk_author_entity {
 	my @names;
 	
 	while (my $author = $authors->next) {
-		push @names, { name => $author->name };
+		push @names, $author->name; #{ name => $author->name };
 	}
-	
-	return { 
-		label => 'name',
-		items => \@names,
-	};
+    return \@names;	
+#	return { 
+#		label => 'name',
+#		items => \@names,
+#	};
 }
 
 

@@ -175,18 +175,21 @@ sub index :Path :Args(0) {
         rows  => 5,
     };
 
-    my $response = $c->model('SolrMail')->search( '*:*', $options);
-
     my $emails = [];
 
-    for my $mail ( $response->docs ) {
-        my $digest = {
-            sentDate => $mail->value_for('sentDate'),
-            subject => $mail->value_for('subject'),
-            uuid => $mail->value_for('uuid'),
-        };
-        push @$emails, $digest;
-    }
+    eval {
+        my $response = $c->model('SolrMail')->search( '*:*', $options);
+
+        for my $mail ( $response->docs ) {
+            my $digest = {
+                sentDate => $mail->value_for('sentDate'),
+                subject => $mail->value_for('subject'),
+                uuid => $mail->value_for('uuid'),
+            };
+            push @$emails, $digest;
+        }
+    };
+
     $c->stash->{emails} = $emails;   
 }
 

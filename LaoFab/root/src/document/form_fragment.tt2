@@ -5,34 +5,32 @@
 <p>
 <label for="title"><em>Title</em></label>
 <br />
-<input type="text" name="title" 
+<input type="text" name="title"  class="text-field"
     value="[% document.title %]"
     title="Give the document a title, this field is required."
     id="title"
-    style="width: 350px;" 
 />
 </p>
 
 <p>
 <label for="sub_title"><em>Secondary reference</em></label>
 <br />
-<input type="text" name="sub_title" 
+<input type="text" name="sub_title" class="text-field"
     value="[% document.sub_title %]"
     title="Use this box for journal reference, name and date of conference, project titles, or other secondary information."
     id="sub_title"
-    style="width: 350px;"
 /></p>
 
 <p>
-<label for="permission"><em>Access permission</em>
+<label for="permission"><em>Access rights</em>
 <br />
-<select id="permission" name="permission" title="Permission can be defined as: Metadata is public but only members can download document, Metadata and download is restricted to members only, or both Metadata and downloads are public."
+<select id="permission" name="permission" class="text-field" title="Permission can be defined as: Restricted Downloads only members can download document but metadata is public, Restricted where only LaoFab members can view the metadata and download the document, or Public as both metadata and downloads are public."
         [% IF document.permission %]
             value="[% document.permission %]"
         [% ELSE %]
             value="pm"
         [% END %]>
-    [% FOREACH perm IN [{ id => 'pm', label => 'Public Metadata'  } , { id => 're', label => 'Restricted' } , { id => 'pu', label => 'Completelay Public' } ] %]
+    [% FOREACH perm IN [{ id => 'pm', label => 'Restricted Downloads'  } , { id => 're', label => 'Restricted' } , { id => 'pu', label => 'Public' } ] %]
         <option value="[% perm.id %]"
         [% IF doctype.permission == perm.id %]
             selected="selected"[% END %]>[% perm.label %]</option>
@@ -43,7 +41,7 @@
 <p>
 <label for="subcats"><em>Subject Categories</em>
 <br />
-<select id="subcats" name="subcats" multiple="multiple" size="[% subcats.size %]" title="Select the categories that corresponds to your document. You can select several by pressing [% select_key %] at the same time you click.">
+<select id="subcats" name="subcats"  class="text-field" multiple="multiple" size="[% subcats.size %]" title="Select the categories that corresponds to your document. You can select several by pressing [% select_key %] at the same time you click.">
 [% FOREACH subcat IN subcats %]
   <option value="[% subcat.id %]"
   [% FOREACH s_subcat IN s_subcats %]
@@ -58,21 +56,23 @@
 <p>
 <label for="keywords"><em>Keywords</em></label>
 <br />
-<textarea name="keywords" id="keywords" style="width: 250px;" title="Fill in the different keywords for your document and separate them with comma. For example: land management, rubber.">[% keywords %]</textarea>
+<textarea name="keywords" id="keywords" class="text-field" style="height: 50px;" title="Fill in the different keywords for your document and separate them with comma. For example: land management, rubber.">[% keywords %]</textarea>
 </p>
 
 <p>
 <label for="pubyear"><em>Publication year</em></label>
 <br />
-<input type="text" name="pubyear" value="[% document.pubyear %]"
+<input type="text" name="pubyear" value="[% document.pubyear %]" class="text-field"
     title="Enter the year of publication with four digits. For example 1975. This field is required."
     style="width: 50px;" />
 </p>
 
 <p>
 <label for="doctype"><em>Type of Document</em></label>
+<br />
 <select title="Select the corresponding document type, if your prefered type is not in the list, choose 'Other'." 
         name="doctype"
+        class="text-field"
         [% IF document.doctype %]
             value="[% document.doctype.id %]"
         [% ELSE %]
@@ -96,15 +96,17 @@
 <table>
 <tbody>
 <tr><td>Name:</td><td><input 
-	value=""
+    class="text-field"	
+    value=""
 	name="author_name"
-	style="width: 250px;"
+	style="width: 350px;"
 	id="author_name"></td></tr>
 
 <tr><td>Organisation:</td><td><input 
+    class="text-field"
 	value=""
 	name="author_org"
-	style="width: 250px;"
+	style="width: 350px;"
 	id="author_org"></td></tr>
 
 <tr><td></td><td><button id="author_add" value="add author" name="author_add" type="submit_author">add author</button>
@@ -134,16 +136,16 @@
 
 <div class="file label">
 <p>
-<label for="document"><em>The actual document</em></label>&nbsp;<span id="info_document"><img src="[% c.uri_for("/static/images/info_icon.png") %]" alt="info" /></span><br />
+<label for="document"><em>The actual document</em></label><br />
 [% IF document.file %]
     The current document is <a href="[% c.uri_for("/document/download/$document.id") %]">[% document.filename %]</a>, to replace this document, upload a new below.<br/>
 [% END %]
-<input name="document" title="Upload the document here" id="document" type="file" />
+<input class="text-field" name="document" title="Upload the document here" id="document" type="file" />
 </p>
 </div>
 <input type="hidden" value="[% selected_folders %]" name="folder" id="folder" />
 <input type="hidden" value="[% mapcoords %]" name="mapcoords" id="mapcoords" />
 
-<button dojoType="dijit.form.Button" value="Submit Document" name="submit" type="submit">Submit Document</button>
+<button value="Submit Document" name="submit" type="submit">Submit Document</button>
 
 </form>

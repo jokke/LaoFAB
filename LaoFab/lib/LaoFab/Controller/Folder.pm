@@ -183,8 +183,15 @@ sub view : Local {
 	if ($order eq 'date') {
 	    $folder_order = 'create_dt';
 	}
+    my $priority_folders = $c->model('LaoFabDB::Folders')->search({
+        parent   => $folderid,
+        priority => 1,
+    },{
+        order_by => "$folder_order $direction",
+    });
     my $folders = $c->model('LaoFabDB::Folders')->search({
-        parent => $folderid,
+        parent   => $folderid,
+        priority => 0,
     },{
         order_by => "$folder_order $direction",
     });
@@ -199,6 +206,7 @@ sub view : Local {
 #    $c->log->info("no: ".$c->model('LaoFabDB')->files_in_album($albums->next));
     $c->stash->{albums} = $albums;
     $c->stash->{folders} = $folders;
+    $c->stash->{priority_folders} = $priority_folders;
     $c->stash->{admin} = 1;
 }
 
@@ -369,11 +377,9 @@ sub add : Local {
             name => $folder_name,
             create_user => $c->user->id,
         });
-#        $folder->parent($folder_id);
-#        $folder->name($folder_name);
-#        $folder->create_user($c->user->id);
+        $folder->priority(1) if $c->req->param("priority");
         $folder->insert;
-        $c->flash->{message} = "The folder '$folder_name' created.";
+        $c->flash->{message} = "The folder '$folder_name' created";
     }
     $c->res->redirect($c->uri_for("/folder/view/$folder_id"));
     $c->detach;

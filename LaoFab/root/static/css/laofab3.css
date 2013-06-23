@@ -191,13 +191,24 @@ td.icon-column {
 td.name-column {
 	float: none !important;
     font-weight: bold;
-	width: 260px;
 }
 
-td.date-column {
+td.action-column {
 	float: none !important;
 	text-align: right;
-	width: 80px;
+	width: 60px;
+}
+
+td.year-column {
+	float: none !important;
+	text-align: right;
+	width: 60px;
+}
+
+td.size-column {
+	float: none !important;
+	text-align: right;
+	width: 70px;
 }
 
 .ellipsis {
@@ -207,7 +218,7 @@ td.date-column {
 	text-overflow: ellipsis;
 }
 
-td.digest-column {
+td.author-column {
 	float: none !important;
     font-weight: normal;
 }
@@ -264,11 +275,11 @@ tr.even {
 	background-image: url("/static/images/laofab_button.png");
     background-repeat: no-repeat;
     background-position: top left;
-    height: 64px;
+    height: 89px;
     margin: 0;
-    padding-left: 75px;
-    padding-right: 30px;
-    margin-left: 300px;
+    padding-left: 225px;
+    padding-right: 100px;
+    margin-left: 20px;
     margin-bottom: 60px;
 }
 
@@ -283,6 +294,10 @@ tr.even {
     margin-top: 0px;
 }
 
+.priority {
+    color: #DD0000; 
+    text-decoration: underline;
+}
 
 #fixed {
     font-family: monospace;
@@ -342,6 +357,21 @@ div.docres {
     overflow: hidden;
 }
 
+/* form */
+.text-field {
+    -moz-box-sizing: content-box;
+    background-color: #FBFBFB;
+    border: 1px solid #C1C1C1;
+    border-radius: 4px 4px 4px 4px;
+    color: #1F7F1F;
+/*    font-family: 'Adelle W01 Regular',serif;
+    font-size: 12px;
+    height: 26px; */
+    line-height: 22px;
+    padding: 0 2px;
+    width: 500px;
+}
+
 /* left */
 .sidebar h2 {
   clear: left;
@@ -380,7 +410,7 @@ font-size: 90%;
 }
 a.tagcloud_size_2 {
 font-size: 100%;
-}Rst
+}
 a.tagcloud_size_3 {
 font-size: 110%;
 }
@@ -931,4 +961,10 @@ button.messi .btn::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
+
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #227744; }
 

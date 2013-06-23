@@ -71,6 +71,12 @@ __PACKAGE__->table("folders");
   extra: {unsigned => 1}
   is_nullable: 0
 
+=head2 priority
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -94,6 +100,8 @@ __PACKAGE__->add_columns(
   },
   "create_user",
   { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
+  "priority",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -109,8 +117,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RLKgVO161UAhe5Ox6azj3w
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-06-10 14:01:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TLCU68hr6Ab/xWRfei6ldg
 
 __PACKAGE__->has_many(
     folders => 'LaoFab::Schema::LaoFabDB::Folders',

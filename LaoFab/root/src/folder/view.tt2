@@ -23,38 +23,32 @@
     [% END %]
 
     [% IF c.check_user_roles(("admin")) %]
+    <div id="albumform" style="width=100%">
+        <fieldset>
+            <legend style="color: #227744">Create a folder here</legend>
+            <form action="[% c.uri_for("/folder/add") %]" method="post">
+                <input type="text" name="folder_name" value=""
+                            class="text-field" style="width: 170px;" />
+                <input id="priority" name="priority" type="checkbox"><span style="color: #DD0000; text-decoration: underline;">Priority</span> folder
+                <input type="hidden" name="folder_id" 
+                            id="folder_id" 
+                            value="[% folder_id %]" />
+            </form>
+        </fieldset>
+    </div>
     
-    <table><tbody><tr>
-    <td align="right">Create a folder here: </td>
-        <td>
-        <form action="[% c.uri_for("/folder/add") %]" method="post">
-        <input type="text" name="folder_name" value=""
-                dojoType="dijit.form.TextBox"
-                trim="true"
-                propercase="true" />
-        <input type="hidden" name="folder_id" 
-                id="folder_id" 
-                value="[% folder_id %]" />
-        </form>
-    </td>
-    </tr>
-    
-    <tr>
-    <td align="right">Create a photo album here: </td>
-        <td>
-        <form action="[% c.uri_for("/album/add") %]" method="post">
-        <input type="text" name="album_name" value=""
-                dojoType="dijit.form.TextBox"
-                trim="true"
-                propercase="true" />
-        <input type="hidden" name="folder_id" 
-                id="folder_id" 
-                value="[% folder_id %]" />
-    </form>
-    </td>
-    </tr>
-    
-    </tbody></table>
+    <div id="albumform" style="width=100%">
+        <fieldset>
+            <legend style="color: #227744">Create a photo album here</legend>
+            <form action="[% c.uri_for("/album/add") %]" method="post">
+                <input type="text" name="album_name" value=""
+                    class="text-field" style="width: 170px;" />
+                <input type="hidden" name="folder_id" 
+                    id="folder_id" 
+                    value="[% folder_id %]" />
+            </form>
+        </fieldset>
+    </div>
   
     [% END %]
   </div>
@@ -62,18 +56,59 @@
 
 <div class="main">
 
-[% IF folders.count > 0 || documents.count > 0 || albums.count > 0 %]
+[% IF folders.count > 0 || priority_folders.count > 0 || documents.count > 0 || albums.count > 0 %]
 <table class="folder-listing">
   <tbody>
-    [% WHILE (subfolder = folders.next) %]
+    <tr>
+      <td class="icon-column"></td><td class="name-column" style="font-weight: normal"><em><a
+        [% IF order.match('name') && direction.match('asc') %]
+                href="[% c.req.uri_with({direction => 'desc', order => 'name' }) %]"
+        [% ELSE %]
+                href="[% c.req.uri_with({direction => 'asc', order => 'name' }) %]"
+        [% END %]>name/title</a></em></td><td class="author-column"><em><a
+        [% IF order.match('author') && direction.match('asc') %]
+                href="[% c.req.uri_with({direction => 'desc', order => 'author' }) %]"
+        [% ELSE %]
+                href="[% c.req.uri_with({direction => 'asc', order => 'author' }) %]"
+        [% END %]>author(s)</a></em></td><td class="size-column"><em><a
+        [% IF order.match('size') && direction.match('asc') %]
+                href="[% c.req.uri_with({direction => 'desc', order => 'size' }) %]"
+        [% ELSE %]
+                href="[% c.req.uri_with({direction => 'asc', order => 'size' }) %]"
+        [% END %]>size</a>/files</em></td><td class="year-column"><em><a
+        [% IF order.match('year') && direction.match('asc') %]
+                href="[% c.req.uri_with({direction => 'desc', order => 'year' }) %]"
+        [% ELSE %]
+                href="[% c.req.uri_with({direction => 'asc', order => 'year' }) %]"
+        [% END %]>pub. year</a></em></td>
+        [% IF c.check_user_roles(("admin")) %]
+            <td class="action-column"><em>action</em></td>
+        [% END %]
+    </tr>
+
+    [% WHILE (subfolder = priority_folders.next) %]
       <tr>
         <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" alt="folder icon"/></td>
+        <td class="name-column"><a class="ellipsis priority" title="[% subfolder.name | html %]" href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
+        <td class="author-column"><span class="ellipsis">-</span></td>
+        [% SET no_files = c.model('LaoFabDB').files_in_folder(subfolder) %]
+        <td class="size-column">[% no_files %]
+        file[% IF no_files != 1 %]s[% END %]</td>
+        <td class="year-column">-</td>
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
+        </tr>
+    [% END %]
 
-
+     [% WHILE (subfolder = folders.next) %]
+      <tr>
+        <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-yellow-24x24.png") %]" alt="folder icon"/></td>
         <td class="name-column"><a class="ellipsis" title="[% subfolder.name | html %]" href="[% c.uri_for("/folder/view/$subfolder.id") %]">[% subfolder.name | html %]</a></td>
-        <td class="digest-column"><span class="ellipsis"></span></td>
-        [% date = c.model('LaoFabDB').folder_changed(subfolder) %]
-        <td class="date-column">[% date.substr(0, 10) %]</td>
+        <td class="author-column"><span class="ellipsis">-</span></td>
+        [% SET no_files = c.model('LaoFabDB').files_in_folder(subfolder) %]
+        <td class="size-column">[% no_files %]
+        file[% IF no_files != 1 %]s[% END %]</td>
+        <td class="year-column">-</td>
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
         </tr>
     [% END %]
     
@@ -81,9 +116,12 @@
       <tr>
         <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/folder-image-24x24.png") %]" alt="folder icon"/></td>
         <td class="name-column"><a class="ellipsis" title="[% album.name | html %]" href="[% c.uri_for("/album/view/$album.id") %]">[% album.name | html %]</a></td>
-        <td class="digest-column"><span class="ellipsis"></span></td>
-        [% date = c.model('LaoFabDB').album_changed(album) %]
-        <td class="date-column">[% date.substr(0, 10) %]</td>
+        <td class="author-column"><span class="ellipsis">-</span></td>
+        [% SET no_files = c.model('LaoFabDB').files_in_album(album) %]
+        <td class="size-column">[% no_files %]
+        file[% IF no_files != 1 %]s[% END %]</td>
+        <td class="year-column">-</td>
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the album <em>[% album.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/album/delete/$album.id") %]'; } });">del</a></td>[% END %]
         </tr>
     [% END %]
 
@@ -111,10 +149,10 @@
         [% END %]
         <td class="icon-column"><img width="14" src="[% c.uri_for("/static/images/$pic") %]" alt="document icon"/></td>
         <td class="name-column"><a class="ellipsis" title="[% doc.title | html %]" href="[% c.uri_for("/document/view/$doc.id") %]">[% doc.title | html %]</a></td>
-        <td class="digest-column"><span class="ellipsis">Year: [% doc.pubyear %][% IF doc.sub_title %], [% doc.sub_title %][% END %][% IF doc.long_authors %], [% doc.long_authors %][% END %]
-        </span></td>
-        [% SET date = doc.create_dt %]
-        <td class="date-column">[% date.substr(0, 10) %]</td>
+        <td class="author-column"><span class="ellipsis">[% doc.long_authors | html %]</span></td>
+        <td class="size-column">[% doc.friendly_size | html %]</td>
+        <td class="year-column">[% doc.pubyear %]</td>
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the document <em>[% doc.title | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/document/delete/$doc.id") %]?from=[% folder_id %]'; } });">del</a></td>[% END %]
         </tr>
         [% END %]
 	[% END %]

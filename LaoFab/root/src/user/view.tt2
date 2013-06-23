@@ -1,91 +1,89 @@
 [% META title = "User settings" %]
 
-<script type="text/javascript">
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.Dialog");
-    dojo.require("dojox.validate.regexp");
-    dojo.require("dojo.parser");
-    function theSame(dojoTxt1, dojoTxt2) {
-        return dojoTxt1.getValue() == dojoTxt2.getValue();
-    } 
-    
-</script>
+<div id="heading">
+    <h1>[% template.title %]</h1>
+    <h2>Settings for '[% user.username %]'</h2>
+</div>
 
-<h1>[% template.title %]</h1>
+<div class="page" style="padding: 10px;">
+        
+<div class="sidebar">
+  <div id="widget" class="sticky">
+    <p>
+    [% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+      [% user.username %]
+    [% ELSE %]
+      You
+    [% END %]
+      were registered </em>[% user.create_dt %]</em>.
+    </p>
 
-<p>
-[% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
-    [% user.username %]&rsquo;s
-[% ELSE %]
-    Your
-[% END %]
-registered settings are as follows:
-</p>
-<table>
-<tbody>
-<tr><th>Email address: </th><td>[% user.username %]</td></tr>
-<tr><th>Name: </th><td>[% user.name %]</td></tr>
-<tr><th>Date added: </th><td>[% user.create_dt %]</td></tr>
-</tbody>
-</table>
-<div id="update_info_dialog" dojoType="dijit.Dialog" title="Update your information">
-    <form method="post" id="update_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/edit_info/$user.id") %]">
-    <table>
-        <tr><td><label for="email">Email address:</label></td>
-        <td><input type="text" name="email" 
+    <div id="update_form" style="width=100%">
+        <fieldset>
+            <legend style="color: #227744">Update
+            [% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+                [% user.username %]&rsquo;s
+            [% ELSE %]
+                Your
+            [% END %]
+                information
+            </legend>
+            <form method="post" id="update_form" action="[% c.uri_for("/user/edit_info/$user.id") %]">
+            <table>
+                <tr><td><label for="email">Email address:</label></td>
+                <td><input type="text" name="email" 
+                               class="text-field"
                                value="[% user.username %]"
                                id="email"
-                               dojoType="dijit.form.ValidationTextBox"
-                               regExpGen="dojox.validate.regexp.emailAddress" trim="true"
-                               required="true"
-                               invalidMessage="Invalid email address!"
+                               style="width: 250px;"
                                /></td></tr>
-        <tr><td><label for="email">Name:</label></td>
-        <td><input type="text" name="name" 
+                <tr><td><label for="email">Name:</label></td>
+                <td><input type="text" name="name" 
+                               class="text-field"
                                value="[% user.name %]"
                                id="name"
-                               dojoType="dijit.form.ValidationTextBox"
-                               trim="true"
-                               required="true"
-                               invalidMessage="Please fill in your name!"
+                               style="width: 250px;"
                                /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit" 
-                        type="submit">Update</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="update_password_dialog" dojoType="dijit.Dialog" title="Change your password">
-    <form method="post" id="password_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/edit_password/$user.id") %]">
-    <table>
-        <tr><td><label for="email">Password:</label></td>
-        <td><input type="password" name="password" 
+                <tr><td colspan="2" align="center">
+                <input type="submit" value="Update"/></td></tr>
+            </table>
+            </form>
+        </fieldset>
+    </div>
+    <div id="update_form" style="width=100%">
+        <fieldset>
+            <legend style="color: #227744">Update
+            [% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
+                [% user.username %]&rsquo;s
+            [% ELSE %]
+                your
+            [% END %]
+                password
+            </legend>
+            <form method="post" id="password_form" action="[% c.uri_for("/user/edit_password/$user.id") %]">
+            <table>
+                <tr><td><label for="email">Password:</label></td>
+                <td><input type="password" name="password" 
+                               class="text-field"
+                               style="width: 250px;"
                                id="password"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               regExp="^.{6,}$"
-                               invalidMessage="The password must have at least 6 characters!"
                                /></td></tr>
-        <tr><td><label for="email">Password (confirm):</label></td>
-        <td><input type="password" name="password2" 
+                <tr><td><label for="email">Confirm:</label></td>
+                <td><input type="password" name="password2" 
+                               class="text-field"
+                               style="width: 250px;"
                                id="password2"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               validator="return theSame(this, dijit.byId('password'));"
-                               invalidMessage="The two passwords must match!"
                                /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_password" 
-                        type="submit">Change</button></td></tr>
-    </table>
-    </form>
+                <tr><td colspan="2" align="center">
+                <input type="submit" value="Change" /></td></tr>
+            </table>
+            </form>
+        </fieldset>
+    </div>
+  </div>
 </div>
 
-<p><a href="#" onclick="dijit.byId('update_info_dialog').show();">Change settings</a> | <a href="#" onclick="dijit.byId('update_password_dialog').show();">Change password</a></p>
-
+<div class="main">
 [% IF downloads.count > 0 %]
 <p>
 [% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
@@ -172,3 +170,8 @@ latest):
         </ul>
     [% END %]
 [% END %]
+
+    <div class="clear"></div>
+</div> <!-- end of main -->
+
+</div> <!-- end of page -->

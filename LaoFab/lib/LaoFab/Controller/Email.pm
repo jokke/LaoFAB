@@ -1,7 +1,8 @@
 package LaoFab::Controller::Email;
 use Moose;
 use namespace::autoclean;
-
+use utf8;
+use Encode;
 BEGIN { extends 'Catalyst::Controller'; }
 
 =head1 NAME
@@ -20,6 +21,14 @@ Catalyst Controller.
 =head2 index
 
 =cut
+
+sub _make_utf8 {
+    my $str = shift;
+    if (utf8::is_utf8($str)) {
+        $str = encode('utf-8', $str);
+    }
+    return $str;
+}
 
 sub view : Local {
     my ( $self, $c, $uuid ) = @_;
@@ -40,16 +49,16 @@ sub view : Local {
 
     my ($subject, $content, $sentDate, $from) = ("Error: Cannot find email", '', 'n/a', 'n/a');
     if ($mail) {
-        $subject = $mail->value_for('subject');
+        $subject = _make_utf8( $mail->value_for('subject') );
         $content = $mail->value_for('content');
-        $sentDate = $mail->value_for('sentDate');
-        $from = $mail->value_for('from');
+        $sentDate = _make_utf8( $mail->value_for('sentDate') );
+        $from = _make_utf8( $mail->value_for('from') );
 
         $sentDate =~ s/T/ /;
         $sentDate =~ s/Z//;
         $subject =~ s/\[laofab\]//gi;
         $subject =~ s/Re:\s*(Re:)/$1/gi;
-        $content = _parse_junk($content);
+        $content = _make_utf8( _parse_junk($content) );
     }
 
     $c->stash->{subject} = $subject;
