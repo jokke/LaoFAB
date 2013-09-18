@@ -89,6 +89,7 @@ action for viewing a document with a certain id
 
 sub view : Local {
     my ($self, $c, $docid) = @_;
+    $c->stash->{menupage} = 'browse';
     my $folderid;
     if ($c->req->referer and $c->req->referer =~ m/folder\/view\/(\d+)$/) {
         $folderid = $1;
@@ -358,6 +359,7 @@ delete action that deletes a document.
 
 sub delete : Local {
     my ($self, $c, $doc_id) = @_;
+    $c->stash->{menupage} = 'browse';
     my $from = $c->req->param("from");
     my $document = $c->model("LaoFabDB::Documents")->find({ id => $doc_id });
     
@@ -457,6 +459,7 @@ edit action that can be called when an administrator needs to edit or accept a d
 
 sub edit : Local {
     my ($self, $c, $doc_id) = @_;
+    $c->stash->{menupage} = 'browse';
     my $flag_new = 0;
     my $document = $c->model("LaoFabDB::Documents")->find({ id => $doc_id });
     my $selected_folders = [];
@@ -619,7 +622,9 @@ add action that either shows a form or accepts a form and if it is by a regular 
 
 sub add : Local {
     my ($self, $c, $folder_id) = @_;
-
+    
+    $c->stash->{menupage} = 'docadd';
+    
     my @authors = ();
     my $selected_folders;
     
@@ -881,6 +886,8 @@ Action that just pulls out the new un-viewable documents for an administrator
 sub recent : Local {
     my ($self, $c) = @_;
 
+    $c->stash->{menupage} = 'recent';
+    
     my $documents = $c->model('LaoFabDB::Documents')->search({
         viewable => 0,
     });

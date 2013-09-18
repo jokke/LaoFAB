@@ -1,14 +1,11 @@
 [% META title = "User settings" %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Settings for '[% user.username %]'</h2>
-</div>
 
 <div class="page" style="padding: 10px;">
         
 <div class="sidebar">
   <div id="widget" class="sticky">
+    <h3>Settings for '[% user.username %]'</h3>
     <p>
     [% IF c.check_user_roles(("admin")) && c.user.id != user.id %]
       [% user.username %]

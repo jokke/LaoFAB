@@ -29,7 +29,6 @@ action to get all viewable documents (not the actual files, just the data) into 
 sub excel : Local {
     my ( $self, $c ) = @_;
 
-$c->log->info("kimmy is here");
     my $documents =$c->model('LaoFabDB::Documents')->search({},
 	{
         order_by => 'title asc',

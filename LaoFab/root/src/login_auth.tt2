@@ -1,37 +1,36 @@
-[% META title = "Login to LaoFab Document Repository" %]
-
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>The home of document and photos for LaoFab</h2>
-</div>
+[% META title = "Login to the LaoFab Document Repository" %]
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar" style="width: 390;">
   <div id="widget" class="sticky" style="width: 390;">
-    <form method="post" id="login_form" dojoType="dijit.form.Form" action="[% c.req.base %][% c.req.path %]">
-    <table style="float:right;">
-        <tr><td><label id="uname" for="username">Email address:</label></td>
-        <td><input type="text" name="__username" id="username" /></td></tr>
+    <div id="login_form" style="width=100%">
+      <fieldset>
+        <legend style="color: #227744">Please authenticate</legend>
+        <form method="post" id="login_form" action="[% c.req.base %][% c.req.path %]">
+          <table>
+            <tr><td><label id="uname" for="username">Email address:</label></td>
+            <td><input class="text-field" style="width: 250px;" type="text" name="__username" id="username" /></td></tr>
 
-        <tr><td><label for="password">Password:</label></td>
-        <td><input type="password" name="__password" id="password" />
-        [% FOREACH p IN c.request.params.pairs %]
-            [% NEXT IF p.key.matches( '^__' ) %]
-                <input type="hidden" name="[% p.key %]" value="[% p.value %]" />
-        [% END %]</td></tr>
-        <tr><td><label for="remember">Remember my login?</label></td>
+            <tr><td><label for="password">Password:</label></td>
+            <td><input class="text-field" style="width: 250px;" type="password" name="__password" id="password" />
+       [% FOREACH p IN c.request.params.pairs %]
+           [% NEXT IF p.key.matches( '^__' ) %]
+               <input type="hidden" name="[% p.key %]" value="[% p.value %]" />
+       [% END %]</td></tr>
+            <tr><td><label for="remember">Remember&nbsp;me?</label></td>
             <td><input id="remember" name="__remember" value="on" type="checkbox" />yes</td>
-        </tr>
-        <tr><td colspan="2" align="center">
-        <button value="Login" name="Login" type="submit">Login</button></td></tr>
-    </table>
-    </form>
-
+            </tr>
+            <tr><td colspan="2" align="center">
+            <button value="Login" name="Login" type="submit">Login</button></td></tr>
+          </table>
+        </form>
+      </fieldset>
+    </div>
   </div>
 </div>
 
-<div class="main" style="margin-left: 400px;width: 700px;">
+<div class="main">
 [% login_page.body %]
     <div class="clear"></div>
 

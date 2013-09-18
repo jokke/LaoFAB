@@ -1,15 +1,13 @@
 [% META title = "Browsing folders" %]
 
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Folder: [% folder_name | html %]</h2>
-</div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
+    <div style="padding: 20px;">
+    <h3>Current folder: [% folder_name | html %]</h3>
     [% IF folder_parent %]
     <p>Go <a href="[% c.uri_for("/folder/view/$folder_parent.id") %]">back to parent folder <em>[% folder_parent.name | html %]</em></a>.
     </p>
@@ -51,6 +49,7 @@
     </div>
   
     [% END %]
+    </div>
   </div>
 </div>
 

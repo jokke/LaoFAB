@@ -14,11 +14,6 @@
 <script type='text/javascript' src='[% c.uri_for('/static/js/solr/managers/Manager.jquery.js') %]'></script>
 [% META title = "Search for documents" %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Access thousands of documents</h2>
-</div>
-
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar" style="width: 390;">

@@ -196,8 +196,12 @@ Action to view a user, either the user view it self, or an administrator view a 
 
 sub view : Local {
     my ( $self, $c, $u_id ) = @_;
-
-    $u_id = $c->user->id unless $u_id;
+    unless ($u_id) {
+        $u_id = $c->user->id;
+        $c->stash->{menupage} = 'settings';
+    } else {
+        $c->stash->{menupage} = 'manage';
+    }
 
     my $user = $c->model('LaoFabDB::User')->find({ id => $u_id });
 
@@ -371,6 +375,7 @@ Action for listing all users in the database.
 
 sub list : Local {
     my ($self, $c) = @_;
+    $c->stash->{menupage} = 'manage';
 	my $order = $c->req->param('order') || 'name';
 	my $direction = $c->req->param('direction');
 	my $order_by = 'name';
@@ -424,7 +429,7 @@ Action for searching for users takes a query that searches in username and name.
 
 sub search : Local {
     my ( $self, $c, $query ) = @_;
-
+    $c->stash->{menupage} = 'manage';
 	my $order = $c->req->param('order') || '';
 	my $direction = $c->req->param('direction');
 	my $order_by = 'name';
@@ -500,7 +505,7 @@ action for deleteing a user from its user id
 
 sub delete : Local {
     my ($self, $c, $u_id) = @_;
-    
+   
     my $user = $c->model('LaoFabDB::User')->find({ id => $u_id });
 
     unless ($user || $u_id == 0) {
@@ -564,7 +569,7 @@ action to edit a user, called by an administrator.
 
 sub edit : Local {
     my ($self, $c, $u_id) = @_;
-
+    $c->stash->{menupage} = 'manage';
 	my $user = $c->model('LaoFabDB::User')->find({ id => $u_id });
 
 	unless ($user || $u_id == 0) {

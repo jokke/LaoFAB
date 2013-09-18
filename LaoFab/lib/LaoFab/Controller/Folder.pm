@@ -122,7 +122,9 @@ sub view : Local {
     my ($self, $c, $folderid) = @_;
     my $order = $c->req->param('order') || $c->session->{order} || 'name';
     my $direction = $c->req->param('direction') || $c->session->{direction} || 'asc';
-    
+
+    $c->stash->{menupage} = 'browse';
+
     $c->session->{order} = $order;
     $c->stash->{order} = $order;
     
@@ -207,7 +209,7 @@ sub view : Local {
     $c->stash->{albums} = $albums;
     $c->stash->{folders} = $folders;
     $c->stash->{priority_folders} = $priority_folders;
-    $c->stash->{admin} = 1;
+    $c->stash->{admin} = 1; #what is this?
 }
 
 sub _has_map {
@@ -269,6 +271,8 @@ sub edit : Local {
     my ($self, $c, $folder_id) = @_;
     my $folder = $c->model('LaoFabDB::Folders')->find({id => $folder_id});
     my ($folder_name, $parent_id);
+    
+    $c->stash->{menupage} = 'browse';
 
     unless ($folder) {
         $c->forward( "/default" ); # require login
@@ -320,6 +324,8 @@ action to delete a folder...
 sub delete : Local {
     my ($self, $c, $folder_id) = @_;
 
+    $c->stash->{menupage} = 'browse';
+
     my $folder = $c->model('LaoFabDB::Folders')->find({id => $folder_id});
     my $parent_id = 0;
     if ($folder) {
@@ -357,6 +363,8 @@ action for add a folder, needs a param for name and id of folder to be inside.
 
 sub add : Local {
     my ($self, $c) = @_;
+
+    $c->stash->{menupage} = 'browse';
 
     my $folder_id = $c->req->param("folder_id") || 0;
     my $folder_name = $c->req->param("folder_name");

@@ -282,6 +282,8 @@ sub _resize_photo {
 sub add : Local {
     my ( $self, $c, $album_id ) = @_;
     
+    $c->stash->{menupage} = 'picadd';
+
     my $album;
     
     if ($album_id) {
@@ -355,6 +357,8 @@ sub add : Local {
 sub edit : Local {
     my ( $self, $c, $photo_id, $album_id ) = @_;
     
+    $c->stash->{menupage} = 'picadd';
+
     my $photo = $c->model("LaoFabDB::Photos")->find({
         id => $photo_id
     });

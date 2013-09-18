@@ -1,4 +1,4 @@
-[% META title = "Browsing album" %]
+[% META title = "Browsing photo album" %]
 <script type="text/javascript" src="[% c.uri_for("/static/galleria/galleria-1.2.9.min.js") %]"></script>
 
 <script type="text/javascript">
@@ -33,10 +33,6 @@ $(document).ready(function() {
 
 </script>
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>[% album_name %]</h2>
-</div>
 
 
 <div class="page" style="padding: 10px;">
@@ -49,7 +45,7 @@ $(document).ready(function() {
     <div id="photoinfo">
         <table class="folder-listing">
             <tr><td width="30%"><em>Caption:</em></td><td class="ellipsis"><span id="pi_caption"></span></td></tr>
-            <tr><td><em>Photagrapher:</em></td><td class="ellipsis"><span id="pi_photagrapher"></span></td></tr>
+            <tr><td><em>Photographer:</em></td><td class="ellipsis"><span id="pi_photographer"></span></td></tr>
             <tr><td><em>Picture date:</em></td><td class="ellipsis"><span id="pi_taken_dt"></span></td></tr>
             <tr><td><em>Uploaded date:</em></td><td class="ellipsis"><span id="pi_uploaded_dt"></span></td></tr>
             <tr><td><em>Location:</em></td><td class="ellipsis"><span id="pi_location"></span></td></tr>
@@ -62,6 +58,7 @@ $(document).ready(function() {
 </div>
 
 <div class="main">
+  <h2>Album: <i>[% album_name %]</i></h2>
   <div id="galleria">
   </div>
 </div> <!-- end of main -->

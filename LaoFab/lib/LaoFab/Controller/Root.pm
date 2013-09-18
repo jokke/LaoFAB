@@ -164,7 +164,7 @@ sub index :Path :Args(0) {
     
     my $latest_photos = $c->model('LaoFabDB::Photos')->search({},{
         order_by => ['create_dt desc'],
-    })->slice(0,2);
+    })->slice(0,5);
     
     $c->stash->{latest_photos} = $latest_photos;
 
@@ -172,7 +172,7 @@ sub index :Path :Args(0) {
     my $options = {
         fl    => 'sentDate,subject,uuid',
         sort  => 'sentDate desc',
-        rows  => 5,
+        rows  => 10,
     };
 
     my $emails = [];
@@ -190,7 +190,8 @@ sub index :Path :Args(0) {
         }
     };
 
-    $c->stash->{emails} = $emails;   
+    $c->stash->{emails} = $emails;
+    $c->stash->{menupage} = 'home';
 }
 
 

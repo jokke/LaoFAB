@@ -2,15 +2,11 @@
 
 [% META title = 'Edit and approve the document' %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Contribute to the repository</h2>
-</div>
-
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
+<div style="padding: 20px;">
 <p>Please fill in the values for your document below and submit it to the repository. The following fields are required:
 <ul>
 <li><em>Title</em> - every document should have a title</li>
@@ -21,8 +17,9 @@
 [% END %]</li>
 <li><em>The actual document</em> - the digital file</li>
 </ul>
-The other fields (secondary reference, keywords etc.) are optional, but we encourage you to use them.
+The other fields (secondary reference, keywords, geograpical locations etc.) are optional, but we encourage you to use them.
 </p>
+</div>
   </div>
 </div>
 

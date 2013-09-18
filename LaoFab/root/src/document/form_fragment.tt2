@@ -126,7 +126,15 @@
 
 
 <div>
-<p>You can associate the document with a geographical locatation. <a href="#" class="togglemap">Open the map</a> and click with your mouse to create a polygon, each click is a corner in the polygon. Finalise the polygon by clicking on the first corner.</p>
+<p>If appropriate, you can associate the document with one or several geographical location. Please note that <u>this is optional</u> since it is not suitable for all documents.
+<p>To associated the document with a location you can:</p>
+<ul>
+<li>click with your mouse to create a polygon, each click is a corner in the polygon. Finalise the polygon by clicking on the first corner.</li>
+<li>select a (or several) predefined provices from the menu</li>
+</ul>
+<p>
+Also, use the <i>reset button</i> to reset the map if you need to start over.
+</p>
 <p><a href="#" class="togglemap">Open/hide the map</a></p>
 <div id="map-container">
     <div id="main-map"></div>

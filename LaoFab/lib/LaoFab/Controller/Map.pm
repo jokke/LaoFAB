@@ -23,6 +23,8 @@ Catalyst Controller.
 
 sub intersect : Local {
     my ( $self, $c, $docid ) = @_;
+    
+    $c->stash->{menupage} = 'browse';
 
     my $document = $c->model('LaoFabDB::Documents')->find({id => $docid});
     my @inter_areas;
@@ -67,6 +69,8 @@ sub _get_areas_in_folder {
 sub folder : Local {
     my ( $self, $c, $folderid ) = @_;
     
+    $c->stash->{menupage} = 'browse';
+
     my $folder = $c->model('LaoFabDB::Folders')->find({id => $folderid});
     my @areas = _get_areas_in_folder($folder, $c) if $folder;
 

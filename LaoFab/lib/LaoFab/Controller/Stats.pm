@@ -26,6 +26,7 @@ Action for showing some statistics, reads them from the DB.
 
 sub stats : Global {
     my ( $self, $c ) = @_;
+    $c->stash->{menupage} = 'statistics';
     my $last_month = DateTime->now;
     $last_month->subtract( months => 1);
     my $search_dt = DateTime::Format::MySQL->format_datetime($last_month);

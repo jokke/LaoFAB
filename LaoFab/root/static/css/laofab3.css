@@ -15,7 +15,7 @@
 /* map */
 div#main-map{
     width:80%;
-    height:600px;
+    /*height:600px;*/
 }
 /* end map */
 
@@ -25,10 +25,21 @@ div#main-map{
 
 .menu {
     background: linear-gradient(#FFFFFF, #F5F5F5) repeat scroll 0 0 transparent;
+    border-top: 2px solid #8ACAA3; /* #BAEAD3;*/
     border-bottom: 1px solid #E9E9E9;
     height: 31px;
     margin-bottom: 20px;
     font-family: Arial,Helvetica,sans-serif;
+}
+
+.menu ul {
+  display: block;
+  margin: 0px auto;
+}
+
+.menu ul li {
+  list-style: none;
+  float: left;
 }
 
 div.clear {
@@ -66,7 +77,7 @@ a:hover {
 }
 
 .menu a {
-    border-top: 2px solid #BAEAD3;
+    /* border-top: 2px solid #BAEAD3; */
     color: #227744;
     display: block;
     float: left;
@@ -81,8 +92,9 @@ a:hover {
 }
 
 .menu a:hover {
-    background: linear-gradient(#DAFFF3, #CAFAE3) repeat scroll 0 0 transparent;
-    text-decoration: none;
+    /* background: linear-gradient(#8ACAA3, #E9E9E9) repeat scroll 0 0 transparent;
+    font-weight: bold;*/
+    text-decoration: underline;
 }
 
 .sidebar {
@@ -96,8 +108,8 @@ a:hover {
 
 .main {
     border-left: 1px solid #E9E9E9;
-    margin-left: 400px;
-    padding-left: 15px;
+    margin-left: 410px;
+    padding-left: 30px;
 }
 
 div#footer {
@@ -274,13 +286,14 @@ tr.even {
 #heading {
 	background-image: url("/static/images/laofab_button.png");
     background-repeat: no-repeat;
-    background-position: top left;
+    /*background-position: top left;*/
+    background-position: 0px 0px;
     height: 89px;
     margin: 0;
     padding-left: 225px;
     padding-right: 100px;
     margin-left: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 }
 
 #heading h1 {
@@ -291,7 +304,7 @@ tr.even {
     color: #888;
     font-weight: normal;
     font-size: 16px;
-    margin-top: 0px;
+    margin-top: 10px;
 }
 
 .priority {
@@ -376,6 +389,7 @@ div.docres {
 .sidebar h2 {
   clear: left;
   padding-top: 20px;
+  padding-left: 20px;
   color: #333;
   font-size: 13px;
 }

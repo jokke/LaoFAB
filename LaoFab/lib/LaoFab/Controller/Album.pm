@@ -103,6 +103,7 @@ sub edit : Local {
     my ($self, $c, $album_id) = @_;
     my $album = $c->model('LaoFabDB::Albums')->find({id => $album_id});
     my ($album_name, $parent_id);
+    $c->stash->{menupage} = 'browse';
 
     unless ($album) {
         $c->forward( "/default" ); # require login
@@ -162,7 +163,9 @@ sub _check_parent_folder {
 
 sub view : Local {
     my ($self, $c, $album_id) = @_;
-    
+ 
+    $c->stash->{menupage} = 'browse';
+
     my $album = $c->model('LaoFabDB::Albums')->find({
         id => $album_id
     }); 
@@ -224,6 +227,8 @@ sub view : Local {
 sub slide : Local {
     my ($self, $c, $album_id, $photo_id) = @_;
     
+    $c->stash->{menupage} = 'browse';
+
     my $album = $c->model('LaoFabDB::Albums')->find({
         id => $album_id
     }); 

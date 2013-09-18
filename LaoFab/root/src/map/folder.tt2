@@ -70,16 +70,12 @@ $(document).ready(function() {
 </script>
 [% META title = "Viewing map with documents in folder" %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>[% folder.name | html %]</h2>
-</div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
-    <p>Back to folder <a href="[% c.uri_for("/folder/view/$folder.id") %]">[% folder.name | html %]</a></p>
+    <p>Back to browsing folder <a href="[% c.uri_for("/folder/view/$folder.id") %]">[% folder.name | html %]</a></p>
     <h2>Documents on map</h2>
     <table class="folder-listing">
         [% FOREACH a IN areas %]
@@ -92,6 +88,7 @@ $(document).ready(function() {
 </div>
 
 <div class="main">
+    <h1>Documents in folder <i>[% folder.name | html %]</i></h1>
 
 <div id="main-map"></div>
 

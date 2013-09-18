@@ -1,17 +1,12 @@
-[% META title = "Welcome to the LaoFAB Document Repository" %]
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Currently serving [% no_docs %] documents and [% no_photos %] photos</h2>
-</div>
-
+[% META title = "Welcome to the Repository" %]
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
-  <div id="widget" class="sticky">
+<!--  <div id="widget" class="sticky"> -->
     <h2>The latest uploaded documents</h2>
     <table class="folder-listing">
     [% WHILE (document = latest_uploads.next) %]
-        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td></tr>
+        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td><td style="width: 71px;">[% IF document.preview %]<a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>[% END %]</td></tr>
     [% END %]
     </table>
 
@@ -23,6 +18,7 @@
             </tr>
         [% END %]
     </table>
+    Go to the <a href="http://groups.google.com/group/laofab">LaoFAB Google group</a> for a complete listing of discussions.
 
 
     <h2>The latest uploaded photos</h2>
@@ -44,29 +40,30 @@
 	</ul>
 
 
-  </div>
+<!--  </div> -->
 </div>
 
 
 <div class="main">
-<p style="margin:8px;">
+<h2>Currently serving [% no_docs %] documents and [% no_photos %] photos</h2>
+<p>
 All members can upload and download documents. The system currently has [% no_users %] registered users.</p>
-<p style="margin:8px;">Most files in the repository are text documents, but members can also share photos, videos and audio files.</p> 
-<p style="margin:8px;">There are currently [% no_docs %] documents with a total of [% size %], spread out in [% no_folders %] folders and [% no_photos %] photos with a total of [% photo_size %], spread out in [% no_albums %] albums.</p>
-<p style="margin:8px;">You can find what you want by using the search or browse functions. The top search word of the week is <em><a href="[% c.uri_for("/search") %]?s=[% week_word %]">[% week_word | html %]</a></em>.</p>
+<p>Most files in the repository are text documents, but members can also share photos, videos and audio files.</p> 
+<p>There are currently [% no_docs %] documents with a total of [% size %], spread out in [% no_folders %] folders and [% no_photos %] photos with a total of [% photo_size %], spread out in [% no_albums %] albums.</p>
+<p>You can find what you want by using the search or browse functions. The top search word of the week is <em><a href="[% c.uri_for("/search") %]?s=[% week_word %]">[% week_word | html %]</a></em>.</p>
 
-<p style="margin:8px;">You can also download an <a href="[% c.uri_for('/export/excel') %]">excel file</a> with a catalogue of all the documents in the repository.</p>
-<p style="margin:8px;">The upload link is visible at the top and bottom of ever folder. New files will not be visible to other members until after approval by the Secretariat.</p>
-<p style="margin:8px;">Guidance can be found in the LaoFAB Frequently Asked Questions, which can be downloaded <a href="[% c.uri_for('/static/faq.pdf') %]">here</a>. 
-<p style="margin:8px;">You can also check our links (on your right hand side) for other online libraries focused on Lao PDR.</p>
+<p>You can also download an <a href="[% c.uri_for('/export/excel') %]">excel file</a> with a catalogue of all the documents in the repository.</p>
+<p>The upload link is visible at the top and bottom of ever folder. New files will not be visible to other members until after approval by the Secretariat.</p>
+<p>Guidance can be found in the LaoFAB Frequently Asked Questions, which can be downloaded <a href="[% c.uri_for('/static/faq.pdf') %]">here</a>. 
+<p>You can also check our links (on your right hand side) for other online libraries focused on Lao PDR.</p>
 
-<p style="margin:8px;">We hope you find this repository useful, but cannot accept any liability for the content.</p>
-<p style="margin:8px;"><a href="mailto:LEAP@laoex.org">Andrew Bartlett</a> (LaoFAB Secretariat)<br>   
+<p>We hope you find this repository useful, but cannot accept any liability for the content.</p>
+<p><a href="mailto:LEAP@laoex.org">Andrew Bartlett</a> (LaoFAB Secretariat)<br>   
 <a href="mailto:joakim.lagerqvist@gmail.com">Joakim Lagerqvist</a> (website and software development)
 	
 </p>
-<div class="clear"></div>
 </div> <!-- end of main -->
+<div class="clear"></div>
 
 </div> <!-- end of page -->
 

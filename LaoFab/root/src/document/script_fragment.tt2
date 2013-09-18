@@ -207,6 +207,7 @@ $(document).ready(function() {
         // add to the hidden input
         //$('#mapcoords').val("([% area.google_polygon.join(')(') %])");
     [% END %]
+    $('div#main-map').css("height",$('div#main-map').width());
 
     $('.togglemap').click(function(){
         $('#map-container').toggle();

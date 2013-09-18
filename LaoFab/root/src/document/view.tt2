@@ -70,11 +70,6 @@ $(document).ready(function() {
 
 [% META title = "Viewing document" %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>[% document.title | html %]</h2>
-</div>
-
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">

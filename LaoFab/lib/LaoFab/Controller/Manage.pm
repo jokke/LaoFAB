@@ -26,6 +26,7 @@ Basically just reads the different pages from the database.
 
 sub manage : Global {
     my ( $self, $c ) = @_;
+    $c->stash->{menupage} = 'manage';
     # my $login_page = $c->model('DB::Content')->find({
     #       page => 'login',
     #   });

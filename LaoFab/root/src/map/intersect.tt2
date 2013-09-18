@@ -102,22 +102,19 @@ $(document).ready(function() {
     $('div#main-map').css("height",$('div#main-map').width());
 });
 </script>
-[% META title = "Viewing map with overlapping documents for" %]
+[% META title = "Viewing map with overlapping documents" %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>[% document.title %]</h2>
-</div>
 
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
-    <p>View the main page for <a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a></p>
+    <p>View the main document page for <a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a></p>
   </div>
 </div>
 
 <div class="main">
+<h2>[% document.title %]</h2>
 
 <div id="main-map"></div>
 

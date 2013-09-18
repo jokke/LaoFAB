@@ -28,7 +28,7 @@ Global action to handle search queries. If a query is supplied, it will return a
 
 sub search : Global {
     my ( $self, $c, $query ) = @_;
-
+    $c->stash->{menupage} = 'search';
 }
 
 =old code

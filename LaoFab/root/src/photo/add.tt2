@@ -2,15 +2,11 @@
 
 [% META title = 'Add a photo' %]
 
-<div id="heading">
-    <h1>[% template.title %]</h1>
-    <h2>Contribute to the repository</h2>
-</div>
-
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
   <div id="widget" class="sticky">
+    <div style="padding: 20px;">
     <p>Please fill in the values for your photo below and submit it to the repository. The following fields are required:</p>
     <ul>
         <li><em>Caption</em> - every photo should have a caption, a short description of the photo</li>
@@ -21,6 +17,7 @@
     </ul>
     <p>The other fields (location, photographer and date) are optional, but we encourage you to use them.
     </p>
+    </div>
   </div>
 </div>
 
