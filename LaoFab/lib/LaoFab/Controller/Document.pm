@@ -89,6 +89,7 @@ action for viewing a document with a certain id
 
 sub view : Local {
     my ($self, $c, $docid) = @_;
+
     $c->stash->{menupage} = 'browse';
     my $folderid;
     if ($c->req->referer and $c->req->referer =~ m/folder\/view\/(\d+)$/) {
@@ -106,6 +107,17 @@ sub view : Local {
         $c->res->redirect( $redir ); # require login
         $c->flash->{error} = "The document you requested can not be found, sorry.";
         $c->detach;
+    }
+
+    # restricted documents and no login?
+    if ($document->permission eq 're' and not $c->user_exists) {
+    	my $login_page = $c->model('LaoFabDB::Content')->find({
+	    	page => 'login',
+    	});
+	    $c->stash->{error} = 'This document is restricted to members only, please login to gain access'.
+    	$c->stash->{login_page} = $login_page;
+	    $c->stash->{ 'template' } = 'login_auth.tt2';
+    	return 0;
     }
 
     my $downloads = $c->model('LaoFabDB::Downloads')->search({

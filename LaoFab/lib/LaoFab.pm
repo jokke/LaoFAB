@@ -86,7 +86,7 @@ __PACKAGE__->config( #name => 'LaoFab',
 # Start the application
 __PACKAGE__->setup();
 
-__PACKAGE__->deny_access_unless('/document', [qw/viewer/]);
+#__PACKAGE__->deny_access_unless('/document', [qw/viewer/]);
 __PACKAGE__->deny_access_unless('/document/edit', [qw/admin/]);
 __PACKAGE__->deny_access_unless('/document/recent', [qw/admin/]);
 __PACKAGE__->deny_access_unless('/export', [qw/viewer/]);

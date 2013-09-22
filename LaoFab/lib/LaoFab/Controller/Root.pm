@@ -339,6 +339,13 @@ sub end : ActionClass('RenderView') {
     }
 }
 
+sub login : Local {
+    my ( $self, $c ) = @_;
+#    $c->forward('index');
+    $c->stash->{template} = 'login_auth.tt2';
+}
+
+
 =head1 AUTHOR
 
 Joakim Lagerqvist
