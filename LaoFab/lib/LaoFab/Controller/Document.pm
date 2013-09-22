@@ -114,7 +114,7 @@ sub view : Local {
     	my $login_page = $c->model('LaoFabDB::Content')->find({
 	    	page => 'login',
     	});
-	    $c->stash->{error} = 'This document is restricted to members only, please login to gain access'.
+	    $c->stash->{error} = 'This document is restricted to members only, please login to gain access';
     	$c->stash->{login_page} = $login_page;
 	    $c->stash->{ 'template' } = 'login_auth.tt2';
     	return 0;
