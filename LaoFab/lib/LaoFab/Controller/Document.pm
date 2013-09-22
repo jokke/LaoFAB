@@ -114,10 +114,9 @@ sub view : Local {
     	my $login_page = $c->model('LaoFabDB::Content')->find({
 	    	page => 'login',
     	});
-	    $c->stash->{error} = 'This document is restricted to members only, please login to gain access';
-    	$c->stash->{login_page} = $login_page;
-	    $c->stash->{ 'template' } = 'login_auth.tt2';
-    	return 0;
+	    $c->flash->{error} = 'This document is restricted to members only, please login to gain access';
+    	$c->res->redirect('/login');
+	    $c->detach; 
     }
 
     my $downloads = $c->model('LaoFabDB::Downloads')->search({
@@ -160,7 +159,7 @@ sub view : Local {
         };
 
         $facebook->{title} .= ' ('. $document->sub_title . ')' if ($document->sub_title);
-        $facebook->{image} = $c->uri_for('/static/images/doc/prev/' . $document->id . '.jpg') if $document->preview;
+        $facebook->{image} = $document->preview ? $c->uri_for('/static/images/doc/prev/' . $document->id . '.jpg') : $c->uri_for('/static/images/laofab_button.png') ;
         $c->stash->{facebook} = $facebook;
     }
 

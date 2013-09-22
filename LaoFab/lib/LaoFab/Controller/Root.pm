@@ -44,7 +44,7 @@ Runs before anything and checkes if the path needs a login or not, if login is n
 sub auto : Private {
     my ( $self, $c ) = @_;
 	$c->log->debug('path is '.$c->req->path);
-    return 1 if ($c->req->path =~ /^feed/ or $c->req->path =~ /^user\/password_recovery/ or $c->req->path =~ /^rest\/laofind/ or $c->req->path =~ /^user\/reset/);
+    return 1 if ($c->req->path =~ /^feed/ or $c->req->path =~ /^user\/password_recovery/ or $c->req->path =~ /^rest\/laofind/ or $c->req->path =~ /^user\/reset/ or $c->req->path =~ /^document\/view/);
     $c->forward( '/check_login' ) || return 0;
     return 1;
 }
@@ -341,8 +341,12 @@ sub end : ActionClass('RenderView') {
 
 sub login : Local {
     my ( $self, $c ) = @_;
-#    $c->forward('index');
-    $c->stash->{template} = 'login_auth.tt2';
+    if ($c->user_exists) {
+        $c->forward('index');
+        $c->stash->{template} = 'index.tt2';
+    } else {
+        $c->stash->{template} = 'login_auth.tt2';
+    }
 }
 
 

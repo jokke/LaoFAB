@@ -115,6 +115,7 @@ __PACKAGE__->deny_access_unless('/user/view', [qw/viewer/]);
 __PACKAGE__->allow_access('/user/reset');
 __PACKAGE__->allow_access('/user/password_recovery');
 __PACKAGE__->allow_access('/logout');
+__PACKAGE__->allow_access('/document/view');
 #__PACKAGE__->allow_access('/login');
 =head1 NAME
 

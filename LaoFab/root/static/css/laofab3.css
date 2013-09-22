@@ -321,10 +321,12 @@ span.highlight {
 }   
 
 .message {
+    margin: 20px;
     color: #66aa66;
 }
 
 .error {
+    margin: 20px;
     color: #cc4444;
     text-decoration:underline;
 }
