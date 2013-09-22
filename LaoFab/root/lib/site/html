@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <meta property="og:site_name" content="LaoFAB Repository"/>
   [% IF facebook %]
+  <meta property="fb:admins" content="732827133" />
   <meta property="og:title" content="[% facebook.title | html %]"/>
   <meta property="og:image" content="[% facebook.image %]"/>
+  <meta property="og:type" content="[% facebook.type %]"/>
+  <meta property="og:url" content="[% facebook.url %]"/>
+  <meta property="og:description" content="[% facebook.description %]"/>
   [% END %]
   <title>[% template.title or site.title %]</title>
     <style type="text/css">

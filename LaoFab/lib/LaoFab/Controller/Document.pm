@@ -156,6 +156,9 @@ sub view : Local {
     if ($document->permission ne 're') {
         my $facebook = {
             title => $document->title,
+            url => $c->uri_for("/document/view/".$document->id),
+            description => "Uploaded document/article in the LaoFAB Repository",
+            type => 'article',
         };
 
         $facebook->{title} .= ' ('. $document->sub_title . ')' if ($document->sub_title);
