@@ -1,238 +1,124 @@
 [% META title = 'System management' %]
-<script type="text/javascript">
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.form.FilteringSelect");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.Dialog");
-    dojo.require("dojox.validate.regexp");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dojo.parser");
-    function theSame(dojoTxt1, dojoTxt2) {
-        return dojoTxt1.getValue() == dojoTxt2.getValue();
-    }    
-</script>
+<div style="padding: 50px">
+<div class="html-code">
+<ul>
+<li><a class="popup-single-form" href="#add-single-form">Add a single user</a> to the database</li>
+<li><a class="popup-multi-form" href="#add-multi-form">Add multiple users</a> with a google group CSV file</li>
+<li><a class="popup-search-form" href="#search-form">Search</a> for users</li>
+<li><a href="[% c.uri_for("/user/list") %]">Browse</a> for users</li>
+</ul>
+<!-- form itself -->
+    <form method="post" action="[% c.uri_for("/user/add") %]" id="add-single-form" class="mfp-hide" style="position: relative; background: #FFF; padding: 20px; width: auto; max-width: 500px; margin: 20px auto;">
+        <fieldset style="border:0;">
+          <h2>Add a user</h2>
+          <table>
+            <tr>
+              <td><label for="email">Email</label></td>
+              <td><input id="email" name="email" type="email" placeholder="example@domain.com" required></td>
+            </tr>
+            <tr>
+              <td><label for="name">Name</label></td>
+              <td><input id="name" name="name" type="text" placeholder="Name" required></td>
+            </tr>
+            <tr>
+              <td><label for="password">Password</label></td>
+              <td><input id="password" name="password" type="password" required></td>
+            </tr>
+            <tr>
+              <td><label for="password2">Password (confirm)</label></td>
+              <td><input id="password2" name="password2" type="password" required></td>
+            </tr>
+            <tr>
+              <td><label for="role">Administrator</label></td>
+              <td><input id="role" name="role" type="checkbox">yes</td>
+            </tr>
+          </table>
+          <button id="submit_single"type="submit">Create</button>
+        </fieldset>
+      </form>
+      <form id="add-multi-form" action="[% c.uri_for('/user/add_multi') %]"
+	encType="multipart/form-data" method="post" class="mfp-hide" style="position: relative; background: #FFF; padding: 20px; width: auto; max-width: 500px; margin: 20px auto;">
+        <fieldset style="border:0;">
+          <h2>Add multiple users</h2>
+          <table>
+          <tr><td><label for="multi_password">Password:</label></td>
+          <td><input type="text" name="password" 
+                               id="multi_password"
+                               required/></td></tr>
 
-<h2>User management</h2>
-
-<div id="add_single_dialog" dojoType="dijit.Dialog" title="Add a new user">
-    <form method="post" id="add_user_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/add") %]">
+          <tr><td><label for="csv">The google group CSV file:</label></td>
+          <td><input name="csv" title="Upload the CSV file here" id="csv" type="file" /></td></tr>
+          </table>
+          <button id="submit_multi" type="submit">Add</button>
+     </form>
+    <form method="get" id="search-form" class="mfp-hide" style="position: relative; background: #FFF; padding: 20px; width: auto; max-width: 500px; margin: 20px auto;" action="[% c.uri_for("/user/search") %]">
+    <fieldset style="border:0;">
+          <h2>Search for users</h2>
     <table>
-        <tr><td><label for="email">Email address:</label></td>
-        <td><input type="text" name="email" 
-                               value=""
-                               id="email"
-                               dojoType="dijit.form.ValidationTextBox"
-                               regExpGen="dojox.validate.regexp.emailAddress" trim="true"
-                               required="true"
-                               invalidMessage="Invalid email address!"
-                               /></td></tr>
-        <tr><td><label for="name">Name:</label></td>
-        <td><input type="text" name="name" 
-                               value=""
-                               id="name"
-                               dojoType="dijit.form.ValidationTextBox"
-                               trim="true"
-                               required="true"
-                               invalidMessage="Please fill in the name!"
-                               /></td></tr>
-        <tr><td><label for="password">Password:</label></td>
-        <td><input type="password" name="password" 
-                               id="password"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               regExp="^.{6,}$"
-                               invalidMessage="The password must have at least 6 characters!"
-                               /></td></tr>
-        <tr><td><label for="password2">Password (confirm):</label></td>
-        <td><input type="password" name="password2" 
-                               id="password2"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               validator="return theSame(this, dijit.byId('password'));"
-                               invalidMessage="The two passwords must match!"
-                               /></td></tr>
-        <tr><td><label for="role">Administrator?</label></td>
-            <td><input id="role" dojotype="dijit.form.CheckBox"
-           name="admin" value="on"
-           type="checkbox" />yes</td>
-        </tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_single" 
-                        type="submit">Create</button></td></tr>
-    </table>
-    </form>
-</div>
-<div id="search_dialog" dojoType="dijit.Dialog" title="Search for users">
-    <form method="get" id="search_user_form" dojoType="dijit.form.Form" action="[% c.uri_for("/user/search") %]">
-    <table>
-        <tr><td><label for="s">Search expresion:</label></td>
+        <tr><td><label for="s">Search expression:</label></td>
         <td><input type="text" name="s" 
                                value=""
                                id="s"
-                               dojoType="dijit.form.ValidationTextBox"
-                               trim="true"
                                required="true"
-                               invalidMessage="Need something to search for."
                                /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_search" 
-                        type="submit">Search</button></td></tr>
     </table>
+    <button id="submit_search" type="submit">Search</button>
     </form>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.popup-single-form').magnificPopup({
+          type: 'inline',
+          preloader: false,
+          focus: '#name',
+
+          // When elemened is focused, some mobile browsers in some cases zoom in
+          // It looks not nice, so we disable it:
+          callbacks: {
+            beforeOpen: function() {
+              if($(window).width() < 700) {
+                this.st.focus = false;
+              } else {
+                this.st.focus = '#name';
+              }
+            }
+          }
+        });
+        $('.popup-multi-form').magnificPopup({
+          type: 'inline',
+          preloader: false,
+          focus: '#multi_password',
+
+          // When elemened is focused, some mobile browsers in some cases zoom in
+          // It looks not nice, so we disable it:
+          callbacks: {
+            beforeOpen: function() {
+              if($(window).width() < 700) {
+                this.st.focus = false;
+              } else {
+                this.st.focus = '#multi_password';
+              }
+            }
+          }
+        });
+        $('.popup-search-form').magnificPopup({
+          type: 'inline',
+          preloader: false,
+          focus: '#s',
+
+          // When elemened is focused, some mobile browsers in some cases zoom in
+          // It looks not nice, so we disable it:
+          callbacks: {
+            beforeOpen: function() {
+              if($(window).width() < 700) {
+                this.st.focus = false;
+              } else {
+                this.st.focus = '#s';
+              }
+            }
+          }
+        });
+      });
+    </script>
+
 </div>
-
-<div id="add_multi_dialog" dojoType="dijit.Dialog" title="Add multiple users">
-<form dojoType="dijit.form.Form" id="document_form" action="[% c.uri_for('/user/add_multi') %]"
-	encType="multipart/form-data" method="post">
-    <table>
-        <tr><td><label for="multi_password">Password:</label></td>
-        <td><input type="text" name="password" 
-                               id="multi_password"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               regExp="^.{6,}$"
-                               invalidMessage="The password must have at least 6 characters!"
-                               /></td></tr>
-        <tr><td><label for="csv">The google group CSV file:</label></td>
-        <td><input name="csv" title="Upload the CSV file here" id="csv" type="file" /></td></tr>
-
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_multi" 
-                        type="submit">Add</button></td></tr>
-    </table>
-    </form>
-</div>
-
-
-<ul>
-<li><a href="#" onclick="dijit.byId('add_single_dialog').show(); return false;">Add one user</a> to the database</li>
-<li><a href="#" onclick="dijit.byId('add_multi_dialog').show(); return false;">Add multiple users</a> from a google group CSV file</li>
-<li><a href="#" onclick="dijit.byId('search_dialog').show(); return false;">Search</a> for users</li>
-<li><a href="[% c.uri_for("/user/list") %]">Browse</a> for users</li>
-</ul>
-
-<div id="add_buzz_one" dojoType="dijit.Dialog" title="Add a new buzz word">
-<form dojoType="dijit.form.Form" id="add_buzz_one_form" action="[% c.uri_for('/buzz/add/1') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_one_add">Buzz word:</label></td>
-        <td><input type="text" name="word" 
-                               id="buzz_one_add"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               invalidMessage="The buzz word cannot be empty..."
-                               /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_add_buzz_one" 
-                        type="submit">Add</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="add_buzz_two" dojoType="dijit.Dialog" title="Add a new buzz word">
-<form dojoType="dijit.form.Form" id="add_buzz_two_form" action="[% c.uri_for('/buzz/add/2') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_two_add">Buzz word:</label></td>
-        <td><input type="text" name="word" 
-                               id="buzz_two_add"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               invalidMessage="The buzz word cannot be empty..."
-                               /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_add_buzz_two" 
-                        type="submit">Add</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="add_buzz_three" dojoType="dijit.Dialog" title="Add a new buzz word">
-<form dojoType="dijit.form.Form" id="add_buzz_three_form" action="[% c.uri_for('/buzz/add/3') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_three_add">Buzz word:</label></td>
-        <td><input type="text" name="word" 
-                               id="buzz_three_add"
-                               dojoType="dijit.form.ValidationTextBox"
-                               required="true"
-                               invalidMessage="The buzz word cannot be empty..."
-                               /></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_add_buzz_three" 
-                        type="submit">Add</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="del_buzz_one" dojoType="dijit.Dialog" title="Delete buzz word">
-<form dojoType="dijit.form.Form" id="del_buzz_one_form" action="[% c.uri_for('/buzz/delete/1') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_one_del">Buzz word:</label></td>
-        <td><select dojoType="dijit.form.FilteringSelect"
-                    name="word"
-                    id="buzz_one_del"
-                    autocomplete="true">
-            [% WHILE (buzz = buzz1.next) %]
-                <option value="[% buzz.id %]">[% buzz.name | html %]</option>
-            [% END %]
-            </select>
-            </td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_del_buzz_one" 
-                        type="submit">Delete</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="del_buzz_two" dojoType="dijit.Dialog" title="Delete buzz word">
-<form dojoType="dijit.form.Form" id="del_buzz_two_form" action="[% c.uri_for('/buzz/delete/2') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_two_del">Buzz word:</label></td>
-        <td><select dojoType="dijit.form.FilteringSelect"
-                        name="word"
-                        id="buzz_two_del"
-                        autocomplete="true">
-                [% WHILE (buzz = buzz2.next) %]
-                    <option value="[% buzz.id %]">[% buzz.name | html %]</option>
-                [% END %]
-                </select></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_del_buzz_two" 
-                        type="submit">Delete</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<div id="del_buzz_three" dojoType="dijit.Dialog" title="Delete buzz word">
-<form dojoType="dijit.form.Form" id="del_buzz_three_form" action="[% c.uri_for('/buzz/delete/3') %]" method="post">
-    <table>
-        <tr><td><label for="buzz_three_del">Buzz word:</label></td>
-        <td><select dojoType="dijit.form.FilteringSelect"
-                        name="word"
-                        id="buzz_three_del"
-                        autocomplete="true">
-                [% WHILE (buzz = buzz3.next) %]
-                    <option value="[% buzz.id %]">[% buzz.name | html %]</option>
-                [% END %]
-                </select></td></tr>
-        <tr><td colspan="2" align="center">
-            <button dojoType="dijit.form.Button" id="submit_del_buzz_three" 
-                        type="submit">Delete</button></td></tr>
-    </table>
-    </form>
-</div>
-
-<h2>Abbot management</h2>
-<ul>
-<li>Add a new phrase in:
-    <ul>
-        <li><a href="#" onclick="dijit.byId('add_buzz_one').show(); return false;">Column one</a></li>
-        <li><a href="#" onclick="dijit.byId('add_buzz_two').show(); return false;">Column two</a></li>
-        <li><a href="#" onclick="dijit.byId('add_buzz_three').show(); return false;">Column three</a></li>
-    </ul></li>
-<li>Delete a phrase from:
-    <ul>
-        <li><a href="#" onclick="dijit.byId('del_buzz_one').show(); return false;">Column one</a></li>
-        <li><a href="#" onclick="dijit.byId('del_buzz_two').show(); return false;">Column two</a></li>
-        <li><a href="#" onclick="dijit.byId('del_buzz_three').show(); return false;">Column three</a></li>
-    </ul></li>
-</ul>

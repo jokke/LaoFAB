@@ -12,7 +12,7 @@
         return dojoTxt1.getValue() == dojoTxt2.getValue();
     }    
 </script>
-
-<h1>[% template.title %]</h1>
+<div style="padding: 50px;">
 
 [% INCLUDE user/list_fragment.tt2 %]
+</div>

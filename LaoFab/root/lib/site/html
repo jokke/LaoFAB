@@ -19,9 +19,11 @@
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'></script>
     <script type='text/javascript' src='[% c.uri_for('/static/js/messi.min.js') %]'></script>
     <script type='text/javascript' src='[% c.uri_for('/static/js/laofab/jquery.laofab.js') %]'></script>
+    <script type='text/javascript' src='[% c.uri_for('/static/js/jquery.magnific-popup.min.js') %]'></script>
 
   <link rel="alternate" type="application/rss+xml" title="The RSS feed for Laofab Document Repository" href="[% c.uri_for('/feed/rss') %]" >
   <link rel="alternate" type="application/atom+xml" title="The Atom feed for Laofab Document Repository" href="[% c.uri_for('/feed/atom') %]" >
+  <link rel="stylesheet" href="[% c.uri_for('/static/css/magnific-popup.css') %]"> 
  </head>
  <body>
    <div class="contentwrapper">

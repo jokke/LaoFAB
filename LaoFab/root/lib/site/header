@@ -23,7 +23,7 @@
     [% END %]
   [% END %]
   <li><a href="https://github.com/jokke/LaoFAB//wiki/FAQ">FAQ</a></li>
-  <li style="float: right; text-align: right; margin-right: 30px;"><a href="[% c.uri_for("/logout") %]">sign out</a></li>
+  <li style="float: right; text-align: right; margin-right: 30px;">[% IF c.user_exists %]<a href="[% c.uri_for("/logout") %]">sign out[% ELSE %]<a href="[% c.uri_for("/login") %]">login[% END %]</a></li>
   </ul>
 
   <!--div class="spacer" style="text-align: right">
