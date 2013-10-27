@@ -1,17 +1,5 @@
 [% META title = "Browsing users" %]
 
-<script type="text/javascript">
-    dojo.require("dijit.form.ValidationTextBox");
-    dojo.require("dijit.form.Button");
-    dojo.require("dijit.form.Form");
-    dojo.require("dijit.Dialog");
-    dojo.require("dojox.validate.regexp");
-    dojo.require("dijit.form.CheckBox");
-    dojo.require("dojo.parser");
-    function theSame(dojoTxt1, dojoTxt2) {
-        return dojoTxt1.getValue() == dojoTxt2.getValue();
-    }    
-</script>
 <div style="padding: 50px;">
 
 [% INCLUDE user/list_fragment.tt2 %]
