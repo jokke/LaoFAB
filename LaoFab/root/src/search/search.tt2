@@ -17,7 +17,7 @@
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar" style="width: 390;">
-  <div id="widget" class="sticky" style="width: 390;">
+  <div id="widget" class="nonsticky" style="width: 390;">
       <h2>Current Selection</h2>
       <ul id="selection"></ul>
 

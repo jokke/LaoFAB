@@ -44,13 +44,13 @@ $(document).ready(function() {
     <h2>Current photo</h2>
     <div id="photoinfo">
         <table class="folder-listing">
-            <tr><td width="30%"><em>Caption:</em></td><td class="ellipsis"><span id="pi_caption"></span></td></tr>
-            <tr><td><em>Photographer:</em></td><td class="ellipsis"><span id="pi_photographer"></span></td></tr>
-            <tr><td><em>Picture date:</em></td><td class="ellipsis"><span id="pi_taken_dt"></span></td></tr>
-            <tr><td><em>Uploaded date:</em></td><td class="ellipsis"><span id="pi_uploaded_dt"></span></td></tr>
-            <tr><td><em>Location:</em></td><td class="ellipsis"><span id="pi_location"></span></td></tr>
+            <tr><td width="30%"><em>Caption:</em></td><td class="noellipsis"><span id="pi_caption"></span></td></tr>
+            <tr><td><em>Photographer:</em></td><td class="noellipsis"><span id="pi_photographer"></span></td></tr>
+            <tr><td><em>Picture date:</em></td><td class="noellipsis"><span id="pi_taken_dt"></span></td></tr>
+            <tr><td><em>Uploaded date:</em></td><td class="noellipsis"><span id="pi_uploaded_dt"></span></td></tr>
+            <tr><td><em>Location:</em></td><td class="noellipsis"><span id="pi_location"></span></td></tr>
             [% IF c.check_user_roles("admin") %]
-            <tr><td><em>Uploaded by:</em></td><td class="ellipsis"><span id="pi_user"></span></td></tr>
+            <tr><td><em>Uploaded by:</em></td><td class="noellipsis"><span id="pi_user"></span></td></tr>
             [% END %]
         </table>
     </div>
