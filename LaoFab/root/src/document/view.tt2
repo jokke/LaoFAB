@@ -73,7 +73,7 @@ $(document).ready(function() {
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
-  <div id="widget" class="sticky">
+  <div id="widget" class="nonsticky">
 [% IF back %]
 <p>
     <a href="[% back.url %]">Back to folder <em>[% back.name | html %]</em></a>.
