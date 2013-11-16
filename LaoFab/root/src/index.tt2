@@ -10,13 +10,13 @@
     [% END %]
     </table>
 
-    <h2>The top 10 downloaded documents</h2>
+<!--    <h2>The top 10 downloaded documents</h2>
     <table class="folder-listing">
     [% WHILE (document = top_downloads.next) %]
         <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td><td style="width: 71px;">[% IF document.preview %]<a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>[% END %]</td></tr>
     [% END %]
     </table>
-
+-->
     <h2>Latest email discussions</h2>
     <table class="folder-listing">
         [% FOREACH email IN emails %]
