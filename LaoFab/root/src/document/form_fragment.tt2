@@ -28,7 +28,7 @@
         [% IF document.permission %]
             value="[% document.permission %]"
         [% ELSE %]
-            value="pm"
+            value="re"
         [% END %]>
     [% FOREACH perm IN [{ id => 're', label => 'Restricted' } , { id => 'pu', label => 'Public' } ] %]
         <option value="[% perm.id %]"
