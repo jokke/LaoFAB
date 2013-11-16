@@ -74,8 +74,8 @@ sub index :Path :Args(0) {
         document    => { '>', 0 }, #fix for documents
     },{
         select => [ 'document', { count => 'distinct user' }],
-#        as => [qw/ document id /],
-#        prefetch => 'document',
+        as => [qw/ document id /],
+        prefetch => 'document',
         group_by => [qw/ document /],
         order_by => [' count(distinct user) desc '],
     })->slice(0,9);
