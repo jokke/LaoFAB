@@ -52,6 +52,13 @@ __PACKAGE__->table("password_recovery");
   extra: {unsigned => 1}
   is_nullable: 0
 
+=head2 create_dt
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
 =head2 user_agent
 
   data_type: 'varchar'
@@ -74,7 +81,7 @@ __PACKAGE__->table("password_recovery");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: '0000-00-00 00:00:00'
   is_nullable: 0
 
 =cut
@@ -89,6 +96,13 @@ __PACKAGE__->add_columns(
   },
   "user",
   { data_type => "integer", extra => { unsigned => 1 }, is_nullable => 0 },
+  "create_dt",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
   "user_agent",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "ip_address",
@@ -99,7 +113,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
   },
 );
@@ -117,8 +131,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-03-31 11:54:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Eml4R4P5n+XVjkjzgMp8Nw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-02-02 02:23:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rkg/uGo6G30Pneaq9KNG/g
 
 __PACKAGE__->belongs_to(
     'user', 'LaoFab::Schema::LaoFabDB::User',

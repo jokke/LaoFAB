@@ -49,7 +49,8 @@ __PACKAGE__->config( #name => 'LaoFab',
                      'View::Excel::Template::Plus' => {
                          etp_config => {
                              INCLUDE_PATH => [
-                                 LaoFab->path_to( 'root', 'src', 'excel_templates' ),
+                                 '/var/www/laofab/LaoFab/root/src/excel_templates',
+                                 #LaoFab->path_to( 'root', 'src', 'excel_templates' ),
                              ]
                          }
                      },

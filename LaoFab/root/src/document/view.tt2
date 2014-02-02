@@ -29,13 +29,13 @@ $(document).ready(function() {
 
         map = new google.maps.Map(document.getElementById('main-map'), myOptions);
             [% area = document.areas.first %]
-            [% bbox = area.bbox %]
+            [% bbox = area.get_bbox %]
             var east = [% bbox.0 %];
             var north = [% bbox.1 %];
             var west = [% bbox.2 %];
             var south = [% bbox.3 %];
         [% FOREACH area IN document.areas %]
-            [% bbox = area.bbox %]
+            [% bbox = area.get_bbox %]
             if ([% bbox.0 %] < east) 
                 east = [% bbox.0 %];
             if ([% bbox.1 %] < north) 
@@ -93,7 +93,7 @@ $(document).ready(function() {
     [% END %]
 
     [% IF document.preview %]
-    <p>Font page view:
+    <p>Front page view:
     <a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>
     </p>
     [% END %]

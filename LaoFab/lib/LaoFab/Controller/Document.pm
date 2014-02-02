@@ -465,6 +465,33 @@ sub _get_authors {
 	return @authors;
 }
 
+=head2 approve
+
+approve action that can be called when an administrator needs to accept a document.
+
+=cut
+
+sub approve : Local {
+    my ($self, $c, $doc_id) = @_;
+    my $document = $c->model("LaoFabDB::Documents")->find({ id => $doc_id });
+
+    unless ($document) {
+        $c->stash->{error} = "Could not find document with id: $doc_id". "!";
+        $c->forward("/default");
+        $c->detach;
+    }
+    unless ($c->check_user_roles(qw|admin|)) {
+        $c->stash->{error} = "You are not an admin!";
+        $c->forward("/default");
+        $c->detach;
+    }
+    $document->viewable(1);
+    $document->update;
+    $c->flash->{message} = "The document ".$document->title." is updated and viewable.";
+    $c->res->redirect( $c->req->referer );
+    $c->detach;
+}
+
 =head2 edit
 
 edit action that can be called when an administrator needs to edit or accept a document.
@@ -542,6 +569,8 @@ sub edit : Local {
 			            polygon  => 'POLYGON(('.join (', ', map { join (' ', @$_) } @pairs).'))',
 		            });
                     $areas->center($areas->calc_center);
+                    $areas->bbox($areas->calc_bbox);
+                    $areas->map_point($areas->calc_map_point);
                     $areas->insert;
                 }
             }
@@ -695,6 +724,8 @@ sub add : Local {
 			            polygon  => 'POLYGON(('.join (', ', map { join (' ', @$_) } @pairs).'))',
 		            });
                     $areas->center($areas->calc_center);
+                    $areas->bbox($areas->calc_bbox);
+                    $areas->map_point($areas->calc_map_point);
                     $areas->insert;
                 }
             }

@@ -245,21 +245,21 @@ __PACKAGE__->add_columns(
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'photos') . "",
-            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/photos/',
+            fs_column_path   => '/var/www/laofab/LaoFab/root/photos/',
         },
     "thumbnail",
         {
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'thumbnail_photos') . "",
-            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/thumbnail_photos/',
+            fs_column_path   => '/var/www/laofab/LaoFab/root/thumbnail_photos/',
         },
     "normal",
         {
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
 #            fs_column_path   => LaoFab->path_to('root', 'normal_size_photos') . "",
-            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/normal_size_photos/',
+            fs_column_path   => '/var/www//laofab/LaoFab/root/normal_size_photos/',
         },
     );
 

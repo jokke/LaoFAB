@@ -3,11 +3,11 @@
 <script type="text/javascript">
 var inter_areas = [
 [% should_comma = 0 %]
-[% FOREACH a IN inter_areas %]
-    [% IF should_comma %], [% END %]
-    [ '[% a.document.short_title %]', [% a.google_center.join(', ') %], [%a.document.id %] ]
+[%- FOREACH a IN inter_areas -%]
+    [%- IF should_comma -%], [%- END -%]
+    [ "[% a.document.short_title %]", [% a.map_point %], [%a.document.id %] ]
     [% should_comma = 1 %]
-[% END %]
+[%- END -%]
 ];
 var markers = [];
 var infowindows = [];
@@ -55,15 +55,16 @@ function draw_polygon(coords, color) {
 var map;
 
 $(document).ready(function() {
+
     [% area = document.areas.first %]
-    [% bbox = area.bbox %]
+    [% bbox = area.get_bbox %]
     var east = [% bbox.0 %];
     var north = [% bbox.1 %];
     var west = [% bbox.2 %];
     var south = [% bbox.3 %];
 
     [% FOREACH area IN document.areas %]
-        [% bbox = area.bbox %]
+        [% bbox = area.get_bbox %]
         if ([% bbox.0 %] < east) 
             east = [% bbox.0 %];
         if ([% bbox.1 %] < north) 
@@ -108,9 +109,17 @@ $(document).ready(function() {
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
-  <div id="widget" class="sticky">
+<!-- <div id="widget" class="sticky"> -->
     <p>View the main document page for <a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a></p>
-  </div>
+    <h2>Overlapping documents on map</h2>
+    <table class="folder-listing">
+        [% FOREACH d IN inter_docs %]
+            <tr>
+                <td><a class="ellipsis" href="[% c.uri_for("/document/view/$d.id") %]">[% d.title | html %]</a></td>
+            </tr>
+        [% END %]
+    </table>
+<!-- </div> -->
 </div>
 
 <div class="main">

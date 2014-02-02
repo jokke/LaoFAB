@@ -3,20 +3,15 @@
 
 <div class="sidebar">
 <!--  <div id="widget" class="sticky"> -->
+<div class="fb-like" data-href="https://www.facebook.com/LaoFAB" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+<p>Check out our facebook group at <a href="https://www.facebook.com/LaoFAB">facebook.com/LaoFAB</a>.    
     <h2>The latest uploaded documents</h2>
     <table class="folder-listing">
     [% WHILE (document = latest_uploads.next) %]
-        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td><td style="width: 71px;">[% IF document.preview %]<a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>[% END %]</td></tr>
+        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td>[% IF document.preview && 0 %]<td style="width: 71px;"><a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a></td>[% END %]</tr>
     [% END %]
     </table>
 
-<!--    <h2>The top 10 downloaded documents</h2>
-    <table class="folder-listing">
-    [% WHILE (document = top_downloads.next) %]
-        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$document.id") %]">[% document.title | html %]</a> [[% document.pubyear | html %]]</td><td style="width: 71px;">[% IF document.preview %]<a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$document.id") %].jpg', { title: '[% document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$document.id") %].jpg" alt="thumbnail" border="0"/></a>[% END %]</td></tr>
-    [% END %]
-    </table>
--->
     <h2>Latest email discussions</h2>
     <table class="folder-listing">
         [% FOREACH email IN emails %]
@@ -69,6 +64,13 @@ All members can upload and download documents. The system currently has [% no_us
 <a href="mailto:joakim.lagerqvist@gmail.com">Joakim Lagerqvist</a> (website and software development)
 	
 </p>
+    <h2>The top 10 downloaded documents</h2>
+    <table style="width:80%;" class="folder-listing">
+    [% WHILE (download = top_downloads.next) %]
+        <tr><td class="ellipsis"><a href="[% c.uri_for("/document/view/$download.document.id") %]">[% download.document.title | html %]</a> [[% download.document.pubyear | html %]]</td><td style="width: 71px;">[% IF download.document.preview %]<a href="#" onClick="Messi.img('[% c.uri_for("/static/images/doc/prev/$download.document.id") %].jpg', { title: '[% download.document.title | html %]', modal: true });"><img src="[% c.uri_for("/static/images/doc/thumb/$download.document.id") %].jpg" alt="thumbnail" border="0"/></a>[% END %]</td></tr>
+    [% END %]
+    </table>
+
 </div> <!-- end of main -->
 <div class="clear"></div>
 

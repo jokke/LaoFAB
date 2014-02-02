@@ -1,11 +1,9 @@
 [% META title = "Edit folder" %]
+<script type='text/javascript' src='[% c.uri_for('/static/js/jquery.dynatree.js') %]'></script>
+
+<link href="[% c.uri_for("/static/css/skin/ui.dynatree.css") %]" rel="stylesheet" type="text/css"/>
+
 <script type="text/javascript">
-    dojo.require("dijit.Tooltip");
-    dojo.require("dijit.form.TextBox");
-    dojo.require("dijit.form.Button");
-	dojo.require("dijit.dijit"); // optimize: load dijit layer
-	dojo.require("dijit.TitlePane");
-	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 
 
 var treeData = [% tree %];
@@ -16,7 +14,7 @@ $(document).ready(function(){
     $("#radio_tree").dynatree({
       checkbox: true,
       // Override class name for checkbox icon:
-      classNames: {checkbox: "ui-dynatree-radio"}, 
+      classNames: {checkbox: "dynatree-radio"}, 
       selectMode: 1,
       children: treeData,
       onSelect: function(select, dtnode) {
@@ -38,26 +36,35 @@ $(document).ready(function(){
       }
     });
 
+        $("#radio_tree").dynatree("getTree").getNodeByKey("[% parent_id %]").select();
+        var node = $("#radio_tree").dynatree("getTree").getNodeByKey("[% folder_id %]");
+        while (node = node.getParent())
+            node.expand();
+
     $('#folder_form').submit(function(){
       $('#folder').val(selectedKeys);
     });
 });
 
 </script>
+<div style="padding: 50px"> 
+  <div class="html-code">
 
-<h1>[% template.title %]</h1>
-<p>Here you can change the name of the folder and/or change its location.</p>
-<form id="folder_form" method="post">
-<div id="TTfolderName"><p><label for="name">Name of folder: </label><br/>
-  <input type="text" name="name" 
-    value="[% folder_name %]"
-    dojoType="dijit.form.TextBox"
-    trim="true" 
-    required="true"/></p></div>
-	<div dojoType="dijit.TitlePane" title="Folder location" open="true" style="width: 70%; padding-top: 5px; padding-bottom: 20px;" >
-
-<div id="radio_tree"></div>
-		</div>
-<input type="hidden" value="[% folder_id %]" name="folder" id="folder">
-<button dojoType="dijit.form.Button" name="edit" value="Edit" type="submit">Edit</button>
-</form>
+    <div id="TTfolderName">
+      <fieldset>
+        <legend style="color: #227744">Here you can change the name of the folder and/or change its location.</legend>
+        <form id="folder_form" method="post">
+        <label for="name">Name of folder: </label><br/>
+        <input type="text" name="name" 
+           value="[% folder_name %]"
+           required="true"/></p>
+        <input id="priority" name="priority" type="checkbox" [%- IF priority %]checked="checked"[% END -%]><span style="color: #DD0000; text-decoration: underline;">Priority</span> folder<br/>
+        <label for="radio_tree">Parent folder: </lable><br/>
+        <div id="radio_tree"></div>
+        <input type="hidden" value="[% folder_id %]" name="folder" id="folder">
+        <button name="edit" value="Edit" type="submit">Edit</button>
+        </form>
+      </fieldset>
+    </div>
+  </div>
+</div>

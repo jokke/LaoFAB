@@ -137,27 +137,27 @@ sub reset : Local {
 
 	# We are now validated and can proceed with reseting password.
 
-	if ($c->req->param("submit")) {
+	if ($c->req->param("password")) {
+	$c->log->debug("all good!");
 		if (!defined($c->req->param('password')) or !length($c->req->param('password'))) {
 			$c->flash->{error} = "The password must be provided.";
 			$c->detach;
 		} elsif (length ($c->req->param('password')) < 6) {
 			$c->flash->{error} = "The password must be at least 6 characters long.";
 			$c->detach;
-		} elsif ($c->req->param('password') ne $c->req->param('validate_password')) {
+		} elsif ($c->req->param('password') ne $c->req->param('password_confirm')) {
 			$c->flash->{error} = "The password and confirmation password must be identical.";
 			$c->detach;
 		}
 		
 		$user->password($c->req->param('password'));
 		$user->update;
-		$c->stash->{message} = "The password is successfully changed.";
+		$c->flash->{message} = "The password is successfully changed.";
         $c->res->redirect($c->uri_for('/'));
         $c->detach;
 	}
 
 	# else - make the form
-	$c->log->debug("all good!");
 	$c->log->debug('are we here 6');
 }
 
@@ -174,13 +174,12 @@ sub password_recovery : Local {
     if (defined($c->req->param("__username")) and _email_valid($c->req->param('__username'))) {
         $c->forward('captcha_check');
         if ($c->stash->{recaptcha_error}) {
-			o
             $c->stash->{error} = 'You did not supply the correct words for the <em>reCAPTCHA</em>. Please try again';
         } elsif ($self->_check_user_email($c)) {
             $c->stash->{error} = 'You did not supply the correct email address. Please try again';
         } else {
             $self->_send_password_recovery($c);
-            $c->flash->{message} = 'Your password is sent to your registered email account. Thank you.';
+            $c->flash->{message} = 'Instructions for password rescoverty have been sent to your registered email account. Thank you.';
             $c->res->redirect($c->uri_for('/'));
             $c->detach;
         }

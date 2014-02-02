@@ -3,11 +3,11 @@
 <script type="text/javascript">
 var areas = [
 [% should_comma = 0 %]
-[% FOREACH a IN areas %]
-    [% IF should_comma %], [% END %]
-    [ '[% a.document.short_title %]', [% a.google_center.join(', ') %], [%a.document.id %] ]
+[%- FOREACH a IN areas -%]
+    [%- IF should_comma -%], [%- END -%]
+    [ "[% a.document.short_title %]", [% a.map_point %], [%a.document.id %] ]
     [% should_comma = 1 %]
-[% END %]
+[%- END -%]
 ];
 var markers = [];
 var infowindows = [];
@@ -40,6 +40,12 @@ function setMarkers(map, locations) {
 var map;
 
 $(document).ready(function() {
+    var east = [% box.east %];
+    var north = [% box.north %];
+    var west = [% box.west %];
+    var south = [% box.south %];
+
+/*
     var east = 0;
     var north = 0;
     var west = 0;
@@ -51,7 +57,7 @@ $(document).ready(function() {
         if (a[2] < north) north = a[2];
         if (a[1] > east) east = a[1];
         if (a[2] > south) south = a[2];
-    }
+    } */
     var bounds = new google.maps.LatLngBounds();
     bounds.extend(new google.maps.LatLng(west, north));
     bounds.extend(new google.maps.LatLng(east, south));
@@ -74,18 +80,18 @@ $(document).ready(function() {
 <div class="page" style="padding: 10px;">
 
 <div class="sidebar">
-  <div id="widget" class="sticky">
+<!--  <div id="widget" class="sticky"> -->
     <p>Back to browsing folder <a href="[% c.uri_for("/folder/view/$folder.id") %]">[% folder.name | html %]</a></p>
     <h2>Documents on map</h2>
     <table class="folder-listing">
-        [% FOREACH a IN areas %]
+        [% FOREACH d IN documents %]
             <tr>
-                <td><a class="ellipsis" href="[% c.uri_for("/document/view/$a.document.id") %]">[% a.document.title | html %]</a></td>
+                <td><a class="ellipsis" href="[% c.uri_for("/document/view/$d.id") %]">[% d.title | html %]</a></td>
             </tr>
         [% END %]
     </table>
   </div>
-</div>
+<!-- </div> -->
 
 <div class="main">
     <h1>Documents in folder <i>[% folder.name | html %]</i></h1>

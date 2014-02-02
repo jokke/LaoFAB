@@ -94,7 +94,7 @@
         <td class="size-column">[% no_files %]
         file[% IF no_files != 1 %]s[% END %]</td>
         <td class="year-column">-</td>
-        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="[% c.uri_for("/folder/edit/$subfolder.id") %]">edit</a>/<a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
         </tr>
     [% END %]
 
@@ -107,7 +107,7 @@
         <td class="size-column">[% no_files %]
         file[% IF no_files != 1 %]s[% END %]</td>
         <td class="year-column">-</td>
-        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="[% c.uri_for("/folder/edit/$subfolder.id") %]">edit</a>/<a href="#" onClick="Messi.ask('Are you sure you want to remove the folder <em>[% subfolder.name | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/folder/delete/$subfolder.id") %]'; } });">del</a></td>[% END %]
         </tr>
     [% END %]
     

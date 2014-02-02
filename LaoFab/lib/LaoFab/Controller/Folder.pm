@@ -295,6 +295,11 @@ sub edit : Local {
             if ($folder_id != $c->req->param("folder")) {
                 $folder->parent($c->req->param("folder"));
             }
+            if ($c->req->param("priority")) {
+                $folder->priority(1);
+            } else {
+                $folder->priority(0);
+            }
             $folder->update;
             $c->flash->{message} = "Folder ".$c->req->param("name")." updated.";
             $c->res->redirect($c->uri_for("/folder/view/$parent_id"));
@@ -309,7 +314,10 @@ sub edit : Local {
     $c->stash->{jquery} = 1;
     # draw the form with values
     $folder_name ||= $folder->name;
-    $parent_id ||= $folder->parent;
+    $parent_id ||= $folder->parent->id;
+    if ($folder->priority) {
+        $c->stash->{priority} = 1;
+    }
     $c->stash->{folder_name} = $folder_name;
     $c->stash->{parent_id} = $parent_id;
     $c->stash->{folder_id} = $folder_id;

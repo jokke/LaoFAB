@@ -99,6 +99,7 @@ function draw_polygon(coords, color) {
 }
 
 var polygons = [];
+var circles = [];
 var map;
 
 $(document).ready(function() {
@@ -134,8 +135,17 @@ $(document).ready(function() {
         drawingControlOptions: {
             position: google.maps.ControlPosition.TOP_CENTER,
            drawingModes: [
-                google.maps.drawing.OverlayType.POLYGON,
+                google.maps.drawing.OverlayType.POLYGON /*,
+                google.maps.drawing.OverlayType.CIRCLE */
             ]
+        },
+        circleOptions: {
+            editable: true,
+            strokeColor: "#AAAA55",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#AAAA55",
+            fillOpacity: 0.35
         },
         polygonOptions: {
             editable: true,
@@ -151,6 +161,10 @@ $(document).ready(function() {
         polygons.push(p);
     });
 
+    google.maps.event.addListener(drawingManager, 'circlecomplete', function(p) {
+        circles.push(p);
+    });
+
     //reset
     $('#reset').click(function(){ 
         for (var i=0; i<polygons.length; i++) {
@@ -158,13 +172,19 @@ $(document).ready(function() {
                 polygons[i].setMap(null);
             }
         }
+        for (var i=0; i<circles.length; i++) {
+            if (circles[i] != null) {
+                circles[i].setMap(null);
+            }
+        }
+        circles = [];
         polygons = [];
     });
 
     
     [% IF document.areas %]
         [% area = document.areas.first %]
-        [% bbox = area.bbox %]
+        [% bbox = area.get_bbox %]
         var east = [% bbox.0 %];
         var north = [% bbox.1 %];
         var west = [% bbox.2 %];
@@ -172,7 +192,7 @@ $(document).ready(function() {
     [% END %]
 
     [% FOREACH area IN document.areas %]
-        [% bbox = area.bbox %]
+        [% bbox = area.get_bbox %]
         if ([% bbox.0 %] < east) 
             east = [% bbox.0 %];
         if ([% bbox.1 %] < north) 

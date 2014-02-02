@@ -41,7 +41,7 @@
         <td class="author-column"><span class="ellipsis">[% doc.long_authors | html %]</span></td>
         <td class="size-column">[% doc.friendly_size | html %]</td>
         <td class="year-column">[% doc.pubyear %]</td>
-        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the document <em>[% doc.title | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/document/delete/$doc.id") %]?from=[% folder_id %]'; } });">del</a></td>[% END %]
+        [% IF c.check_user_roles(("admin")) %]<td class="action-column"><a href="#" onClick="Messi.ask('Are you sure you want to remove the document <em>[% doc.title | html %]</em>?', function(val) { if (val == 'Y') { window.location.href = '[% c.uri_for("/document/delete/$doc.id") %]?from=[% folder_id %]'; } });">del</a> <a href='[% c.uri_for("/document/approve/$doc.id") %]'>approve</a> <a href='[% c.uri_for("/document/edit/$doc.id") %]'>edit</a></td>[% END %]
         </tr>
     [% END %]
 </tbody>

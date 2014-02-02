@@ -32,7 +32,7 @@
         [% END %]>
     [% FOREACH perm IN [{ id => 're', label => 'Restricted' } , { id => 'pu', label => 'Public' } ] %]
         <option value="[% perm.id %]"
-        [% IF doctype.permission == perm.id %]
+        [% IF document.permission == perm.id %]
             selected="selected"[% END %]>[% perm.label %]</option>
     [% END %]
 </select>

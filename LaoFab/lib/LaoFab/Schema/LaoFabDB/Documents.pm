@@ -131,7 +131,7 @@ __PACKAGE__->table("documents");
 =head2 permission
 
   data_type: 'char'
-  default_value: 'pm'
+  default_value: 're'
   is_nullable: 0
   size: 2
 
@@ -205,7 +205,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "permission",
-  { data_type => "char", default_value => "pm", is_nullable => 0, size => 2 },
+  { data_type => "char", default_value => "re", is_nullable => 0, size => 2 },
   "preview",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "hot",
@@ -230,8 +230,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-06-01 17:03:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fO+eNp28nO3zRYrjLMOwTw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-02-02 02:23:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Hkrq4cqXfka8n5QW/yX9IQ
 
 __PACKAGE__->resultset_class(
 	'LaoFab::ResultSet::Documents');
@@ -397,9 +397,8 @@ __PACKAGE__->add_columns(
         {
             data_type        => 'VARCHAR',
             is_fs_column     => 1,
-            #fs_column_path   => LaoFab->path_to('root', 'docs') . "",
             #fs_column_path   => '/var/www/LaoFab/root/docs/',
-            fs_column_path   => '/home/jokke/perl/LaoFAB/LaoFab/root/docs/',
+            fs_column_path   => '/var/www/laofab/LaoFab/root/docs/',
         }
     );
 

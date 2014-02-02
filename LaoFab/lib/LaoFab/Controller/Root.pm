@@ -74,8 +74,8 @@ sub index :Path :Args(0) {
         document    => { '>', 0 }, #fix for documents
     },{
         select => [ 'document', { count => 'distinct user' }],
-        as => [qw/ document id /],
-        prefetch => 'document',
+        #as => [qw/ document id /],
+        #prefetch => 'document',
         group_by => [qw/ document /],
         order_by => [' count(distinct user) desc '],
     })->slice(0,9);
@@ -172,7 +172,7 @@ sub index :Path :Args(0) {
     my $options = {
         fl    => 'sentDate,subject,uuid',
         sort  => 'sentDate desc',
-        rows  => 10,
+        rows  => 15,
     };
 
     my $emails = [];

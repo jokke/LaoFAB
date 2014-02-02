@@ -62,6 +62,17 @@ __PACKAGE__->table("areas");
   data_type: 'geometry'
   is_nullable: 0
 
+=head2 map_point
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 50
+
+=head2 bbox
+
+  data_type: 'geometry'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -78,6 +89,10 @@ __PACKAGE__->add_columns(
   { data_type => "geometry", is_nullable => 0 },
   "center",
   { data_type => "geometry", is_nullable => 0 },
+  "map_point",
+  { data_type => "varchar", is_nullable => 1, size => 50 },
+  "bbox",
+  { data_type => "geometry", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -93,8 +108,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-04-01 09:22:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:c0loOzmvHWTTesLxhO9Ssw
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-02-02 02:23:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vfPwJBewkbzpwbb1adC7/A
 
 __PACKAGE__->belongs_to(
     document => 'LaoFab::Schema::LaoFabDB::Documents'
@@ -104,15 +119,15 @@ __PACKAGE__->resultset_class(
 
 use Math::Polygon;
 
-__PACKAGE__->geom_columns('center','polygon');
+__PACKAGE__->geom_columns('center','polygon','bbox');
 
-sub bbox {
-    my $self = shift;
-
-    my $poly = $self->real_polygon;
-
-    return $poly->bbox;
-}
+#sub bbox {
+#    my $self = shift;
+#
+#    my $poly = $self->real_polygon;
+#
+#    return $poly->bbox;
+#}
 
 sub google_polygon {
     my $self = shift;
@@ -139,6 +154,40 @@ sub google_center {
     my @pairs = map { join (', ', split /\s+/, $_) } split /,\s*/, $str_pol;
 
     return @pairs;
+}
+
+sub calc_bbox {
+    my $self = shift;
+    my $poly = $self->real_polygon;
+    my @bbox = $poly->bbox;
+
+    return 'POLYGON(('.$bbox[0].' '.$bbox[1].', '.
+                       $bbox[2].' '.$bbox[1].', '.
+                       $bbox[2].' '.$bbox[3].', '.
+                       $bbox[0].' '.$bbox[3].', '.
+                       $bbox[0].' '.$bbox[1].'))';
+}
+
+sub calc_map_point {
+    my $self = shift;
+    my $poly = $self->real_polygon;
+    my @bbox = $self->get_bbox;
+    my @point;
+    do {
+        $point[0] = sprintf("%.12f", rand ($bbox[2]-$bbox[0])) + $bbox[0];
+        $point[1] = sprintf("%.12f", rand ($bbox[3]-$bbox[1])) + $bbox[1];
+    } until ($poly->contains(\@point));
+    return $point[0].', '.$point[1];
+}
+
+sub get_bbox {
+    my $self = shift;
+    my $value = $self->bbox;
+    $value =~ s/^POLYGON\(+//;
+    $value =~ s/\)+$//;
+    my @pairs = map { [ split /\s+/, $_ ] } split /,\s*/, $value;
+    my $poly = Math::Polygon->new(@pairs);
+    return $poly->bbox;
 }
 
 sub calc_center {
