@@ -50,3 +50,22 @@ LaoFab/root/normal_size_photos
 LaoFab/root/thumbnail_photos
 LaoFab/root/static/images/doc/thumb
 LaoFab/root/static/images/doc/prev
+
+# sensative stuff
+LaoFab/root/static/galleria/themes/twelve/galleria.twelve.css
+LaoFab/root/static/galleria/themes/twelve/galleria.twelve.css
+LaoFab/root/static/galleria/themes/twelve/galleria.twelve.js
+LaoFab/root/static/galleria/themes/twelve/galleria.twelve.min.js
+LaoFab/script/laofab_convert_db.pl
+LaoFab/script/laofab_convert_passwords.pl
+LaoFab/script/laofab_generate_graphs.pl
+LaoFab/script/laofab_index_mail.pl
+LaoFab/script/laofab_index_solr.pl
+LaoFab/script/laofab_populate_locations.pl
+LaoFab/script/laofab_sendmail.pl
+LaoFab/script/laofab_test_area.pl
+LaoFab/script/laofab_update_photos.pl
+LaoFab/script/laofab_update_schema.pl
+LaoFab/script/laofab_update_solrupdates.pl
+LaoFab/script/login_day_month.pl
+LaoFab/lib/LaoFab/Model/LaoFabDB.pm
